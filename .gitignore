@@ -1,0 +1,11 @@
+.idea/
+templates/
+tests/
+venv/
+
+src/settings.py
+src/objects/
+
+*.py_
+src/controller/can*
+src/object/can*
