@@ -1,13 +1,14 @@
 from flask import request
 from flask_restful import Resource
-from ..dao.flask_config import app
-from ..service.selectionprocess_service import SelectionProcessService
+from dao.flask_config import app
+from service.selectionprocess_service import SelectionProcessService
 
 selectionprocess_service = SelectionProcessService()
 
 class SelectionProcessController(Resource):
-    def get(self):
-        return selectionprocess_service.get_selectionprocesses()
+    
+    def get(self, idclient=None, idjobposition=None):
+        return selectionprocess_service.get_selectionprocesses(idclient, idjobposition)
 
     def post(self):
         idclient = request.json['idclient']

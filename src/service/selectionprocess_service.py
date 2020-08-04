@@ -1,15 +1,23 @@
 from flask import jsonify
-from ..common.util import str2bool
-from ..dao.flask_config import db
-from ..object.selectionprocess import SelectionProcess, SelectionProcessSchema
+from common.util import str2bool
+from dao.flask_config import db
+from object.selectionprocess import SelectionProcess, SelectionProcessSchema
 
 selectionprocess_schema = SelectionProcessSchema()
 selectionprocesses_schema = SelectionProcessSchema(many=True)
 
 class SelectionProcessService():
 
-    def get_selectionprocesses(self):
-        all_selectionprocess = SelectionProcess.query.all()
+    def get_selectionprocesses(self, idclient, idjobposition):        
+        if idclient and idjobposition:
+            all_selectionprocess = SelectionProcess.query.filter(SelectionProcess.idclient==idclient, SelectionProcess.idjobposition==idjobposition).all()
+        elif idclient and not idjobposition:
+            all_selectionprocess = SelectionProcess.query.filter(SelectionProcess.idclient==idclient).all()
+        elif not idclient and idjobposition:
+            return {'message': 'Client identity is required'}, 500
+        else:
+            all_selectionprocess = SelectionProcess.query.all()
+        
         if all_selectionprocess:
             result = selectionprocesses_schema.dump(all_selectionprocess)
             return jsonify(result)

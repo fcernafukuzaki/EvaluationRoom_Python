@@ -1,4 +1,5 @@
-from ..dao.flask_config import db, ma
+from dao.flask_config import db, ma
+from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
 
 class SelectionProcess(db.Model):
 
@@ -11,6 +12,9 @@ class SelectionProcess(db.Model):
     date_process_end = db.Column(db.DateTime)
     user_register = db.Column(db.String())
     process_active = db.Column(db.Boolean)
+    selectionprocess_candidates = db.relationship('SelectionProcessCandidate', lazy="dynamic", 
+                primaryjoin='and_(SelectionProcess.idclient==SelectionProcessCandidate.idclient, '
+                'SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition)')
     
     def __init__(self, idclient=0, idjobposition=0, date_process_begin=None, date_process_end=None, 
                  user_register=None, process_active=True):
@@ -24,4 +28,6 @@ class SelectionProcess(db.Model):
 class SelectionProcessSchema(ma.Schema):
     class Meta:
         fields = ('idclient', 'idjobposition', 'date_process_begin', 'date_process_end', 
-                    'user_register', 'process_active')
+                    'user_register', 'process_active', 'selectionprocess_candidates')
+        
+    selectionprocess_candidates = ma.Nested(SelectionProcessCandidateSchema, many=True)
