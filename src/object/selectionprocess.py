@@ -1,13 +1,15 @@
 from dao.flask_config import db, ma
 from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
+from object.client import Client, ClientSchema
+from object.jobposition import JobPosition, JobPositionSchema
 
 class SelectionProcess(db.Model):
 
-    __table_args__ = {"schema": "evaluationroom"}
+    __table_args__ = {"schema": "evaluationroom", 'extend_existing': True}
     __tablename__ = 'selectionprocess'
 
-    idclient = db.Column(db.Integer, primary_key=True)
-    idjobposition = db.Column(db.Integer, primary_key=True)
+    idclient = db.Column(db.Integer, db.ForeignKey('evaluationroom.cliente.idcliente'), primary_key=True)
+    idjobposition = db.Column(db.Integer, db.ForeignKey('evaluationroom.puestolaboral.idpuestolaboral'), primary_key=True)
     date_process_begin = db.Column(db.DateTime)
     date_process_end = db.Column(db.DateTime)
     user_register = db.Column(db.String())
@@ -15,6 +17,13 @@ class SelectionProcess(db.Model):
     selectionprocess_candidates = db.relationship('SelectionProcessCandidate', lazy="dynamic", 
                 primaryjoin='and_(SelectionProcess.idclient==SelectionProcessCandidate.idclient, '
                 'SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition)')
+    
+    client = db.relationship('Client', 
+                primaryjoin='and_(SelectionProcess.idclient==Client.idcliente)')
+
+    jobposition = db.relationship('JobPosition', 
+                primaryjoin='and_(SelectionProcess.idclient==JobPosition.idcliente, '
+                'SelectionProcess.idjobposition==JobPosition.idpuestolaboral)')
     
     def __init__(self, idclient=0, idjobposition=0, date_process_begin=None, date_process_end=None, 
                  user_register=None, process_active=True):
@@ -28,6 +37,8 @@ class SelectionProcess(db.Model):
 class SelectionProcessSchema(ma.Schema):
     class Meta:
         fields = ('idclient', 'idjobposition', 'date_process_begin', 'date_process_end', 
-                    'user_register', 'process_active', 'selectionprocess_candidates')
+                    'user_register', 'process_active', 'client', 'jobposition', 'selectionprocess_candidates')
         
+    client = ma.Nested(ClientSchema)
+    jobposition = ma.Nested(JobPositionSchema)
     selectionprocess_candidates = ma.Nested(SelectionProcessCandidateSchema, many=True)
