@@ -10,7 +10,7 @@ class SelectionProcessService():
 
     def get_selectionprocesses(self, idclient, idjobposition):        
         if idclient and idjobposition:
-            all_selectionprocess = SelectionProcess.query.filter(SelectionProcess.idclient==idclient, SelectionProcess.idjobposition==idjobposition).all()
+            all_selectionprocess = SelectionProcess.query.get((idclient, idjobposition))
         elif idclient and not idjobposition:
             all_selectionprocess = SelectionProcess.query.filter(SelectionProcess.idclient==idclient).all()
         elif not idclient and idjobposition:
@@ -18,7 +18,10 @@ class SelectionProcessService():
         else:
             all_selectionprocess = SelectionProcess.query.all()
         
-        if all_selectionprocess:
+        if all_selectionprocess and idclient and idjobposition:
+            result = selectionprocess_schema.jsonify(all_selectionprocess)
+            return result
+        else:
             result = selectionprocesses_schema.dump(all_selectionprocess)
             return jsonify(result)
         return {'message': 'Not found'}, 404
