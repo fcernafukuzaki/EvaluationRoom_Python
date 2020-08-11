@@ -14,8 +14,8 @@ class CandidateInfo():
                     db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
                     db.func.count(CandidatePsychologicalTest.fechaexamen > '1900-01-01').label('tiene_resultado'),
                     Candidate.selfregistration,
-                ).outerjoin(CandidatePsychologicalTest, CandidatePsychologicalTest.idcandidato==Candidate.idcandidato).group_by(Candidate.idcandidato).order_by(Candidate.idcandidato)
-        
+                ).outerjoin(CandidatePsychologicalTest, CandidatePsychologicalTest.idcandidato==Candidate.idcandidato).group_by(Candidate.idcandidato).order_by(Candidate.idcandidato.desc())
+            
 class CandidateInfoSchema(ma.Schema):
     class Meta:
         fields = ('cant_puestos_laborales', 'cant_examenes_asignados', 'tiene_resultado',

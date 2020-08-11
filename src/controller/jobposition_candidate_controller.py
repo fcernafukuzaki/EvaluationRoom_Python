@@ -27,12 +27,18 @@ class JobPositionCandidateController(Resource):
         
         return new_jobposition_candidate
 
-    def delete(self):
+    def put(self):
         idclient = request.json['idclient']
         idjobposition = request.json['idjobposition']
         idcandidate = request.json['idcandidate']
         
-        jobposition_candidate = jobposition_candidate_service.delete_jobposition_candidate(idclient, idjobposition, idcandidate)
-        selectionprocess_candidate_service.delete_selectionprocess(idclient, idjobposition, idcandidate)
-
+        try:
+            jobposition_candidate = jobposition_candidate_service.delete_jobposition_candidate(idclient, idjobposition, idcandidate)
+        except:
+            print('Error al eliminar jobposition de puesto laboral candidato.')
+        try:
+            selectionprocess_candidate_service.delete_selectionprocess(idclient, idjobposition, idcandidate)
+        except:
+            print('Error al eliminar jobposition de proceso de selección.')
+        
         return jobposition_candidate
