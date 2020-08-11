@@ -1,5 +1,6 @@
 from .flask_config import api
 from controller.candidate_controller import *
+from controller.candidate_info_controller import *
 from controller.selectionprocess_controller import *
 from controller.selectionprocess_candidate_controller import *
 from controller.client_controller import *
@@ -9,6 +10,9 @@ from controller.jobposition_candidate_controller import *
 api.add_resource(CandidateController, 
     '/v1/candidate',
     '/v1/candidate/<int:idcandidate>')
+
+api.add_resource(CandidateInfoSimpleController, 
+    '/v1/candidate_info')
 
 api.add_resource(SelectionProcessController, 
     '/v1/selectionprocess',

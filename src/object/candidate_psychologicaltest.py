@@ -22,3 +22,7 @@ class CandidatePsychologicalTestSchema(ma.Schema):
         fields = ('idcandidato', 'idtestpsicologico', 'fechaexamen', 'psychologicaltest')
 
     psychologicaltest = ma.Nested(PsychologicalTestSchema)
+
+class CandidatePsychologicalTestInfoSchema(ma.Schema):
+    class Meta:
+        fields = ('idcandidato', 'idtestpsicologico', 'fechaexamen')

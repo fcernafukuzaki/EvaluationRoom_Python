@@ -26,9 +26,6 @@ class JobPositionCandidateService():
         return {'message': 'Not found'}, 404
         
     def add_jobposition_candidate(self, idclient, idjobposition, idcandidate):
-        print(idclient)
-        print(idjobposition)
-        print(idcandidate)
         new_jobposition = JobPositionCandidate(idclient, idjobposition, idcandidate)
         db.session.add(new_jobposition)
         db.session.commit()

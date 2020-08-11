@@ -1,6 +1,6 @@
 from dao.flask_config import db, ma
 from object.candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
-from object.candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
+from object.candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema, CandidatePsychologicalTestInfoSchema
 
 class Candidate(db.Model):
     __table_args__ = {"schema": "evaluationroom"}
@@ -18,7 +18,7 @@ class Candidate(db.Model):
     
     psychologicaltests = db.relationship('CandidatePsychologicalTest', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidatePsychologicalTest.idcandidato)')
-    
+
     def __init__(self, nombre, apellidopaterno, apellidomaterno, fechanacimiento, correoelectronico):
         self.nombre = nombre
         self.apellidopaterno = apellidopaterno
@@ -33,3 +33,10 @@ class CandidateSchema(ma.Schema):
 
     telephones = ma.Nested(CandidateTelephoneSchema, many=True)
     psychologicaltests = ma.Nested(CandidatePsychologicalTestSchema, many=True)
+
+class CandidateInfoSimpleSchema(ma.Schema):
+    class Meta:
+        fields = ('idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico',
+            'psychologicaltests')
+    
+    psychologicaltests = ma.Nested(CandidatePsychologicalTestInfoSchema, many=True)
