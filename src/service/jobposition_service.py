@@ -29,7 +29,7 @@ class JobPositionService():
         new_jobposition = JobPosition(idclient, idjobposition, name)
         db.session.add(new_jobposition)
         db.session.commit()
-        return jobposition_schema.jsonify(new_jobposition)
+        return jobposition_schema.jsonify(new_jobposition), new_jobposition
     
     def update_jobposition(self, idclient, idjobposition, name):
         jobposition = JobPosition.query.get((idclient, idjobposition))

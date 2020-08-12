@@ -2,8 +2,10 @@ from flask import request
 from flask_restful import Resource
 from dao.flask_config import app
 from service.jobposition_service import JobPositionService
+from service.selectionprocess_service import SelectionProcessService
 
 jobposition_service = JobPositionService()
+selectionprocess_service = SelectionProcessService()
 
 class JobPositionController(Resource):
     
@@ -14,9 +16,16 @@ class JobPositionController(Resource):
         idclient = request.json['idclient']
         nombre = request.json['nombre']
         
-        new_jobposition = jobposition_service.add_jobposition(idclient, None, nombre)
+        new_jobposition_json, new_jobposition = jobposition_service.add_jobposition(idclient, None, nombre)
         
-        return new_jobposition
+        date_process_begin = request.json['date_process_begin']
+        date_process_end = request.json['date_process_end']
+        user_register = request.json['user_register']
+        process_active = request.json['process_active']
+        
+        new_selectionprocess = selectionprocess_service.add_selectionprocess(idclient, new_jobposition.idpuestolaboral, date_process_begin, date_process_end, user_register, process_active)
+        
+        return new_jobposition_json
 
     def put(self):
         idclient = request.json['idclient']
