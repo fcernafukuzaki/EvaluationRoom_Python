@@ -5,7 +5,7 @@ class JobPosition(db.Model):
     __tablename__ = 'puestolaboral'
     
     idcliente = db.Column(db.Integer, db.ForeignKey('evaluationroom.cliente.idcliente'), primary_key=True)
-    idpuestolaboral = db.Column(db.Integer, primary_key=True)
+    idpuestolaboral = db.Column(db.Integer, primary_key=True, autoincrement=True)
     nombre = db.Column(db.String())
     
     def __init__(self, id_client, id_jobposition, name=None):

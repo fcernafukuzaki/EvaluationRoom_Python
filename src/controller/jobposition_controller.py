@@ -32,7 +32,16 @@ class JobPositionController(Resource):
         idjobposition = request.json['idjobposition']
         nombre = request.json['nombre']
 
-        return jobposition_service.update_jobposition(idclient, idjobposition, nombre)
+        jobposition = jobposition_service.update_jobposition(idclient, idjobposition, nombre)
+
+        date_process_begin = request.json['date_process_begin']
+        date_process_end = request.json['date_process_end']
+        user_register = request.json['user_register']
+        process_active = request.json['process_active']
+
+        selectionprocess = selectionprocess_service.update_selectionprocess(idclient, idjobposition, date_process_begin, date_process_end, user_register, process_active)
+
+        return jobposition
 
     def delete(self):
         idclient = request.json['idclient']
