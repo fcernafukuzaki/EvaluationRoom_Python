@@ -12,10 +12,9 @@ class JobPositionController(Resource):
 
     def post(self):
         idclient = request.json['idclient']
-        idjobposition = request.json['idjobposition']
         nombre = request.json['nombre']
         
-        new_jobposition = jobposition_service.add_jobposition(idclient, idjobposition, nombre)
+        new_jobposition = jobposition_service.add_jobposition(idclient, None, nombre)
         
         return new_jobposition
 

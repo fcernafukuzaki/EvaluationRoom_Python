@@ -11,10 +11,9 @@ class ClientController(Resource):
         return client_service.get_clients(idclient)
 
     def post(self):
-        idclient = request.json['idclient']
         nombre = request.json['nombre']
         
-        new_client = client_service.add_client(idclient, nombre)
+        new_client = client_service.add_client(None, nombre)
         
         return new_client
 
