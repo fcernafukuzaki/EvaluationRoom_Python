@@ -1,5 +1,5 @@
 from dao.flask_config import db, ma
-from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
+from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
 from object.client import Client, ClientSchema
 from object.jobposition import JobPosition, JobPositionSchema
 
@@ -42,3 +42,12 @@ class SelectionProcessSchema(ma.Schema):
     client = ma.Nested(ClientSchema)
     jobposition = ma.Nested(JobPositionSchema)
     selectionprocess_candidates = ma.Nested(SelectionProcessCandidateSchema, many=True)
+
+class SelectionProcessInfoSchema(ma.Schema):
+    class Meta:
+        fields = ('idclient', 'idjobposition', 'date_process_begin', 'date_process_end', 
+                    'user_register', 'process_active', 'client', 'jobposition', 'selectionprocess_candidates')
+        
+    client = ma.Nested(ClientSchema)
+    jobposition = ma.Nested(JobPositionSchema)
+    selectionprocess_candidates = ma.Nested(SelectionProcessCandidateInfoSchema, many=True)

@@ -2,9 +2,11 @@ from flask import jsonify
 from common.util import str2bool
 from dao.flask_config import db
 from object.selectionprocess import SelectionProcess, SelectionProcessSchema
+from object.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, CandidatePsychologicalTestInfoSchema
 
 selectionprocess_schema = SelectionProcessSchema()
-selectionprocesses_schema = SelectionProcessSchema(many=True)
+selectionprocesses_info_schema = SelectionProcessInfoSchema(many=True)
+candidates_psychologicaltest_info_schema = CandidatePsychologicalTestInfoSchema(many=True)
 
 class SelectionProcessService():
 
@@ -16,13 +18,14 @@ class SelectionProcessService():
         elif not idclient and idjobposition:
             return {'message': 'Client identity is required'}, 500
         else:
-            all_selectionprocess = SelectionProcess.query.all()
+            all_selectionprocess = SelectionProcessInfo.all_processselection_resumen
+            all_candidates_psychologicaltes = SelectionProcessInfo.all_candidates_psychologicaltest_resumen
         
         if all_selectionprocess and idclient and idjobposition:
             result = selectionprocess_schema.jsonify(all_selectionprocess)
             return result
         else:
-            result = selectionprocesses_schema.dump(all_selectionprocess)
+            result = selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
             return jsonify(result)
         return {'message': 'Not found'}, 404
 
@@ -35,14 +38,18 @@ class SelectionProcessService():
         return selectionprocess_schema.jsonify(new_selectionprocess)
     
     def update_selectionprocess(self, idclient, idjobposition, date_process_begin, date_process_end, user_register, process_active):
-        process_active = str2bool(process_active)
-
         selectionprocess = SelectionProcess.query.get((idclient, idjobposition))
-        selectionprocess.date_process_begin = date_process_begin
-        selectionprocess.date_process_end = date_process_end
-        selectionprocess.user_register = user_register
-        selectionprocess.process_active = process_active
 
+        if selectionprocess:
+            process_active = str2bool(process_active)
+
+            selectionprocess.date_process_begin = date_process_begin
+            selectionprocess.date_process_end = date_process_end
+            selectionprocess.user_register = user_register
+            selectionprocess.process_active = process_active
+        else:
+            selectionprocess = self.add_selectionprocess(idclient, idjobposition, date_process_begin, date_process_end, user_register, process_active)
+            
         db.session.commit()
         return selectionprocess_schema.jsonify(selectionprocess)
 

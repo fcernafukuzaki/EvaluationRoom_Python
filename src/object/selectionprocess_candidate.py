@@ -1,5 +1,6 @@
 from dao.flask_config import db, ma
 from object.candidate import Candidate, CandidateSchema
+from object.candidate_info import CandidateInfoSchema
 
 class SelectionProcessCandidate(db.Model):
 
@@ -32,3 +33,10 @@ class SelectionProcessCandidateSchema(ma.Schema):
                     'user_register', 'user_registered_byself', 'candidate')
 
     candidate = ma.Nested(CandidateSchema)
+
+class SelectionProcessCandidateInfoSchema(ma.Schema):
+    class Meta:
+        fields = ('idclient', 'idjobposition', 'idcandidate', 'date_registered', 
+                    'user_register', 'user_registered_byself', 'candidate')
+
+    candidate = ma.Nested(CandidateInfoSchema)
