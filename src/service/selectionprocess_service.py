@@ -10,7 +10,7 @@ candidates_psychologicaltest_info_schema = CandidatePsychologicalTestInfoSchema(
 
 class SelectionProcessService():
 
-    def get_selectionprocesses(self, idclient, idjobposition):        
+    def get_selectionprocesses(self, idclient, idjobposition, processStatus):        
         if idclient and idjobposition:
             all_selectionprocess = SelectionProcess.query.get((idclient, idjobposition))
         elif idclient and not idjobposition:
@@ -18,8 +18,8 @@ class SelectionProcessService():
         elif not idclient and idjobposition:
             return {'message': 'Client identity is required'}, 500
         else:
-            all_selectionprocess = SelectionProcessInfo.all_processselection_resumen
-            all_candidates_psychologicaltes = SelectionProcessInfo.all_candidates_psychologicaltest_resumen
+            all_selectionprocess = SelectionProcessInfo.selectionprocess_info(processStatus)
+            all_candidates_psychologicaltes = SelectionProcessInfo.candidates_psychologicaltest_info(processStatus)
         
         if all_selectionprocess and idclient and idjobposition:
             result = selectionprocess_schema.jsonify(all_selectionprocess)

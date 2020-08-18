@@ -17,7 +17,7 @@ api.add_resource(CandidateInfoSimpleController,
 
 api.add_resource(SelectionProcessController, 
     '/v1/selectionprocess',
-    '/v1/selectionprocess/<int:idclient>',
+    '/v1/selectionprocess/<string:process_status>',
     '/v1/selectionprocess/<int:idclient>/<int:idjobposition>')
 
 api.add_resource(SelectionProcessCandidateController, 

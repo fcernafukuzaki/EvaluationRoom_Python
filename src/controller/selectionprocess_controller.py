@@ -7,8 +7,8 @@ selectionprocess_service = SelectionProcessService()
 
 class SelectionProcessController(Resource):
     
-    def get(self, idclient=None, idjobposition=None):
-        return selectionprocess_service.get_selectionprocesses(idclient, idjobposition)
+    def get(self, idclient=None, idjobposition=None, process_status=None):
+        return selectionprocess_service.get_selectionprocesses(idclient, idjobposition, process_status)
 
     def post(self):
         idclient = request.json['idclient']
