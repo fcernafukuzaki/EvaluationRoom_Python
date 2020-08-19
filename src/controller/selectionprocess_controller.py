@@ -2,13 +2,19 @@ from flask import request
 from flask_restful import Resource
 from dao.flask_config import app
 from service.selectionprocess_service import SelectionProcessService
+from service.login_user_service import LoginUserService
 
 selectionprocess_service = SelectionProcessService()
+login_user_service = LoginUserService()
 
 class SelectionProcessController(Resource):
     
     def get(self, idclient=None, idjobposition=None, process_status=None):
-        return selectionprocess_service.get_selectionprocesses(idclient, idjobposition, process_status)
+        token = request.headers['Authorization']
+        validate = login_user_service.validate_user(token)
+        if validate:
+            return selectionprocess_service.get_selectionprocesses(idclient, idjobposition, process_status)
+        return {'message': 'User not registered'}, 403
 
     def post(self):
         idclient = request.json['idclient']
