@@ -12,7 +12,7 @@ from object.psychologicaltest import PsychologicalTest
 class SelectionProcessInfo():
     
     resumen = db.session.query(
-            db.func.count(SelectionProcess.process_active).label('cant_procesos_activos')
+            db.func.count(SelectionProcess.process_active).label('cant_procesos_activos'),'1'
         ).filter(SelectionProcess.process_active==True
         ).group_by(SelectionProcess.process_active)
                     
