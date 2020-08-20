@@ -11,6 +11,11 @@ from object.psychologicaltest import PsychologicalTest
 
 class SelectionProcessInfo():
     
+    resumen = db.session.query(
+            db.func.count(SelectionProcess.process_active).label('cant_procesos_activos')
+        ).filter(SelectionProcess.process_active==True
+        ).group_by(SelectionProcess.process_active)
+                    
     def selectionprocess_info(processStatus='True'):
         filtroSelectionProcess = SelectionProcess.process_active==True
         if processStatus == 'False':
@@ -46,14 +51,12 @@ class SelectionProcessInfo():
                         db.func.count(CandidatePsychologicalTest.fechaexamen > '1900-01-01').label('tiene_resultado'),
                         Candidate.selfregistration
                     ).filter(filtroSelectionProcess
-                        ,SelectionProcess.idclient==SelectionProcessCandidate.idclient
-                        ,SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition
                     ).outerjoin(Client, 
                         SelectionProcess.idclient==Client.idcliente
                     ).outerjoin(JobPosition, 
                         SelectionProcess.idjobposition==JobPosition.idpuestolaboral
                     ).outerjoin(SelectionProcessCandidate, 
-                        SelectionProcess.idclient==SelectionProcessCandidate.idclient
+                        SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition
                     ).outerjoin(Candidate, SelectionProcessCandidate.idcandidate==Candidate.idcandidato
                     ).outerjoin(CandidatePsychologicalTest, CandidatePsychologicalTest.idcandidato==Candidate.idcandidato
                     ).group_by(SelectionProcess.idclient, Client.nombre, Candidate.idcandidato, SelectionProcess.date_process_begin,
@@ -86,7 +89,11 @@ class SelectionProcessInfo():
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
                     ).order_by(CandidatePsychologicalTest.idcandidato, CandidatePsychologicalTest.idtestpsicologico)
         return all_candidates_psychologicaltest_resumen
-            
+
+class SelectionProcessInfoResumenSchema(ma.Schema):
+    class Meta:
+        fields = ('cant_procesos_activos','resumen')
+           
 class SelectionProcessInfoSchema(ma.Schema):
     class Meta:
         fields = ('idclient', 'client_name', 'date_process_begin', 'date_process_end', 

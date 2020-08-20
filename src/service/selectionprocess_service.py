@@ -2,11 +2,12 @@ from flask import jsonify
 from common.util import str2bool
 from dao.flask_config import db
 from object.selectionprocess import SelectionProcess, SelectionProcessSchema
-from object.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, CandidatePsychologicalTestInfoSchema
+from object.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, SelectionProcessInfoResumenSchema, CandidatePsychologicalTestInfoSchema
 
 selectionprocess_schema = SelectionProcessSchema()
 selectionprocesses_info_schema = SelectionProcessInfoSchema(many=True)
 candidates_psychologicaltest_info_schema = CandidatePsychologicalTestInfoSchema(many=True)
+eelection_process_info_resumen_schema = SelectionProcessInfoResumenSchema(many=True)
 
 class SelectionProcessService():
 
@@ -18,6 +19,7 @@ class SelectionProcessService():
         elif not idclient and idjobposition:
             return {'message': 'Client identity is required'}, 500
         else:
+            resumen_selectionprocess = SelectionProcessInfo.resumen
             all_selectionprocess = SelectionProcessInfo.selectionprocess_info(processStatus)
             all_candidates_psychologicaltes = SelectionProcessInfo.candidates_psychologicaltest_info(processStatus)
         
@@ -25,7 +27,7 @@ class SelectionProcessService():
             result = selectionprocess_schema.jsonify(all_selectionprocess)
             return result
         else:
-            result = selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
+            result = eelection_process_info_resumen_schema.dump(resumen_selectionprocess),selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
             return jsonify(result)
         return {'message': 'Not found'}, 404
 
