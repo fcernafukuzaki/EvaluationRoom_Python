@@ -8,6 +8,10 @@ class LoginUserService():
 
     def validate_user(self, hash):
         if hash:
-            return db.session.query(LoginUser).filter(LoginUser.hash==hash,LoginUser.date_logout==None).first()
+            return db.session.query(LoginUser
+                ).filter(LoginUser.hash==hash, 
+                         LoginUser.date_logout==None, 
+                         LoginUser.iduser > 0
+                ).first()
         else:
             return None
