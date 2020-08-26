@@ -21,9 +21,13 @@ class CandidateInfo():
                         ).label('telefono_fijo'),
                     db.func.count(Candidate.idcandidato).label('cant_puestos_laborales'),
                     db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
-                    db.func.count(CandidatePsychologicalTest.fechaexamen > '1900-01-01').label('tiene_resultado'),
+                    db.session.query(db.func.count(CandidatePsychologicalTest.fechaexamen)
+                            ).filter(CandidatePsychologicalTest.idcandidato==Candidate.idcandidato,
+                                db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
+                                db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
+                                db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01'
+                            ).label('tiene_resultado'),
                     Candidate.selfregistration
-                ).outerjoin(CandidatePsychologicalTest, CandidatePsychologicalTest.idcandidato==Candidate.idcandidato
                 ).group_by(Candidate.idcandidato
                 ).order_by(Candidate.idcandidato.desc())
             

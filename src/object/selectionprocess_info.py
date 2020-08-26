@@ -8,6 +8,8 @@ from object.candidate import Candidate
 from object.candidate_psychologicaltest import CandidatePsychologicalTest
 from object.candidate_telephone import CandidateTelephone
 from object.psychologicaltest import PsychologicalTest
+from datetime import datetime, timedelta
+
 
 class SelectionProcessInfo():
     
@@ -48,7 +50,12 @@ class SelectionProcessInfo():
                             ).label('telefono_fijo'),
                         db.func.count(Candidate.idcandidato).label('cant_puestos_laborales'),
                         db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
-                        db.func.count(CandidatePsychologicalTest.fechaexamen > '1900-01-01').label('tiene_resultado'),
+                        db.session.query(db.func.count(CandidatePsychologicalTest.fechaexamen)
+                            ).filter(CandidatePsychologicalTest.idcandidato==Candidate.idcandidato,
+                                db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
+                                db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
+                                db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01'
+                            ).label('tiene_resultado'),
                         Candidate.selfregistration
                     ).filter(filtroSelectionProcess
                     ).outerjoin(Client, 
@@ -58,7 +65,6 @@ class SelectionProcessInfo():
                     ).outerjoin(SelectionProcessCandidate, 
                         SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition
                     ).outerjoin(Candidate, SelectionProcessCandidate.idcandidate==Candidate.idcandidato
-                    ).outerjoin(CandidatePsychologicalTest, CandidatePsychologicalTest.idcandidato==Candidate.idcandidato
                     ).group_by(SelectionProcess.idclient, Client.nombre, Candidate.idcandidato, SelectionProcess.date_process_begin,
                         SelectionProcess.date_process_end,
                         SelectionProcess.idjobposition,
