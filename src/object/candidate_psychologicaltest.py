@@ -13,7 +13,7 @@ class CandidatePsychologicalTest(db.Model):
                 primaryjoin='and_(PsychologicalTest.idtestpsicologico==CandidatePsychologicalTest.idtestpsicologico)')
     
     def __init__(self, id_candidate, id_psychologicaltest, date_end_exam=None):
-        self.idtestpsicologico = id_candidate
+        self.idcandidato = id_candidate
         self.idtestpsicologico = id_psychologicaltest
         self.fechaexamen = date_end_exam
     
