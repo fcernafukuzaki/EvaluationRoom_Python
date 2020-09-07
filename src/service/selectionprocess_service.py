@@ -2,12 +2,14 @@ from flask import jsonify
 from common.util import str2bool
 from dao.flask_config import db
 from object.selectionprocess import SelectionProcess, SelectionProcessSchema
-from object.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, SelectionProcessInfoResumenSchema, CandidatePsychologicalTestInfoSchema
+from object.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, SelectionProcessInfoResumenSchema, CandidatePsychologicalTestInfoSchema, CandidateWithoutSelectionProcessSchema, CandidatePsychologicalTestWithoutSelectionProcessInfoSchema
 
 selectionprocess_schema = SelectionProcessSchema()
 selectionprocesses_info_schema = SelectionProcessInfoSchema(many=True)
 candidates_psychologicaltest_info_schema = CandidatePsychologicalTestInfoSchema(many=True)
-eelection_process_info_resumen_schema = SelectionProcessInfoResumenSchema(many=True)
+selection_process_info_resumen_schema = SelectionProcessInfoResumenSchema(many=True)
+candidates_without_selection_process_info_resumen_schema = CandidateWithoutSelectionProcessSchema(many=True)
+candidates_psychologicaltest_without_selection_process_info_schema = CandidatePsychologicalTestWithoutSelectionProcessInfoSchema(many=True)
 
 class SelectionProcessService():
 
@@ -27,7 +29,16 @@ class SelectionProcessService():
             result = selectionprocess_schema.jsonify(all_selectionprocess)
             return result
         else:
-            result = eelection_process_info_resumen_schema.dump(resumen_selectionprocess),selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
+            result = selection_process_info_resumen_schema.dump(resumen_selectionprocess),selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
+            return jsonify(result)
+        return {'message': 'Not found'}, 404
+    
+    def get_candidates_without_selectionprocess(self):        
+        all_selectionprocess = SelectionProcessInfo.candidates_without_selectionprocess_info()
+        all_candidates_psychologicaltes = SelectionProcessInfo.candidates_psychologicaltest_without_selectionprocess_info()
+        
+        result = candidates_without_selection_process_info_resumen_schema.dump(all_selectionprocess),candidates_psychologicaltest_without_selection_process_info_schema.dump(all_candidates_psychologicaltes)
+        if result:
             return jsonify(result)
         return {'message': 'Not found'}, 404
 

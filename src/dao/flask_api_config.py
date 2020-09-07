@@ -7,6 +7,7 @@ from controller.client_controller import *
 from controller.client_info_controller import *
 from controller.jobposition_controller import *
 from controller.jobposition_candidate_controller import *
+from controller.candidate_without_selectionprocess_controller import *
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
@@ -24,6 +25,9 @@ api.add_resource(SelectionProcessCandidateController,
     '/v1/selectionprocesscandidate',
     '/v1/selectionprocesscandidate/<int:idclient>',
     '/v1/selectionprocesscandidate/<int:idclient>/<int:idjobposition>')
+
+api.add_resource(CandidateWithoutSelectionProcessController, 
+    '/v1/candidatewithoutselectionprocess')
 
 api.add_resource(ClientInfoSimpleController, 
     '/v1/client_info')

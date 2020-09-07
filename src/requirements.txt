@@ -13,3 +13,4 @@ flask-marshmallow
 marshmallow
 marshmallow-sqlalchemy
 flask-cors
+urllib3
