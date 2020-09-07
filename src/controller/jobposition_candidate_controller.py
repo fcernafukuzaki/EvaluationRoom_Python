@@ -3,9 +3,11 @@ from flask_restful import Resource
 from dao.flask_config import app
 from service.jobposition_candidate_service import JobPositionCandidateService
 from service.selectionprocess_candidate_service import SelectionProcessCandidateService
+from service.candidate_apreciation_service import CandidateApreciationService
 
 jobposition_candidate_service = JobPositionCandidateService()
 selectionprocess_candidate_service = SelectionProcessCandidateService()
+candidate_apreciation_service = CandidateApreciationService()
 
 class JobPositionCandidateController(Resource):
     
@@ -24,6 +26,14 @@ class JobPositionCandidateController(Resource):
         user_registered_byself = request.json['user_registered_byself']
         
         new_selectionprocess = selectionprocess_candidate_service.add_selectionprocess(idclient, idjobposition, idcandidate, date_registered, user_register, user_registered_byself)
+        
+        try:
+            token = request.json['headers']['Authorization']
+            email = request.json['headers']['correoelectronico']
+        
+            candidate_apreciation_service.assign_candidateapreciation_to_selectionprocess(token, email, idcandidate, idclient, idjobposition)
+        except:
+            print('Error assigning candidate apreciation to selection process.')
         
         return new_jobposition_candidate
 
