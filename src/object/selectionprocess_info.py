@@ -134,7 +134,7 @@ class SelectionProcessInfo():
                         CandidatePsychologicalTest.idtestpsicologico,
                         CandidatePsychologicalTest.fechaexamen,
                         PsychologicalTest.nombre
-                    ).filter(Candidate.idcandidato.notin_(subquery)
+                    ).filter(CandidatePsychologicalTest.idcandidato.notin_(subquery)
                     ).outerjoin(PsychologicalTest, 
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
                     ).order_by(CandidatePsychologicalTest.idcandidato, CandidatePsychologicalTest.idtestpsicologico)
