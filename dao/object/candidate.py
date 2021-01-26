@@ -1,4 +1,4 @@
-from .flask_config import db, ma
+from ..flask_config import db, ma
 from object.candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
 from object.candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
 
