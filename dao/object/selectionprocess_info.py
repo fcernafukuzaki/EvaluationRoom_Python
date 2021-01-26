@@ -1,13 +1,13 @@
 from dao.flask_config import db, ma
-from object.selectionprocess import SelectionProcess
-from object.client import Client, ClientSchema
-from object.jobposition import JobPosition
-from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
-from object.candidate_info import CandidateInfo, CandidateInfoSchema
-from object.candidate import Candidate
-from object.candidate_psychologicaltest import CandidatePsychologicalTest
-from object.candidate_telephone import CandidateTelephone
-from object.psychologicaltest import PsychologicalTest
+from .selectionprocess import SelectionProcess
+from .client import Client, ClientSchema
+from .jobposition import JobPosition
+from .selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
+from .candidate_info import CandidateInfo, CandidateInfoSchema
+from .candidate import Candidate
+from .candidate_psychologicaltest import CandidatePsychologicalTest
+from .candidate_telephone import CandidateTelephone
+from .psychologicaltest import PsychologicalTest
 from datetime import datetime, timedelta
 
 

@@ -1,5 +1,5 @@
-from .flask_config import db, ma
-from object.psychologicaltest import PsychologicalTest, PsychologicalTestSchema
+from dao.flask_config import db, ma
+from .psychologicaltest import PsychologicalTest, PsychologicalTestSchema
 
 class CandidatePsychologicalTest(db.Model):
     __table_args__ = {"schema": "evaluationroom"}

@@ -1,7 +1,7 @@
 from dao.flask_config import db, ma
-from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
-from object.client import Client, ClientSchema
-from object.jobposition import JobPosition, JobPositionSchema
+from .selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
+from .client import Client, ClientSchema
+from .jobposition import JobPosition, JobPositionSchema
 
 class SelectionProcess(db.Model):
 

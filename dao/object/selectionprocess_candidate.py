@@ -1,6 +1,6 @@
 from dao.flask_config import db, ma
-from object.candidate import Candidate, CandidateSchema
-from object.candidate_info import CandidateInfoSchema
+from .candidate import Candidate, CandidateSchema
+from .candidate_info import CandidateInfoSchema
 
 class SelectionProcessCandidate(db.Model):
 

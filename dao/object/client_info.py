@@ -1,6 +1,6 @@
 from dao.flask_config import db, ma
-from object.client import Client
-from object.jobposition import JobPosition
+from .client import Client
+from .jobposition import JobPosition
 
 class ClientInfo():
     all_clients_resumen = db.session.query(
