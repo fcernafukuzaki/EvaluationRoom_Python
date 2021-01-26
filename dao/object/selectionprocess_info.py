@@ -1,4 +1,4 @@
-from dao.flask_config import db, ma
+from ..flask_config import db, ma
 from .selectionprocess import SelectionProcess
 from .client import Client, ClientSchema
 from .jobposition import JobPosition

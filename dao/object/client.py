@@ -1,4 +1,4 @@
-from dao.flask_config import db, ma
+from ..flask_config import db, ma
 
 class Client(db.Model):
     __table_args__ = {"schema": "evaluationroom", 'extend_existing': True}

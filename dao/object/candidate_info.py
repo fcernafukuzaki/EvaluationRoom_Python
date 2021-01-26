@@ -1,7 +1,7 @@
-from .flask_config import db, ma
-from object.candidate import Candidate
-from object.candidate_psychologicaltest import CandidatePsychologicalTest
-from object.candidate_telephone import CandidateTelephone
+from ..flask_config import db, ma
+from .candidate import Candidate
+from .candidate_psychologicaltest import CandidatePsychologicalTest
+from .candidate_telephone import CandidateTelephone
 
 class CandidateInfo():
     all_candidates_resumen = db.session.query(
