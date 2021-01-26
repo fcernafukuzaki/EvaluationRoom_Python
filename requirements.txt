@@ -14,3 +14,4 @@ marshmallow
 marshmallow-sqlalchemy
 flask-cors
 urllib3
+gunicorn
