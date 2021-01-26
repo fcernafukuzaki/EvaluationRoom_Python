@@ -1,13 +1,13 @@
 from .flask_config import api
 from .controller.candidate_controller import *
-from .candidate_info_controller import *
-from .selectionprocess_controller import *
-from .selectionprocess_candidate_controller import *
-from .client_controller import *
-from .client_info_controller import *
-from .jobposition_controller import *
-from .jobposition_candidate_controller import *
-from .candidate_without_selectionprocess_controller import *
+from .controller.candidate_info_controller import *
+from .controller.selectionprocess_controller import *
+from .controller.selectionprocess_candidate_controller import *
+from .controller.client_controller import *
+from .controller.client_info_controller import *
+from .controller.jobposition_controller import *
+from .controller.jobposition_candidate_controller import *
+from .controller.candidate_without_selectionprocess_controller import *
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
