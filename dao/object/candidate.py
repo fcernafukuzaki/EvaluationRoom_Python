@@ -1,6 +1,6 @@
 from ..flask_config import db, ma
-from object.candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
-from object.candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
+from .candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
+from .candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
 
 class Candidate(db.Model):
     __table_args__ = {"schema": "evaluationroom"}
