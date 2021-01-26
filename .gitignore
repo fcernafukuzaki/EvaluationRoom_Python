@@ -3,9 +3,9 @@ templates/
 tests/
 venv/
 
-src/settings.py
-src/objects/
+settings.py
+objects/
 
 *.py_
-src/controller/can*
-src/object/can*
+controller/can*
+object/can*
