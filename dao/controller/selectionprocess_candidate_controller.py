@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from dao.flask_config import app
+from .flask_config import app
 from service.selectionprocess_candidate_service import SelectionProcessCandidateService
 
 selectionprocess_candidate_service = SelectionProcessCandidateService()
