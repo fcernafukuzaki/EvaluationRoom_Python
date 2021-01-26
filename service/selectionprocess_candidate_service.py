@@ -1,7 +1,7 @@
 from flask import jsonify
 from common.util import str2bool
 from dao.flask_config import db
-from object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
+from dao.object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
 
 selectionprocess_candidate_schema = SelectionProcessCandidateSchema()
 selectionprocess_candidates_schema = SelectionProcessCandidateSchema(many=True)

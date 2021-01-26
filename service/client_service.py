@@ -1,6 +1,6 @@
 from flask import jsonify
 from dao.flask_config import db
-from object.client import Client, ClientSchema
+from dao.object.client import Client, ClientSchema
 
 client_schema = ClientSchema()
 clients_schema = ClientSchema(many=True)
