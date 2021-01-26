@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from .flask_config import app
+from ..flask_config import app
 from service.jobposition_candidate_service import JobPositionCandidateService
 from service.selectionprocess_candidate_service import SelectionProcessCandidateService
 from service.candidate_apreciation_service import CandidateApreciationService
