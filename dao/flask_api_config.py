@@ -1,5 +1,5 @@
 from .flask_config import api
-from .controller.candidate_controller import *
+from controller.candidate_controller import *
 from controller.candidate_info_controller import *
 from controller.selectionprocess_controller import *
 from controller.selectionprocess_candidate_controller import *
