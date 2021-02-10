@@ -70,7 +70,7 @@ class SelectionProcessInfo():
                         SelectionProcess.date_process_end,
                         SelectionProcess.idjobposition,
                         JobPosition.nombre
-                    ).order_by(SelectionProcess.idclient, SelectionProcess.idjobposition)
+                    ).order_by(desc(SelectionProcess.idclient), desc(SelectionProcess.idjobposition))
         return all_processselection_resumen
     
     def candidates_without_selectionprocess_info():
@@ -100,7 +100,7 @@ class SelectionProcessInfo():
                         Candidate.selfregistration
                     ).filter(Candidate.idcandidato.notin_(subquery)
                     ).group_by(Candidate.idcandidato
-                    ).order_by(Candidate.idcandidato.desc())
+                    ).order_by(desc(Candidate.idcandidato))
         return all_processselection_resumen
 
     def candidates_psychologicaltest_info(processStatus='True'):
