@@ -123,7 +123,7 @@ class SelectionProcessInfo():
                         SelectionProcessCandidate.idcandidate==CandidatePsychologicalTest.idcandidato
                     ).outerjoin(PsychologicalTest, 
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
-                    ).order_by(CandidatePsychologicalTest.idcandidato, CandidatePsychologicalTest.idtestpsicologico)
+                    ).order_by(CandidatePsychologicalTest.idcandidato, CandidatePsychologicalTest.idtestpsicologico.desc())
         return all_candidates_psychologicaltest_resumen
 
     def candidates_psychologicaltest_without_selectionprocess_info():
