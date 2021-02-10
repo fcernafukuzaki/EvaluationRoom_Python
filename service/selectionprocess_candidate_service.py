@@ -1,4 +1,5 @@
 from flask import jsonify
+from sqlalchemy import desc
 from common.util import str2bool
 from dao.flask_config import db
 from dao.object.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
@@ -16,7 +17,7 @@ class SelectionProcessCandidateService():
         elif not idclient and idjobposition:
             return {'message': 'Client identity is required'}, 500
         else:
-            all_selectionprocess = SelectionProcessCandidate.query.order_by(SelectionProcessCandidate.idjobposition.desc()).all()
+            all_selectionprocess = SelectionProcessCandidate.query.order_by(desc(SelectionProcessCandidate.idjobposition)).all()
         
         if all_selectionprocess:
             result = selectionprocess_candidates_schema.dump(all_selectionprocess)
