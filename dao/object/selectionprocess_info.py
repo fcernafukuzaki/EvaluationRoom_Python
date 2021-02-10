@@ -1,4 +1,5 @@
 from ..flask_config import db, ma
+from sqlalchemy import desc
 from .selectionprocess import SelectionProcess
 from .client import Client, ClientSchema
 from .jobposition import JobPosition
@@ -123,7 +124,7 @@ class SelectionProcessInfo():
                         SelectionProcessCandidate.idcandidate==CandidatePsychologicalTest.idcandidato
                     ).outerjoin(PsychologicalTest, 
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
-                    ).order_by(SelectionProcess.idjobposition.desc(), CandidatePsychologicalTest.idcandidato.desc(), CandidatePsychologicalTest.idtestpsicologico)
+                    ).order_by(desc(SelectionProcess.idjobposition), desc(CandidatePsychologicalTest.idcandidato), CandidatePsychologicalTest.idtestpsicologico)
         return all_candidates_psychologicaltest_resumen
 
     def candidates_psychologicaltest_without_selectionprocess_info():
