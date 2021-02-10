@@ -70,7 +70,7 @@ class SelectionProcessInfo():
                         SelectionProcess.date_process_end,
                         SelectionProcess.idjobposition,
                         JobPosition.nombre
-                    ).order_by(desc(SelectionProcess.idclient), desc(SelectionProcess.idjobposition))
+                    ).order_by(desc(SelectionProcess.idclient), desc(SelectionProcess.idjobposition), desc(Candidate.idcandidato))
         return all_processselection_resumen
     
     def candidates_without_selectionprocess_info():
