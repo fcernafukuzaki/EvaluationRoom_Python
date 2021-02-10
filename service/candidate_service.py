@@ -33,7 +33,7 @@ class CandidateService():
         return candidate_schema.jsonify(selectionprocess)
 
     def delete_candidate(self, idcandidate, nombre, apellidopaterno):
-        selectionprocess = Candidate.query.get((idclient, idjobposition, idcandidate))
+        selectionprocess = Candidate.query.get((idcandidate, nombre, idcandidate))
 
         db.session.delete(selectionprocess)
         db.session.commit()
