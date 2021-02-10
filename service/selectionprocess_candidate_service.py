@@ -16,7 +16,7 @@ class SelectionProcessCandidateService():
         elif not idclient and idjobposition:
             return {'message': 'Client identity is required'}, 500
         else:
-            all_selectionprocess = SelectionProcessCandidate.query.all()
+            all_selectionprocess = SelectionProcessCandidate.query.order_by(SelectionProcessCandidate.idjobposition.desc()).all()
         
         if all_selectionprocess:
             result = selectionprocess_candidates_schema.dump(all_selectionprocess)
