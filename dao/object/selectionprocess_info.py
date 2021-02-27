@@ -138,13 +138,10 @@ class SelectionProcessInfo():
                         PsychologicalTest.nombre,
                         db.session.query(
                             db.func.count(CandidatePsychologicalTestDetail.idpregunta)
-                        ).filter(CandidatePsychologicalTestDetail.idpregunta==CandidatePsychologicalTest.idcandidato,
+                        ).filter(CandidatePsychologicalTestDetail.idcandidato==CandidatePsychologicalTest.idcandidato,
                             CandidatePsychologicalTestDetail.idtestpsicologico==PsychologicalTest.idtestpsicologico
                         ).label('cantidad_preguntas_respondidas'),
-                        db.session.query(
-                            db.func.count(PsychologicalTest.cantidadpreguntas)
-                        ).filter(PsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
-                        ).label('cantidad_preguntas_test')
+                        PsychologicalTest.cantidadpreguntas.label('cantidad_preguntas_test')
                     ).filter(CandidatePsychologicalTest.idcandidato.notin_(subquery)
                     ).outerjoin(PsychologicalTest, 
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico

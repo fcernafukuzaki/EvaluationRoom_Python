@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from ..flask_config import db, ma
 
 
 class CandidatePsychologicalTestDetail(db.Model):
