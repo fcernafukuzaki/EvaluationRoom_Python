@@ -7,6 +7,7 @@ from .selectionprocess_candidate import SelectionProcessCandidate, SelectionProc
 from .candidate_info import CandidateInfo, CandidateInfoSchema
 from .candidate import Candidate
 from .candidate_psychologicaltest import CandidatePsychologicalTest
+from .candidate_psychologicaltestdetail import CandidatePsychologicalTestDetail
 from .candidate_telephone import CandidateTelephone
 from .psychologicaltest import PsychologicalTest
 from datetime import datetime, timedelta
@@ -134,7 +135,16 @@ class SelectionProcessInfo():
                         CandidatePsychologicalTest.idcandidato,
                         CandidatePsychologicalTest.idtestpsicologico,
                         CandidatePsychologicalTest.fechaexamen,
-                        PsychologicalTest.nombre
+                        PsychologicalTest.nombre,
+                        db.session.query(
+                            db.func.count(CandidatePsychologicalTestDetail.idpregunta)
+                        ).filter(CandidatePsychologicalTestDetail.idpregunta==CandidatePsychologicalTest.idcandidato,
+                            CandidatePsychologicalTestDetail.idtestpsicologico==PsychologicalTest.idtestpsicologico
+                        ).label('cantidad_preguntas_respondidas'),
+                        db.session.query(
+                            db.func.count(PsychologicalTest.cantidadpreguntas)
+                        ).filter(PsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
+                        ).label('cantidad_preguntas_test')
                     ).filter(CandidatePsychologicalTest.idcandidato.notin_(subquery)
                     ).outerjoin(PsychologicalTest, 
                         CandidatePsychologicalTest.idtestpsicologico==PsychologicalTest.idtestpsicologico
@@ -168,4 +178,4 @@ class CandidatePsychologicalTestInfoSchema(ma.Schema):
 
 class CandidatePsychologicalTestWithoutSelectionProcessInfoSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'idcandidato', 'idtestpsicologico', 'fechaexamen', 'nombre')
+        fields = ('id', 'idcandidato', 'idtestpsicologico', 'fechaexamen', 'nombre', 'cantidad_preguntas_respondidas', 'cantidad_preguntas_test')
