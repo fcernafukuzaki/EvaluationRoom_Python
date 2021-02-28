@@ -117,7 +117,13 @@ class SelectionProcessInfo():
                         SelectionProcess.idjobposition,
                         CandidatePsychologicalTest.idtestpsicologico,
                         CandidatePsychologicalTest.fechaexamen,
-                        PsychologicalTest.nombre
+                        PsychologicalTest.nombre,
+                        db.session.query(
+                            db.func.count(CandidatePsychologicalTestDetail.idpregunta)
+                        ).filter(CandidatePsychologicalTestDetail.idcandidato==SelectionProcessCandidate.idcandidate,
+                            CandidatePsychologicalTestDetail.idtestpsicologico==PsychologicalTest.idtestpsicologico
+                        ).label('cantidad_preguntas_respondidas'),
+                        PsychologicalTest.cantidadpreguntas.label('cantidad_preguntas_test')
                     ).filter(filtroSelectionProcess
                     ).outerjoin(SelectionProcessCandidate, 
                         SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition
@@ -171,7 +177,7 @@ class CandidateWithoutSelectionProcessSchema(ma.Schema):
 
 class CandidatePsychologicalTestInfoSchema(ma.Schema):
     class Meta:
-        fields = ('id', 'idcandidato', 'idtestpsicologico', 'fechaexamen', 'nombre')
+        fields = ('id', 'idcandidato', 'idtestpsicologico', 'fechaexamen', 'nombre', 'cantidad_preguntas_respondidas', 'cantidad_preguntas_test')
 
 class CandidatePsychologicalTestWithoutSelectionProcessInfoSchema(ma.Schema):
     class Meta:
