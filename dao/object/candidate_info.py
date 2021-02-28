@@ -9,6 +9,7 @@ class CandidateInfo():
                     Candidate.nombre,
                     Candidate.apellidopaterno,
                     Candidate.apellidomaterno,
+                    db.func.concat(Candidate.nombre, ' ', Candidate.apellidopaterno, ' ', Candidate.apellidomaterno).label('nombre_completo'),
                     Candidate.fechanacimiento,
                     Candidate.correoelectronico,
                     db.session.query(CandidateTelephone.numero
@@ -34,5 +35,5 @@ class CandidateInfo():
 class CandidateInfoSchema(ma.Schema):
     class Meta:
         fields = ('cant_puestos_laborales', 'cant_examenes_asignados', 'tiene_resultado',
-                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
+                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'nombre_completo', 'fechanacimiento', 'correoelectronico', 'selfregistration',
                 'telefono_fijo', 'telefono_movil')
