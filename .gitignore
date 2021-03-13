@@ -7,5 +7,6 @@ settings.py
 objects/
 
 *.py_
+*.pyc
 controller/can*
 object/can*
