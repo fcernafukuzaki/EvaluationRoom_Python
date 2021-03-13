@@ -3,8 +3,8 @@ templates/
 tests/
 venv/
 
-src/settings.py
-src/objects/
+settings.py
+objects/
 
 *.py_
 *.pyc
