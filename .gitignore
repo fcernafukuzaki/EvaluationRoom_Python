@@ -7,5 +7,6 @@ src/settings.py
 src/objects/
 
 *.py_
-src/controller/can*
-src/object/can*
+*.pyc
+controller/can*
+object/can*

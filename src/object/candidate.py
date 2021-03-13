@@ -13,6 +13,7 @@ class Candidate(db.Model):
     fechanacimiento = db.Column(db.DateTime)
     correoelectronico = db.Column(db.String())
     selfregistration = db.Column(db.Boolean())
+    fecharegistro = db.Column(db.DateTime)
 
     telephones = db.relationship('CandidateTelephone', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidateTelephone.idcandidato)')
@@ -31,7 +32,7 @@ class Candidate(db.Model):
 class CandidateSchema(ma.Schema):
     class Meta:
         fields = ('idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
-            'telephones', 'psychologicaltests')
+            'telephones', 'psychologicaltests', 'fecharegistro')
     
     telephones = ma.Nested(CandidateTelephoneSchema, many=True)
     psychologicaltests = ma.Nested(CandidatePsychologicalTestSchema, many=True)

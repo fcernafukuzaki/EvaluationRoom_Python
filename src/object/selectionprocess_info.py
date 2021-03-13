@@ -39,6 +39,7 @@ class SelectionProcessInfo():
                         Candidate.apellidopaterno,
                         Candidate.apellidomaterno,
                         Candidate.fechanacimiento,
+                        Candidate.fecharegistro.label('fecha_registro'),
                         Candidate.correoelectronico,
                         db.session.query(CandidateTelephone.numero
                             ).filter(CandidateTelephone.idtelefono==1, 
@@ -80,6 +81,7 @@ class SelectionProcessInfo():
                         Candidate.apellidopaterno,
                         Candidate.apellidomaterno,
                         Candidate.fechanacimiento,
+                        Candidate.fecharegistro.label('fecha_registro'),
                         Candidate.correoelectronico,
                         db.session.query(CandidateTelephone.numero
                             ).filter(CandidateTelephone.idtelefono==1, 
@@ -151,15 +153,15 @@ class SelectionProcessInfoSchema(ma.Schema):
                 'process_active', 'user_register',
                 'cant_candidatos_asignados',
                 'cant_puestos_laborales', 'cant_examenes_asignados', 'tiene_resultado',
-                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
-                'telefono_fijo', 'telefono_movil'
+                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'nombre_completo', 'fechanacimiento', 'correoelectronico', 'selfregistration',
+                'telefono_fijo', 'telefono_movil', 'fecha_registro'
                 )
 
 class CandidateWithoutSelectionProcessSchema(ma.Schema):
     class Meta:
         fields = ('cant_examenes_asignados', 'tiene_resultado',
-                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
-                'telefono_fijo', 'telefono_movil')
+                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'nombre_completo', 'fechanacimiento', 'correoelectronico', 'selfregistration',
+                'telefono_fijo', 'telefono_movil', 'fecha_registro')
 
 class CandidatePsychologicalTestInfoSchema(ma.Schema):
     class Meta:

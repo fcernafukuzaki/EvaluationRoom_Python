@@ -10,6 +10,7 @@ class CandidateInfo():
                     Candidate.apellidopaterno,
                     Candidate.apellidomaterno,
                     Candidate.fechanacimiento,
+                    Candidate.fecharegistro.label('fecha_registro'),
                     Candidate.correoelectronico,
                     db.session.query(CandidateTelephone.numero
                         ).filter(CandidateTelephone.idtelefono==1, 
@@ -36,3 +37,5 @@ class CandidateInfoSchema(ma.Schema):
         fields = ('cant_puestos_laborales', 'cant_examenes_asignados', 'tiene_resultado',
                 'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
                 'telefono_fijo', 'telefono_movil')
+                'idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'nombre_completo', 'fechanacimiento', 'correoelectronico', 'selfregistration',
+                'telefono_fijo', 'telefono_movil', 'fecha_registro')
