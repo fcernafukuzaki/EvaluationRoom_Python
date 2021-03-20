@@ -14,8 +14,8 @@ class CandidateResetTestService():
                 CandidatePsychologicalTestHistory.idtestpsicologico == idpsychologicaltest
             )
 
-            if count_times_psychologicaltest.count() >= 0:
-                time = count_times_psychologicaltest.count()
+            if count_times_psychologicaltest.count() > 0:
+                time = count_times_psychologicaltest[0].intento + 1
                 data = ({'time': time, 'idcandidate': idcandidate, 'idtestpsicologico': idpsychologicaltest, 'id_user': id_user},)
                 
                 sql_insert = text('''INSERT INTO evaluationroom.candidatotest_historico 
