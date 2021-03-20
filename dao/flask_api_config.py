@@ -8,6 +8,7 @@ from .controller.client_info_controller import *
 from .controller.jobposition_controller import *
 from .controller.jobposition_candidate_controller import *
 from .controller.candidate_without_selectionprocess_controller import *
+from .controller.candidate_resettest_controller import *
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
@@ -45,3 +46,6 @@ api.add_resource(JobPositionCandidateController,
     '/v1/jobpositioncandidate',
     '/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>',
     '/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>/<int:idcandidate>')
+
+api.add_resource(CandidateResetTestController, 
+    '/v1/candidate/resettest')

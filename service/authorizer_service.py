@@ -18,6 +18,6 @@ class AuthorizerService():
                                     headers={'Content-Type': 'application/json'})
             print('Resultado de API: {} {}'.format(response.status, response.data))
             if response.status == 200:
-                return True, 'Usuario valido', response.status
-            return False, json.loads(response.data.decode('utf-8'))['mensaje'], response.status
-        return False, 'Usuario no valido.', 404
+                return True, 'Usuario valido', response.status, json.loads(response.data.decode('utf-8'))['idusuario']
+            return False, json.loads(response.data.decode('utf-8'))['mensaje'], response.status, None
+        return False, 'Usuario no valido.', 404, None

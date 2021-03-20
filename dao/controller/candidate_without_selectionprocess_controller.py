@@ -12,7 +12,7 @@ class CandidateWithoutSelectionProcessController(Resource):
     def post(self):
         token = request.json['headers']['Authorization']
         email = request.json['headers']['correoelectronico']
-        flag, respuesta, codigo = authorizer_service.validate_recruiter_identify(token, email)
+        flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
         if flag:
             return selectionprocess_service.get_candidates_without_selectionprocess()
         return {'message': respuesta}, codigo
