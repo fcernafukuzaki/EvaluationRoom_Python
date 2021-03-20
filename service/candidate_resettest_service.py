@@ -34,8 +34,6 @@ class CandidateResetTestService():
                     evaluationroom.candidatotest.idtestpsicologico ''')
 
                 connection = create_engine(DATABASE_URI)
-                for line in data:
-                    connection.execute(sql_insert, **line)
                 
                 sql_insert_detail = text('''INSERT INTO evaluationroom.candidatotestdetalle_historico 
                     (intento, idtestpsicologico, idpregunta, idparte, idcandidato, respuesta, fecharegistro, origin, host, user_agent, fecharegistro_usuario, idusuario) 
@@ -60,9 +58,24 @@ class CandidateResetTestService():
                     evaluationroom.candidatotestdetalle.idparte,
                     evaluationroom.candidatotestdetalle.idpregunta ''')
                 
+                sql_update = text('''UPDATE evaluationroom.candidatotest 
+                    SET resultado = '""', 
+                    fechaexamen = '1900-01-01 00:00:00+00' 
+                    WHERE 
+                    evaluationroom.candidatotest.idcandidato = :idcandidate 
+                    AND evaluationroom.candidatotest.idtestpsicologico = :idtestpsicologico ''')
+
+                sql_delete = text('''DELETE FROM evaluationroom.candidatotestdetalle
+                    WHERE 
+                    evaluationroom.candidatotestdetalle.idcandidato = :idcandidate
+                    AND evaluationroom.candidatotestdetalle.idtestpsicologico = :idtestpsicologico ''')
+                
                 for line in data:
+                    connection.execute(sql_insert, **line)
                     connection.execute(sql_insert_detail, **line)
-            
+                    connection.execute(sql_update, **line)
+                    connection.execute(sql_delete, **line)
+
             return {'message': 'Inserted'}, 200
         except:
             return {'message': 'Error'}, 503
