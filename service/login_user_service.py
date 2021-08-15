@@ -1,6 +1,6 @@
 from flask import jsonify
-from dao.flask_config import db
-from dao.object.login_user import LoginUser, LoginUserSchema
+from configs.flask_config import db
+from objects.login_user import LoginUser, LoginUserSchema
 
 login_user_schema = LoginUserSchema()
 

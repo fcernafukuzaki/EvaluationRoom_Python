@@ -21,3 +21,8 @@ class AuthorizerService():
                 return True, 'Usuario valido', response.status, json.loads(response.data.decode('utf-8'))['idusuario']
             return False, json.loads(response.data.decode('utf-8'))['mensaje'], response.status, None
         return False, 'Usuario no valido.', 404, None
+    
+    def validate_token(self, token):
+        if token:
+            return True
+        return False

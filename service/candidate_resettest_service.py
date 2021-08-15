@@ -1,8 +1,8 @@
 from flask import jsonify
 from sqlalchemy.sql import table, column, text
 from sqlalchemy import create_engine
-from dao.flask_config import db, DATABASE_URI
-from dao.object.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
+from configs.flask_config import db, DATABASE_URI
+from objects.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
 
 class CandidateResetTestService():
 
