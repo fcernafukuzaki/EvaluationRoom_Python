@@ -1,3 +1,4 @@
+import datetime
 from configs.flask_config import db, ma
 from .candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
 from .candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
@@ -13,7 +14,12 @@ class Candidate(db.Model):
     fechanacimiento = db.Column(db.DateTime)
     correoelectronico = db.Column(db.String())
     selfregistration = db.Column(db.Boolean())
-    fecharegistro = db.Column(db.DateTime)
+    fecharegistro = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+    iddocumentoidentidad = db.Column(db.Integer)
+    numerodocumentoidentidad = db.Column(db.String())
+    idestadocivil = db.Column(db.Integer)
+    cantidadhijos = db.Column(db.Integer)
+    idsexo = db.Column(db.Integer)
 
     telephones = db.relationship('CandidateTelephone', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidateTelephone.idcandidato)')
@@ -21,12 +27,19 @@ class Candidate(db.Model):
     psychologicaltests = db.relationship('CandidatePsychologicalTest', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidatePsychologicalTest.idcandidato)')
 
-    def __init__(self, nombre, apellidopaterno, apellidomaterno, fechanacimiento, correoelectronico, selfregistration):
+    def __init__(self, idcandidato, nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
+                 cantidadhijos, fechanacimiento, correoelectronico, idsexo, selfregistration):
+        self.idcandidato = idcandidato
         self.nombre = nombre
         self.apellidopaterno = apellidopaterno
         self.apellidomaterno = apellidomaterno
+        self.iddocumentoidentidad = iddocumentoidentidad
+        self.numerodocumentoidentidad = numerodocumentoidentidad
+        self.idestadocivil = idestadocivil
+        self.cantidadhijos = cantidadhijos
         self.fechanacimiento = fechanacimiento
         self.correoelectronico = correoelectronico
+        self.idsexo = idsexo
         self.selfregistration = selfregistration
 
 class CandidateSchema(ma.Schema):

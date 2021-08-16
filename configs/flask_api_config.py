@@ -1,5 +1,4 @@
 from .flask_config import api
-from controller.candidate_controller import *
 from controller.candidate_info_controller import *
 from controller.selectionprocess_controller import *
 from controller.selectionprocess_candidate_controller import *
@@ -9,6 +8,7 @@ from controller.jobposition_controller import *
 from controller.jobposition_candidate_controller import *
 from controller.candidate_without_selectionprocess_controller import *
 from controller.candidate_resettest_controller import *
+from controller.candidate_form.candidate_controller import *
 from controller.candidate_form.ubigeo_controller import *
 from controller.candidate_form.sexo_controller import *
 from controller.candidate_form.documento_identidad_controller import *

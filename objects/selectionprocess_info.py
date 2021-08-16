@@ -56,9 +56,13 @@ class SelectionProcessInfo():
                         db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
                         db.session.query(db.func.count(CandidatePsychologicalTest.fechaexamen)
                             ).filter(CandidatePsychologicalTest.idcandidato==Candidate.idcandidato,
-                                db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
-                                db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
-                                db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01'
+                                db.or_(
+                                    (db.and_(
+                                        db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
+                                        db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
+                                        db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01')),
+                                    (CandidatePsychologicalTest.fechaexamen!=None)
+                                )
                             ).label('tiene_resultado'),
                         Candidate.selfregistration
                     ).filter(filtroSelectionProcess
@@ -98,9 +102,13 @@ class SelectionProcessInfo():
                         db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
                         db.session.query(db.func.count(CandidatePsychologicalTest.fechaexamen)
                             ).filter(CandidatePsychologicalTest.idcandidato==Candidate.idcandidato,
-                                db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
-                                db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
-                                db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01'
+                                db.or_(
+                                    (db.and_(
+                                        db.func.extract('year', CandidatePsychologicalTest.fechaexamen) != '1900',
+                                        db.func.extract('month', CandidatePsychologicalTest.fechaexamen) != '01',
+                                        db.func.extract('day', CandidatePsychologicalTest.fechaexamen) != '01')),
+                                    (CandidatePsychologicalTest.fechaexamen!=None)
+                                )
                             ).label('tiene_resultado'),
                         Candidate.selfregistration
                     ).filter(Candidate.idcandidato.notin_(subquery)

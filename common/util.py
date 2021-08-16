@@ -3,6 +3,12 @@ def str2bool(v):
     return v.lower() in ("yes", "true", "t", "1")
 
 
+def field_in_dict(dictionary, field):
+    if field in dictionary:
+        return True
+    return False
+
+
 def get_response_body(code=200, message='OK', user_message='', body=None):
     if code == 200:
         return {'code':200, 'message':message, 'user_message':user_message, 'body':body}

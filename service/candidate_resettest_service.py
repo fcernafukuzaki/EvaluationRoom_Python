@@ -60,7 +60,7 @@ class CandidateResetTestService():
                 
                 sql_update = text('''UPDATE evaluationroom.candidatotest 
                     SET resultado = '""', 
-                    fechaexamen = '1900-01-01 00:00:00+00' 
+                    fechaexamen = NULL
                     WHERE 
                     evaluationroom.candidatotest.idcandidato = :idcandidate 
                     AND evaluationroom.candidatotest.idtestpsicologico = :idtestpsicologico ''')
