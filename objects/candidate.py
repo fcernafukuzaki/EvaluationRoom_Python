@@ -1,6 +1,7 @@
 import datetime
 from configs.flask_config import db, ma
 from .candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
+from .candidate_form.candidato_direccion import CandidatoDireccion, CandidatoDireccionSchema
 from .candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema
 
 class Candidate(db.Model):
@@ -23,6 +24,9 @@ class Candidate(db.Model):
 
     telephones = db.relationship('CandidateTelephone', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidateTelephone.idcandidato)')
+    
+    addresses = db.relationship('CandidatoDireccion', lazy="dynamic", 
+                primaryjoin='and_(Candidate.idcandidato==CandidatoDireccion.idcandidato)')
     
     psychologicaltests = db.relationship('CandidatePsychologicalTest', lazy="dynamic", 
                 primaryjoin='and_(Candidate.idcandidato==CandidatePsychologicalTest.idcandidato)')
@@ -48,4 +52,14 @@ class CandidateSchema(ma.Schema):
             'telephones', 'psychologicaltests', 'fecharegistro')
     
     telephones = ma.Nested(CandidateTelephoneSchema, many=True)
+    psychologicaltests = ma.Nested(CandidatePsychologicalTestSchema, many=True)
+
+class CandidateDataSchema(ma.Schema):
+    class Meta:
+        fields = ('idcandidato', 'nombre', 'apellidopaterno', 'apellidomaterno', 'fechanacimiento', 'correoelectronico', 'selfregistration',
+            'iddocumentoidentidad','numerodocumentoidentidad','idestadocivil','cantidadhijos','idsexo',
+            'telephones', 'addresses', 'psychologicaltests', 'fecharegistro')
+    
+    telephones = ma.Nested(CandidateTelephoneSchema, many=True)
+    addresses = ma.Nested(CandidatoDireccionSchema, many=True)
     psychologicaltests = ma.Nested(CandidatePsychologicalTestSchema, many=True)

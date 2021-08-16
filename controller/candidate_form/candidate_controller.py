@@ -1,12 +1,33 @@
 from flask import request
 from flask_restful import Resource
 from common.util import field_in_dict, get_response_body
+from service.authorizer_service import AuthorizerService
 from objects.candidate import Candidate
 from service.candidate_form.candidate_service import CandidateService
 
+authorizer_service = AuthorizerService()
 candidate_service = CandidateService()
 
 class CandidateController(Resource):
+    
+    def get(self, email):
+        try:
+            token = request.headers['Authorization']
+            validated = authorizer_service.validate_token(token)
+            if validated:
+                correoelectronico = str(email).lower()
+                result, code, message = candidate_service.get_candidate_by_email(correoelectronico)
+                user_message = message
+                if result:
+                    response_body = {'candidato':result} if result else None
+                    return get_response_body(code=200, message='OK', user_message=user_message, body=response_body), 200
+                return get_response_body(code=code, message=message, user_message=user_message), code
+            message = 'Operación inválida.'
+            user_message = 'Operación inválida.'
+            return get_response_body(code=403, message=message, user_message=user_message), 403
+        except Exception as e:
+            message = f'Hubo un error durante el registro del candidato {e}'
+            return get_response_body(code=503, message=message, user_message=message), 503
     
     def post(self):
         try:

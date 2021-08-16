@@ -1,25 +1,30 @@
 from flask import jsonify
 from configs.flask_config import db
-from objects.candidate import Candidate, CandidateSchema
+from objects.candidate import Candidate, CandidateDataSchema
 from objects.candidate_telephone import CandidateTelephone
 from objects.candidate_form.candidato_direccion import CandidatoDireccion
 from objects.candidate_psychologicaltest import CandidatePsychologicalTest
 
-candidate_schema = CandidateSchema()
-candidates_schema = CandidateSchema(many=True)
+candidate_data_schema = CandidateDataSchema()
+candidates_data_schema = CandidateDataSchema(many=True)
 
 class CandidateService():
 
-    def get_candidates(self, idcandidate):        
-        if idcandidate:
-            all_selectionprocess = Candidate.query.filter(Candidate.idcandidato==idcandidate).all()
-        else:
-            all_selectionprocess = Candidate.query.all()
-        
-        if all_selectionprocess:
-            result = candidates_schema.dump(all_selectionprocess)
-            return jsonify(result)
-        return {'message': 'Not found'}, 404
+    def get_candidate_by_email(self, correoelectronico):
+        try:
+            if correoelectronico:
+                candidato = Candidate.query.filter(Candidate.correoelectronico==correoelectronico).first()
+                print(candidato)
+                if candidato:
+                    result = candidate_data_schema.dump(candidato)
+                    
+                    message = 'Existe candidato en base de datos.'
+                    return result, 200, message
+                message = f'No existe candidato en base de datos.'
+                return None, 404, message
+        except Exception as e:
+            message = f'Hubo un error al obtener datos del candidato {correoelectronico} en base de datos {e}'
+            return None, 503, message
 
     def add_candidate(self, idcandidato, nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
                  cantidadhijos, fechanacimiento, correoelectronico, idsexo, selfregistration, telefonos, direcciones):
@@ -64,7 +69,7 @@ class CandidateService():
         selectionprocess.apellidopaterno = apellidopaterno
 
         db.session.commit()
-        return candidate_schema.jsonify(selectionprocess)
+        return candidate_data_schema.jsonify(selectionprocess)
 
     def add_candidate_telephones(self, idcandidate, telefonos):
         try:

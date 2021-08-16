@@ -25,4 +25,4 @@ class CandidatoDireccion(db.Model):
 
 class CandidatoDireccionSchema(ma.Schema):
     class Meta:
-        fields = ('idcandidato', 'idtipodireccion', 'idpais', 'iddepartamento', 'iddistrito', 'direccion')
+        fields = ('idcandidato', 'idtipodireccion', 'idpais', 'iddepartamento', 'idprovincia', 'iddistrito', 'direccion')
