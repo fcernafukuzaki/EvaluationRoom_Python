@@ -34,7 +34,7 @@ class CandidateController(Resource):
                 result, code, message = candidate_service.add_candidate_tests(idcandidato, tests)
                 user_message = f"{user_message} {message}"
 
-            response_body = {'candidato':idcandidato} if idcandidato else None
+            response_body = {'candidato':{"idCandidato":idcandidato}} if idcandidato else None
             return get_response_body(code=200, message='OK', user_message=user_message, body=response_body), 200
         except Exception as e:
             message = f'Hubo un error durante el registro del candidato {e}'
