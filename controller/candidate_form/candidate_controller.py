@@ -12,6 +12,7 @@ class CandidateController(Resource):
         try:
             input_json = request.json
             idcandidato = input_json['idCandidato'] if field_in_dict(input_json, 'idCandidato') else None
+            idcandidato = idcandidato if isinstance(idcandidato, int) else None
             nombre = input_json['nombre']
             apellidopaterno = input_json['apellidoPaterno']
             apellidomaterno = input_json['apellidoMaterno']
