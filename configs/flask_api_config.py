@@ -17,6 +17,7 @@ from controller.candidate_form.tipo_direccion_controller import *
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
+    '/v1/candidate/uid=<int:uid>',
     '/v1/candidate/email=<string:email>')
 
 api.add_resource(CandidateInfoSimpleController, 

@@ -10,6 +10,22 @@ candidates_data_schema = CandidateDataSchema(many=True)
 
 class CandidateService():
 
+    def get_candidate_by_uid(self, uid):
+        try:
+            if uid:
+                candidato = Candidate.query.filter(Candidate.idcandidato==uid).first()
+                print(candidato)
+                if candidato:
+                    result = candidate_data_schema.dump(candidato)
+                    message = 'Existe candidato en base de datos.'
+                    return result, 200, message
+                message = f'No existe candidato en base de datos.'
+                return None, 404, message
+            return None, 400, 'Debe ingresar los parámetros.'
+        except Exception as e:
+            message = f'Hubo un error al obtener datos del candidato {uid} en base de datos {e}'
+            return None, 503, message
+    
     def get_candidate_by_email(self, correoelectronico):
         try:
             if correoelectronico:

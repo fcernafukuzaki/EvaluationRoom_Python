@@ -10,14 +10,18 @@ candidate_service = CandidateService()
 
 class CandidateController(Resource):
     
-    def get(self, email):
+    def get(self, uid=None, email=None):
         try:
             token = request.headers['Authorization']
             validated = authorizer_service.validate_token(token)
             if validated:
-                correoelectronico = str(email).lower()
-                result, code, message = candidate_service.get_candidate_by_email(correoelectronico)
-                user_message = message
+                if uid:
+                    result, code, message = candidate_service.get_candidate_by_uid(uid)
+                    user_message = message
+                if email:
+                    correoelectronico = str(email).lower()
+                    result, code, message = candidate_service.get_candidate_by_email(correoelectronico)
+                    user_message = message
                 if result:
                     response_body = {'candidato':result} if result else None
                     return get_response_body(code=200, message='OK', user_message=user_message, body=response_body), 200
@@ -26,7 +30,7 @@ class CandidateController(Resource):
             user_message = 'Operación inválida.'
             return get_response_body(code=403, message=message, user_message=user_message), 403
         except Exception as e:
-            message = f'Hubo un error durante el registro del candidato {e}'
+            message = f'Hubo un error al obtener datos del candidato {e}'
             return get_response_body(code=503, message=message, user_message=message), 503
     
     def post(self):
