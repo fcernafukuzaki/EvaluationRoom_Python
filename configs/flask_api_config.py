@@ -14,6 +14,7 @@ from controller.candidate_form.sexo_controller import *
 from controller.candidate_form.documento_identidad_controller import *
 from controller.candidate_form.estado_civil_controller import *
 from controller.candidate_form.tipo_direccion_controller import *
+from controller.candidate_form.psychologicaltest_controller import *
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
@@ -74,3 +75,6 @@ api.add_resource(EstadoCivilController,
 
 api.add_resource(TipoDireccionController, 
     '/v1/candidateform/tipodireccion')
+
+api.add_resource(PsychologicalTestController, 
+    '/v1/candidateform/testpsicologicos')
