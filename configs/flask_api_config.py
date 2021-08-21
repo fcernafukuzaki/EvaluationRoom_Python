@@ -15,6 +15,10 @@ from controller.candidate_form.documento_identidad_controller import *
 from controller.candidate_form.estado_civil_controller import *
 from controller.candidate_form.tipo_direccion_controller import *
 from controller.candidate_form.psychologicaltest_controller import *
+from controller.login_user.login_user_controller import *
+
+api.add_resource(LoginUserController, 
+    '/login/authenticate')
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
