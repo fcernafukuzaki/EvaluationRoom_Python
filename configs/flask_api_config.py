@@ -16,6 +16,7 @@ from controller.candidate_form.estado_civil_controller import *
 from controller.candidate_form.tipo_direccion_controller import *
 from controller.candidate_form.psychologicaltest_controller import *
 from controller.login_user.login_user_controller import *
+from controller.api.api import *
 
 api.add_resource(LoginUserController, 
     '/login/authenticate')
@@ -82,3 +83,7 @@ api.add_resource(TipoDireccionController,
 
 api.add_resource(PsychologicalTestController, 
     '/v1/candidateform/testpsicologicos')
+
+# Obtener interpretación de las pruebas psicológicas
+api.add_resource(PsychologicalTestInterpretacionController, 
+    '/testpsicologico/interpretacion/candidato/<int:idcandidato>')
