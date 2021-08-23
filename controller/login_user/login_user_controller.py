@@ -21,8 +21,8 @@ class LoginUserController(Resource):
 
             idusuario = user_object['idusuario'] if flag else 0
             email = None if flag else correoelectronico
-            result, _, message = login_user_service.add_login_user(idusuario, hash, email)
-            user_message = f"{user_message} {message}"
+            result, _, message_aux = login_user_service.add_login_user(idusuario, hash, email)
+            user_message = f"{user_message} {message_aux}"
 
             response_body = {'usuario':{"idusuario":idusuario,"correoelectronico":correoelectronico,"perfiles":user_object['perfiles']}} if flag else None
             return get_response_body(code=code, message=message, user_message=user_message, body=response_body), code
