@@ -86,4 +86,5 @@ api.add_resource(PsychologicalTestController,
 
 # Obtener interpretación de las pruebas psicológicas
 api.add_resource(PsychologicalTestInterpretacionController, 
-    '/testpsicologico/interpretacion/candidato/<int:idcandidato>')
+    '/testpsicologico/interpretacion/candidato/<int:idcandidato>',
+    '/testpsicologico/download/informe/uid=<int:uid>&email=<string:email>')

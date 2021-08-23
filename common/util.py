@@ -16,10 +16,10 @@ def get_response_body(code=200, message='OK', user_message='', body=None):
         return {'code':200, 'message':message, 'user_message':user_message, 'body':body}
     return {'error':{'code':code, 'message':message, 'user_message':user_message}}
 
-def invoke_api(url, body, method='POST'):
+def invoke_api(url, body, headers={'Content-Type': 'application/json'}, method='POST'):
     http = urllib3.PoolManager()
     response = http.request(method,
                             url,
                             body=body,
-                            headers={'Content-Type': 'application/json'})
+                            headers=headers)
     return response

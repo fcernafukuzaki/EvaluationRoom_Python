@@ -9,7 +9,7 @@ class AuthorizerService():
             url = 'https://api.evaluationroom.com/reclutador_identificador_validar/'
             data = {"Authorization": token, "correoelectronico": email}
             encoded_data = json.dumps(data).encode('utf-8')
-            response = invoke_api(url, encoded_data, 'POST')
+            response = invoke_api(url, body=encoded_data, method='POST')
             print('Resultado de API: {} {}'.format(response.status, response.data))
             if response.status == 200:
                 return True, 'Usuario valido', response.status, json.loads(response.data.decode('utf-8'))['idusuario']
@@ -21,7 +21,7 @@ class AuthorizerService():
             url = 'https://api.evaluationroom.com/reclutador_identificador_validar/reclutador_email_validar'
             data = {"Authorization": token, "correoelectronico": email}
             encoded_data = json.dumps(data).encode('utf-8')
-            response = invoke_api(url, encoded_data, 'POST')
+            response = invoke_api(url, body=encoded_data, method='POST')
             print('Resultado de API: {} {}'.format(response.status, response.data))
             if response.status == 200:
                 return True, 'Usuario valido', response.status, json.loads(response.data.decode('utf-8'))
