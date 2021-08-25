@@ -23,6 +23,7 @@ api.add_resource(LoginUserController,
 
 api.add_resource(CandidateController, 
     '/v1/candidate',
+    '/v1/candidate/self_registered=<string:self_registered>',
     '/v1/candidate/uid=<int:uid>',
     '/v1/candidate/email=<string:email>')
 
