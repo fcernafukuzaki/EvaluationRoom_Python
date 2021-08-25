@@ -1,8 +1,8 @@
 from flask import jsonify
 from sqlalchemy.sql import table, column, text
 from sqlalchemy import create_engine
-from dao.flask_config import db, DATABASE_URI
-from dao.object.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
+from configs.flask_config import db, DATABASE_URI
+from objects.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
 
 class CandidateResetTestService():
 
@@ -60,7 +60,7 @@ class CandidateResetTestService():
                 
                 sql_update = text('''UPDATE evaluationroom.candidatotest 
                     SET resultado = '""', 
-                    fechaexamen = '1900-01-01 00:00:00+00' 
+                    fechaexamen = NULL
                     WHERE 
                     evaluationroom.candidatotest.idcandidato = :idcandidate 
                     AND evaluationroom.candidatotest.idtestpsicologico = :idtestpsicologico ''')

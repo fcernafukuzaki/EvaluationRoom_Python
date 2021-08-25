@@ -1,6 +1,6 @@
 from flask import jsonify
-from dao.flask_config import db
-from dao.object.jobposition import JobPosition, JobPositionSchema
+from configs.flask_config import db
+from objects.jobposition import JobPosition, JobPositionSchema
 
 jobposition_schema = JobPositionSchema()
 jobpositions_schema = JobPositionSchema(many=True)
