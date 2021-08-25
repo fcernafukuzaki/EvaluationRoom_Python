@@ -28,7 +28,7 @@ class PsychologicalTestInterpretacionController(Resource):
                     response = invoke_api(url, body=None, method='GET')
                     print('Resultado de API de descarga: {} | {}'.format(response.status, response.headers.get('content-disposition')))
                     filename = str(response.headers.get('content-disposition')).split("filename=")
-                    filename = filename[1][1:-1]
+                    filename = filename[1][1:-1].strip()
                     mimetype = response.headers.get('content-type')
                     return send_file(io.BytesIO(response.data),mimetype=mimetype,as_attachment=True,attachment_filename=filename)
         except Exception as e:
