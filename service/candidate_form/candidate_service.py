@@ -85,10 +85,10 @@ class CandidateService():
                 candidate_psychologicaltest = CandidatePsychologicalTest.query.get((idcandidate, idtest))
                 db.session.delete(candidate_psychologicaltest)
                 db.session.commit()
-            message = f'Se eliminó datos de la prueba psicológica {idtest} del candidato en base de datos.'
+            message = f'Se eliminó datos de las pruebas psicológicas del candidato en base de datos.'
             return True, 200, message
         except Exception as e:
-            message = f'Hubo un error al eliminar datos de la prueba psicológica {idtest} del candidato {idcandidate} en base de datos {e}'
+            message = f'Hubo un error al eliminar datos de las pruebas psicológicas del candidato {idcandidate} en base de datos {e}'
             return None, 503, message
     
     def update_candidate(self, id_candidato, nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
