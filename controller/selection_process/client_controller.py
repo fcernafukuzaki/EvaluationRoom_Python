@@ -77,7 +77,7 @@ class ClientController(Resource):
 
                 response_body = {'client':{'uid':result, 'datetime':datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")}} if result else None
         except Exception as e:
-            code, message = 503, f'Hubo un error al actualizar usuario {e}'
+            code, message = 503, f'Hubo un error al actualizar cliente {e}'
             user_message = message
         finally:
             if response_body:
@@ -101,7 +101,7 @@ class ClientController(Resource):
 
                 response_body = {'client':{'uid':result, 'datetime':datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")}} if result else None
         except Exception as e:
-            code, message = 503, f'Hubo un error al actualizar usuario {e}'
+            code, message = 503, f'Hubo un error al eliminar cliente {e}'
             user_message = message
         finally:
             if response_body:
