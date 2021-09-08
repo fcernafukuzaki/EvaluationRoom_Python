@@ -1,6 +1,6 @@
 from configs.flask_config import db, ma
-from .client import Client
-from .jobposition import JobPosition
+from objects.selection_process.client import Client
+from objects.selection_process.jobposition import JobPosition
 
 class ClientInfo():
     all_clients_resumen = db.session.query(

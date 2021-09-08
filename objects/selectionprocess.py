@@ -1,7 +1,7 @@
 from configs.flask_config import db, ma
-from .selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
-from .client import Client, ClientSchema
-from .jobposition import JobPosition, JobPositionSchema
+from objects.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
+from objects.selection_process.client import Client, ClientSchema
+from objects.selection_process.jobposition import JobPosition, JobPositionSchema
 
 class SelectionProcess(db.Model):
 
