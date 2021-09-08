@@ -1,15 +1,15 @@
 from configs.flask_config import db, ma
 from sqlalchemy import desc
-from .selectionprocess import SelectionProcess
-from .client import Client, ClientSchema
-from .jobposition import JobPosition
-from .selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
-from .candidate_info import CandidateInfo, CandidateInfoSchema
-from .candidate import Candidate
-from .candidate_psychologicaltest import CandidatePsychologicalTest
-from .candidate_psychologicaltestdetail import CandidatePsychologicalTestDetail
-from .candidate_telephone import CandidateTelephone
-from .psychologicaltest import PsychologicalTest
+from objects.selectionprocess import SelectionProcess
+from objects.selection_process.client import Client, ClientSchema
+from objects.selection_process.jobposition import JobPosition
+from objects.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
+from objects.candidate_info import CandidateInfo, CandidateInfoSchema
+from objects.candidate import Candidate
+from objects.candidate_psychologicaltest import CandidatePsychologicalTest
+from objects.candidate_psychologicaltestdetail import CandidatePsychologicalTestDetail
+from objects.candidate_telephone import CandidateTelephone
+from objects.psychologicaltest import PsychologicalTest
 from datetime import datetime, timedelta
 
 
