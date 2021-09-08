@@ -25,8 +25,7 @@ class ClientService():
         result, code, message = None, 404, 'No existe cliente.'
         try:
             client = db.session.query(Client).filter(Client.idcliente==uid).order_by(Client.idcliente).all()
-            print(client, type(client))
-
+            
             if client:
                 result, code, message = client_schema.dump(client[0]), 200, 'Se encontró cliente.'
         except Exception as e:
@@ -69,7 +68,7 @@ class ClientService():
             client = Client.query.get((uid))
             db.session.delete(client)
             db.session.commit()
-            result = uid
+            result, code, message = uid, 200, 'Se eliminó cliente en base de datos.'
         except Exception as e:
             code, message = 503, f'Hubo un error al eliminar cliente en base de datos {e}'
         finally:

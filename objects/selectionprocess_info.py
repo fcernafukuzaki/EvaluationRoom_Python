@@ -2,7 +2,7 @@ from configs.flask_config import db, ma
 from sqlalchemy import desc
 from objects.selectionprocess import SelectionProcess
 from objects.selection_process.client import Client, ClientSchema
-from objects.jobposition import JobPosition
+from objects.selection_process.jobposition import JobPosition
 from objects.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
 from objects.candidate_info import CandidateInfo, CandidateInfoSchema
 from objects.candidate import Candidate

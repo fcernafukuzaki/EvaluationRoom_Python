@@ -3,7 +3,7 @@ from controller.candidate_info_controller import *
 from controller.selectionprocess_controller import *
 from controller.selectionprocess_candidate_controller import *
 from controller.selection_process.client_controller import *
-from controller.jobposition_controller import *
+from controller.selection_process.jobposition_controller import *
 from controller.jobposition_candidate_controller import *
 from controller.candidate_without_selectionprocess_controller import *
 from controller.candidate_resettest_controller import *
@@ -48,7 +48,7 @@ api.add_resource(ClientController,
     '/v1/clients/<int:uid>')
 
 api.add_resource(JobPositionController, 
-    '/v1/jobposition',
+    '/v1/jobposition/',
     '/v1/jobposition/<int:idclient>',
     '/v1/jobposition/<int:idclient>/<int:idjobposition>')
 
