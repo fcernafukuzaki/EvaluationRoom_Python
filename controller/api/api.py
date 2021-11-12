@@ -11,7 +11,7 @@ authorizer_service = AuthorizerService()
 
 class PsychologicalTestInterpretacionController(Resource):
     
-    def get(self, idcandidato=None, uid=None, email=None):
+    def get(self, idcandidato=None, uid=None, email=None, token=None):
         try:
             api = os.environ['API']
             print("PsychologicalTestInterpretacionController:{}|{}|{}|{}".format(idcandidato,uid,email,api))
@@ -26,7 +26,7 @@ class PsychologicalTestInterpretacionController(Resource):
                 print(type(request.headers))
                 print(request.headers)
                 print((k,v) for k, v in request.headers.items())
-                token = request.headers['Authorization']
+                #token = request.headers['Authorization']
                 print(f"{token}")
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
                 print("{}|{}".format(flag,respuesta))
