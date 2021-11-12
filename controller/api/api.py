@@ -25,7 +25,7 @@ class PsychologicalTestInterpretacionController(Resource):
             if uid:
                 print(request.headers)
                 print(request.json)
-                token = request.headers['Authorization']
+                token = request.json['Authorization']
                 print(f"{token}")
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
                 print("{}|{}".format(flag,respuesta))
