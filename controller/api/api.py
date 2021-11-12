@@ -13,7 +13,7 @@ class PsychologicalTestInterpretacionController(Resource):
     
     def get(self, idcandidato=None, uid=None, email=None):
         try:
-            print("PsychologicalTestInterpretacionController:{}|{}|{}|".format(idcandidate,uid,email))
+            print("PsychologicalTestInterpretacionController:{}|{}|{}|".format(idcandidato,uid,email))
             api = os.environ['API']
             if idcandidato:
                 url = f'{api}/testpsicologico/interpretacion/candidato/{idcandidato}'
