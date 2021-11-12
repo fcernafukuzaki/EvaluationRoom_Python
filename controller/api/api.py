@@ -26,9 +26,6 @@ class PsychologicalTestInterpretacionController(Resource):
                 print(type(request.headers))
                 print(request.headers)
                 print((k,v) for k, v in request.headers.items())
-                print(type(request.json))
-                print(request.json)
-                print((k,v) for k, v in request.json.items())
                 token = request.headers['Authorization']
                 print(f"{token}")
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
