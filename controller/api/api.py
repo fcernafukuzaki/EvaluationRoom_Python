@@ -13,8 +13,8 @@ class PsychologicalTestInterpretacionController(Resource):
     
     def get(self, idcandidato=None, uid=None, email=None):
         try:
-            print("PsychologicalTestInterpretacionController:{}|{}|{}".format(idcandidato,uid,email))
             api = os.environ['API']
+            print("PsychologicalTestInterpretacionController:{}|{}|{}|{}".format(idcandidato,uid,email,api))
             if idcandidato:
                 url = f'{api}/testpsicologico/interpretacion/candidato/{idcandidato}'
                 print(url)
@@ -24,6 +24,7 @@ class PsychologicalTestInterpretacionController(Resource):
                 return get_response_body(code=200, message="OK", user_message="OK", body=response_body), 200
             if uid:
                 token = request.headers['Authorization']
+                print(f"{token}")
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
                 print("{}|{}".format(flag,respuesta))
                 if flag:
