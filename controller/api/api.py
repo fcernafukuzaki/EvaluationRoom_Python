@@ -17,6 +17,7 @@ class PsychologicalTestInterpretacionController(Resource):
             api = os.environ['API']
             if idcandidato:
                 url = f'{api}/testpsicologico/interpretacion/candidato/{idcandidato}'
+                print(url)
                 response = invoke_api(url, body=None, method='GET')
                 print('Resultado de API: {} {}'.format(response.status, response.data))
                 response_body = {'mensaje':"OK"}
