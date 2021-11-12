@@ -13,7 +13,7 @@ class PsychologicalTestInterpretacionController(Resource):
     
     def get(self, idcandidato=None, uid=None, email=None):
         try:
-            print("PsychologicalTestInterpretacionController:{}|{}|{}|".format(idcandidato,uid,email))
+            print("PsychologicalTestInterpretacionController:{}|{}|{}".format(idcandidato,uid,email))
             api = os.environ['API']
             if idcandidato:
                 url = f'{api}/testpsicologico/interpretacion/candidato/{idcandidato}'
@@ -24,8 +24,10 @@ class PsychologicalTestInterpretacionController(Resource):
             if uid:
                 token = request.headers['Authorization']
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
+                print("{}|{}".format(flag,respuesta))
                 if flag:
                     url = f'{api}/testpsicologico/download/informe/{uid}'
+                    print(url)
                     response = invoke_api(url, body=None, method='GET')
                     print('Resultado de API de descarga: {} | {}'.format(response.status, response.headers.get('content-disposition')))
                     filename = str(response.headers.get('content-disposition')).split("filename=")
