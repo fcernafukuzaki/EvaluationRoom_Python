@@ -23,7 +23,8 @@ class PsychologicalTestInterpretacionController(Resource):
                 response_body = {'mensaje':"OK"}
                 return get_response_body(code=200, message="OK", user_message="OK", body=response_body), 200
             if uid:
-                token = request.headers['Authorization']
+                #token = request.headers['Authorization']
+                token = request.json['headers']['Authorization']
                 print(f"{token}")
                 flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, email)
                 print("{}|{}".format(flag,respuesta))
