@@ -53,6 +53,11 @@ class CandidateController(Resource):
             direcciones = input_json['direcciones'] if field_in_dict(input_json, 'direcciones') else None
             tests = input_json['testPsicologicos'] if field_in_dict(input_json, 'testPsicologicos') else None
             
+            _, code, _ = candidate_service.get_candidate_by_email(correoelectronico)
+            if code == 200:
+                message = f'Ya existe un candidato con el mismo correo electrónico. Debe ingresar un email distinto.'
+                return get_response_body(code=409, message=message, user_message=message), 409
+
             if not idcandidato:
                 result, code, message = candidate_service.add_candidate(idcandidato, nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
                             cantidadhijos, fechanacimiento, correoelectronico, idsexo, self_register, telefonos, direcciones)
