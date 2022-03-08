@@ -6,7 +6,7 @@ class AuthorizerService():
 
     def validate_recruiter_identify(self, token, email):
         if email and token:
-            url = 'https://api.evaluationroom.com/reclutador_identificador_validar/'
+            url = 'https://evaluationroom-recruteridntval.herokuapp.com/reclutador_identificador_validar'
             data = {"Authorization": token, "correoelectronico": email}
             encoded_data = json.dumps(data).encode('utf-8')
             response = invoke_api(url, body=encoded_data, method='POST')
@@ -18,7 +18,7 @@ class AuthorizerService():
     
     def validate_recruiter_active(self, token, email):
         if email and token:
-            url = 'https://api.evaluationroom.com/reclutador_identificador_validar/reclutador_email_validar'
+            url = 'https://evaluationroom-recruteridntval.herokuapp.com/reclutador_email_validar'
             data = {"Authorization": token, "correoelectronico": email}
             encoded_data = json.dumps(data).encode('utf-8')
             response = invoke_api(url, body=encoded_data, method='POST')
