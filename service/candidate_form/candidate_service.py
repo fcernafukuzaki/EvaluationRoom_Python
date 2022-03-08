@@ -42,6 +42,22 @@ class CandidateService():
             message = f'Hubo un error al obtener datos del candidato {correoelectronico} en base de datos {e}'
             return None, 503, message
 
+    def get_candidate_by_document(self, numerodocumentoidentidad):
+        try:
+            if numerodocumentoidentidad:
+                candidato = Candidate.query.filter(Candidate.numerodocumentoidentidad==numerodocumentoidentidad).first()
+                print(candidato)
+                if candidato:
+                    result = candidate_data_schema.dump(candidato)
+                    
+                    message = 'Existe candidato en base de datos.'
+                    return result, 200, message
+                message = f'No existe candidato en base de datos.'
+                return None, 404, message
+        except Exception as e:
+            message = f'Hubo un error al obtener datos del candidato {numerodocumentoidentidad} en base de datos {e}'
+            return None, 503, message
+
     def add_candidate(self, idcandidato, nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
                  cantidadhijos, fechanacimiento, correoelectronico, idsexo, selfregistration, telefonos, direcciones):
         try:
