@@ -4,12 +4,12 @@ from configs.flask_config import app
 from service.soporte_tecnico.mensaje_procesoseleccion_candidato_service import MensajeProcesoseleccionCandidatoService
 from service.soporte_tecnico.soportetecnico_notificacion_service import SoporteTecnicoNotificacionService
 from service.apigateway_notificacion_service import APIGatewayNotificacionService
-from service.autorizador_service import AutorizadorService
+from service.authorizer_service import AuthorizerService
 
 mensaje_procesoseleccion_candidato_service = MensajeProcesoseleccionCandidatoService()
 soportetecnico_notificacion_service = SoporteTecnicoNotificacionService()
 apigateway_notificacion_service = APIGatewayNotificacionService()
-autorizador_service = AutorizadorService()
+autorizador_service = AuthorizerService()
 
 class CandidatoSoporteTecnicoNotificacionController(Resource):
 
