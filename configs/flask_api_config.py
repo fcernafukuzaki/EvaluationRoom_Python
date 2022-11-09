@@ -17,6 +17,8 @@ from controller.candidate_form.psychologicaltest_controller import *
 from controller.login_user.login_user_controller import *
 from controller.api.api import *
 from controller.menu.psychologicaltests_controller import *
+from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import *
+from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 
 api.add_resource(LoginUserController, 
     '/login/authenticate')
@@ -90,3 +92,9 @@ api.add_resource(PsychologicalTestsController,
 api.add_resource(PsychologicalTestInterpretacionController, 
     '/testpsicologico/interpretacion/candidato/<int:idcandidato>',
     '/testpsicologico/download/informe/uid=<int:uid>&email=<string:email>&token=<string:token>')
+
+api.add_resource(CandidatoSoporteTecnicoNotificacionController,
+    '/v1/candidato_soportetecnico_notificar')
+
+api.add_resource(CandidatoEmailValidarController,
+    '/candidato_email_validar')
