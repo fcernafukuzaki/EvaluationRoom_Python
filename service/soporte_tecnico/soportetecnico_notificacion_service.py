@@ -1,6 +1,6 @@
 from configs.flask_config import db
 from sqlalchemy import func
-from object.soporte_tecnico.soportetecnico_notificacion import SoporteTecnicoNotificacion
+from objects.soporte_tecnico.soportetecnico_notificacion import SoporteTecnicoNotificacion
 import json
 
 class SoporteTecnicoNotificacionService():

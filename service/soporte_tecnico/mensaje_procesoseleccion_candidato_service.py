@@ -1,6 +1,6 @@
 from configs.flask_config import db
 from sqlalchemy import func
-from object.soporte_tecnico.mensaje_procesoseleccion_candidato import MensajeProcesoseleccionCandidato, MensajeProcesoseleccionCandidatoSchema
+from objects.soporte_tecnico.mensaje_procesoseleccion_candidato import MensajeProcesoseleccionCandidato, MensajeProcesoseleccionCandidatoSchema
 
 mensaje_procesoseleccion_candidato_schema = MensajeProcesoseleccionCandidatoSchema(many=True)
 
