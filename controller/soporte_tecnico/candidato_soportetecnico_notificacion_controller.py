@@ -15,14 +15,14 @@ class CandidatoSoporteTecnicoNotificacionController(Resource):
 
     def get(self):
         email_candidato = request.headers['Authorization']
-        valido = autorizador_service.validar_token(email_candidato)
+        valido = autorizador_service.validate_token(email_candidato)
         if valido:
             return mensaje_procesoseleccion_candidato_service.obtener_mensajes_error()
         return {'mensaje': 'Operación no valida.'}, 403
     
     def post(self):
         email_candidato = request.headers['Authorization']
-        valido = autorizador_service.validar_token(email_candidato)
+        valido = autorizador_service.validate_token(email_candidato)
         if valido:
             json_dict = request.json
             if json_dict is not None:
