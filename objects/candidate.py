@@ -63,3 +63,7 @@ class CandidateDataSchema(ma.Schema):
     telephones = ma.Nested(CandidateTelephoneSchema, many=True)
     addresses = ma.Nested(CandidatoDireccionSchema, many=True)
     psychologicaltests = ma.Nested(CandidatePsychologicalTestSchema, many=True)
+
+class CandidateEmailValidateSchema(ma.Schema):
+    class Meta:
+        fields = ('idcandidato', 'selfregistration')
