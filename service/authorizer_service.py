@@ -27,7 +27,7 @@ class AuthorizerService():
             return False, mensaje, 404, None
         return False, 'Usuario no valido.', 404, None
     
-    def validar_token_recruiter(hash, idusuario):
+    def validar_token_recruiter(self, hash, idusuario):
         if hash:
             return db.session.query(LoginUser
                 ).filter(LoginUser.hash == hash,
