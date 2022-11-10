@@ -21,6 +21,8 @@ from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller
 from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 from controller.recruiter.reclutadoremailvalidar_controller import *
+from controller.administrator.usuarios_controller import *
+from controller.administrator.perfiles_controller import *
 
 api.add_resource(LoginUserController, 
     '/login/authenticate')
@@ -109,3 +111,12 @@ api.add_resource(ReclutadorIdentificadorValidarController,
 
 api.add_resource(ReclutadorEmailValidarController,
     '/reclutador_email_validar')
+
+# Administrador accesos gestionar
+api.add_resource(UsuariosController, 
+    '/usuarios/',
+    '/usuarios/<int:uid>')
+
+api.add_resource(PerfilesController, 
+    '/perfiles/',
+    '/perfiles/<int:uid>')
