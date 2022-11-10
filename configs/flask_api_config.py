@@ -19,6 +19,8 @@ from controller.api.api import *
 from controller.menu.psychologicaltests_controller import *
 from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import *
 from controller.candidate_email_validate.candidatoemailvalidar_controller import *
+from controller.recruiter.reclutadoridentificadorvalidar_controller import *
+from controller.recruiter.reclutadoremailvalidar_controller import *
 
 api.add_resource(LoginUserController, 
     '/login/authenticate')
@@ -98,3 +100,12 @@ api.add_resource(CandidatoSoporteTecnicoNotificacionController,
 
 api.add_resource(CandidatoEmailValidarController,
     '/candidato_email_validar')
+
+"""
+Eliminar luego de migrar código fuente.
+"""
+api.add_resource(ReclutadorIdentificadorValidarController,
+    '/reclutador_identificador_validar')
+
+api.add_resource(ReclutadorEmailValidarController,
+    '/reclutador_email_validar')
