@@ -1,10 +1,10 @@
-import json
-from common.util import invoke_api
 from configs.flask_config import db
 from objects.login_user import LoginUser
 from service.recruiter.reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
+from objects.usuario import Usuario, UsuarioSchema
 
 reclutadoridentificadorvalidar_service = ReclutadorIdentificadorValidarService()
+usuario_schema = UsuarioSchema()
 
 class AuthorizerService():
 
@@ -23,7 +23,7 @@ class AuthorizerService():
         if email and token:
             email_valido, mensaje, usuario = reclutadoridentificadorvalidar_service.valida_email_reclutador(email)
             if email_valido:
-                return True, 'Usuario valido', 200, usuario
+                return True, 'Usuario valido', 200, usuario_schema.dump(usuario)
             return False, mensaje, 404, None
         return False, 'Usuario no valido.', 404, None
     
