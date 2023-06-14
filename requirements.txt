@@ -7,10 +7,10 @@
 # flask run
 
 urllib3
-psycopg2==2.9.6
+psycopg2-binary
 Flask==2.2.2
 flask-cors
-flask-sqlalchemy>=2.5
+Flask-SQLAlchemy
 Flask-RESTful==0.3.10
 SQLAlchemy==2.0.16
 flask-marshmallow==0.15.0
