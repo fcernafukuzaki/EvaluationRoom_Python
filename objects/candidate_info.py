@@ -1,7 +1,7 @@
 from configs.flask_config import db, ma
 from .candidate import Candidate
-from .candidate_psychologicaltest import CandidatePsychologicalTest
-from .candidate_telephone import CandidateTelephone
+# from .candidate_psychologicaltest import CandidatePsychologicalTest
+# from .candidate_telephone import CandidateTelephone
 
 class CandidateInfo():
     all_candidates_resumen = db.session.query(
