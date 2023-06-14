@@ -2,7 +2,6 @@ from flask import request
 from flask_restful import Resource
 from common.util import field_in_dict, get_response_body
 from service.authorizer_service import AuthorizerService
-from objects.login_user import LoginUser
 from service.login_user_service import LoginUserService
 
 authorizer_service = AuthorizerService()

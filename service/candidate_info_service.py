@@ -1,5 +1,6 @@
 from flask import jsonify
 from configs.flask_config import db
+from objects.candidate import Candidate
 from objects.candidate_info import CandidateInfo, CandidateInfoSchema
 
 candidates_info_schema = CandidateInfoSchema(many=True)
