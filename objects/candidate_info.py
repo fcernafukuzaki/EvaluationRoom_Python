@@ -13,11 +13,11 @@ class CandidateInfo():
                     Candidate.fechanacimiento,
                     Candidate.fecharegistro.label('fecha_registro'),
                     Candidate.correoelectronico,
-                    db.session.query(CandidateTelephone.numero
+                    db.session.query(CandidateTelephone
                         ).filter(CandidateTelephone.idtelefono==1, 
                             CandidateTelephone.idcandidato==Candidate.idcandidato
                         ).label('telefono_movil'),
-                    db.session.query(CandidateTelephone.numero
+                    db.session.query(CandidateTelephone
                         ).filter(CandidateTelephone.idtelefono==2, 
                             CandidateTelephone.idcandidato==Candidate.idcandidato
                         ).label('telefono_fijo'),
