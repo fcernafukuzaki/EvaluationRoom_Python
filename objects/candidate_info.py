@@ -13,14 +13,14 @@ class CandidateInfo():
                     Candidate.fechanacimiento,
                     Candidate.fecharegistro.label('fecha_registro'),
                     Candidate.correoelectronico,
-                    db.session.query(CandidateTelephone.numero
-                        ).filter(CandidateTelephone.idtelefono==1, 
-                            CandidateTelephone.idcandidato==Candidate.idcandidato
-                        ).label('telefono_movil'),
-                    db.session.query(CandidateTelephone.numero
-                        ).filter(CandidateTelephone.idtelefono==2, 
-                            CandidateTelephone.idcandidato==Candidate.idcandidato
-                        ).label('telefono_fijo'),
+                    # db.session.query(CandidateTelephone.numero
+                    #     ).filter(CandidateTelephone.idtelefono==1, 
+                    #         CandidateTelephone.idcandidato==Candidate.idcandidato
+                    #     ).label('telefono_movil'),
+                    # db.session.query(CandidateTelephone.numero
+                    #     ).filter(CandidateTelephone.idtelefono==2, 
+                    #         CandidateTelephone.idcandidato==Candidate.idcandidato
+                    #     ).label('telefono_fijo'),
                     db.func.count(Candidate.idcandidato).label('cant_puestos_laborales'),
                     db.func.count(Candidate.idcandidato).label('cant_examenes_asignados'),
                     db.session.query(db.func.count(CandidatePsychologicalTest.fechaexamen)
