@@ -9,7 +9,7 @@
 urllib3
 psycopg2==2.9.6
 Flask==2.2.2
-Flask-Cors==1.6.1
+flask-cors
 Flask-SQLAlchemy==2.4.1
 Flask-RESTful==0.3.10
 SQLAlchemy==2.0.16
