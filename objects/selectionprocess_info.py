@@ -136,7 +136,8 @@ class SelectionProcessInfo():
                             CandidatePsychologicalTestDetail.idtestpsicologico==PsychologicalTest.idtestpsicologico
                         ).label('cantidad_preguntas_respondidas'),
                         PsychologicalTest.cantidadpreguntas.label('cantidad_preguntas_test')
-                    ).filter(filtroSelectionProcess
+                    ).filter(filtroSelectionProcess,
+                        CandidatePsychologicalTest.idtestpsicologico!=7  # Filtrar por test psicologico
                     ).outerjoin(SelectionProcessCandidate, 
                         SelectionProcess.idjobposition==SelectionProcessCandidate.idjobposition
                     ).outerjoin(CandidatePsychologicalTest, 
