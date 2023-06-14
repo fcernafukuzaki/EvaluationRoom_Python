@@ -15,7 +15,7 @@ from controller.candidate_form.estado_civil_controller import *
 from controller.candidate_form.tipo_direccion_controller import *
 from controller.candidate_form.psychologicaltest_controller import *
 from controller.login_user.login_user_controller import *
-from controller.api.api import *
+from controller.api.api_test_interpretacion import *
 from controller.menu.psychologicaltests_controller import *
 from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import *
 from controller.candidate_email_validate.candidatoemailvalidar_controller import *
