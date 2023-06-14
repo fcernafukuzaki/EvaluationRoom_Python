@@ -7,7 +7,7 @@ class CandidateTelephone(db.Model):
     
     idcandidato = db.Column(db.Integer, db.ForeignKey('evaluationroom.candidato.idcandidato'), primary_key=True)
     idtelefono = db.Column(db.Integer, db.ForeignKey('evaluationroom.telefono.idtelefono'), primary_key=True)
-    numero = db.Column(db.String(9), nullable=True)
+    numero = db.Column(db.String())
 
     telephone = db.relationship('Telephone', 
                 primaryjoin='and_(Candidate.idcandidato==CandidateTelephone.idcandidato, '
