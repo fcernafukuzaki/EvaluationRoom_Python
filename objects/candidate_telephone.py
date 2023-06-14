@@ -1,5 +1,5 @@
 from configs.flask_config import db, ma
-from .telephone import Telephone, TelephoneSchema
+from .telephone import TelephoneSchema
 
 class CandidateTelephone(db.Model):
     __table_args__ = {"schema": "evaluationroom"}
