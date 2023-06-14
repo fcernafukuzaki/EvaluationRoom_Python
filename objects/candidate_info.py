@@ -3,7 +3,7 @@ from .candidate import Candidate
 from .candidate_psychologicaltest import CandidatePsychologicalTest
 from .candidate_telephone import CandidateTelephone
 
-class CandidateInfo(db.Model):
+class CandidateInfo():
     all_candidates_resumen = db.session.query(
                     Candidate.idcandidato, 
                     Candidate.nombre,
