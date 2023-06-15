@@ -1,4 +1,5 @@
 urllib3
+psycopg2
 SQLAlchemy
 Flask
 Flask-RESTful
