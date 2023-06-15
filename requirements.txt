@@ -2,3 +2,4 @@ urllib3
 SQLAlchemy
 Flask
 Flask-RESTful
+gunicorn
