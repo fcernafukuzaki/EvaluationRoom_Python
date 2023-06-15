@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
 from service.recruiter.reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
 from service.authorizer_service import AuthorizerService
 from objects.usuario import Usuario, UsuarioSchema
@@ -18,7 +18,7 @@ class ReclutadorIdentificadorValidarController(Resource):
 
         email_valido, mensaje, usuario = reclutadoridentificadorvalidar_service.valida_email_reclutador(email_reclutador)
         if email_valido:
-            valido = autorizador_service.validar_token_recruiter(token, usuario.idusuario)
+            valido = autorizador_service.validar_token_recruiter(token, usuario.get("idusuario"))
             if valido:
                 return usuario_schema.jsonify(usuario)
             return {'mensaje': 'Operación no valida.'}, 403

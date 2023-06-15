@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 from objects.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema, SelectionProcessCandidateInfoSchema
 from objects.selection_process.client import Client, ClientSchema
 from objects.selection_process.jobposition import JobPosition, JobPositionSchema

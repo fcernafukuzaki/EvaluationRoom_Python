@@ -1,5 +1,5 @@
 import datetime
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 from .candidate_telephone import CandidateTelephone, CandidateTelephoneSchema
 from .candidate_form.candidato_direccion import CandidatoDireccion, CandidatoDireccionSchema
 from .candidate_psychologicaltest import CandidatePsychologicalTest, CandidatePsychologicalTestSchema

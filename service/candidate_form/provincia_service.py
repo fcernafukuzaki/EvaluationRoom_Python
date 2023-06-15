@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate_form.provincia import Provincia, ProvinciaSchema
 
 provincias_schema = ProvinciaSchema(many=True)

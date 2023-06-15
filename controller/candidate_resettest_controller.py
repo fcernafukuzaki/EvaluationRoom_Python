@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
 from service.candidate_resettest_service import CandidateResetTestService
 from service.authorizer_service import AuthorizerService
 

@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate_form.sexo import Sexo, SexoSchema
 
 sexos_schema = SexoSchema(many=True)

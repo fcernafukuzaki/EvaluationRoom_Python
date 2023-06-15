@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
 from service.recruiter.reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
 from objects.usuario import Usuario, UsuarioSchema
 

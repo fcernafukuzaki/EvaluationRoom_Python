@@ -1,7 +1,7 @@
 from flask import jsonify
 from sqlalchemy import desc
 from common.util import str2bool
-from configs.flask_config import db
+from configs.resources import db
 from objects.selectionprocess_candidate import SelectionProcessCandidate, SelectionProcessCandidateSchema
 
 selectionprocess_candidate_schema = SelectionProcessCandidateSchema()

@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate_form.tipo_direccion import TipoDireccion, TipoDireccionSchema
 
 tipos_direccion_schema = TipoDireccionSchema(many=True)

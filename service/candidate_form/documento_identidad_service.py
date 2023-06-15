@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate_form.documento_identidad import DocumentoIdentidad, DocumentoIdentidadSchema
 
 documentos_identidad_schema = DocumentoIdentidadSchema(many=True)

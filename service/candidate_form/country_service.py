@@ -1,4 +1,4 @@
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate_form.country import Country, CountrySchema
 
 countries_schema = CountrySchema(many=True)

@@ -1,4 +1,4 @@
-from configs.flask_config import db
+from configs.resources import db
 from sqlalchemy import func
 from objects.soporte_tecnico.soportetecnico_notificacion import SoporteTecnicoNotificacion
 import json

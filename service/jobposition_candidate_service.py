@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.jobposition_candidate import JobPositionCandidate, JobPositionCandidateSchema
 
 jobposition_candidate_schema = JobPositionCandidateSchema()

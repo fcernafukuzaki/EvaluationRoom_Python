@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 from .telephone import TelephoneSchema
 
 class CandidateTelephone(db.Model):

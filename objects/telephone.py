@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 
 class Telephone(db.Model):
     __table_args__ = {"schema": "evaluationroom"}

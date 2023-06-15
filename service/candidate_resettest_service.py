@@ -1,7 +1,7 @@
 from flask import jsonify
 from sqlalchemy.sql import table, column, text
 from sqlalchemy import create_engine
-from configs.flask_config import db, DATABASE_URI
+from configs.resources import db, DATABASE_URI
 from objects.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
 
 class CandidateResetTestService():

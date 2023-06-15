@@ -1,4 +1,4 @@
-from configs.flask_config import db
+from configs.resources import db
 from objects.usuario import Usuario, UsuarioAccesosGestionSchema, UsuarioInfoSchema
 from objects.usuario_perfil import UsuarioPerfil
 

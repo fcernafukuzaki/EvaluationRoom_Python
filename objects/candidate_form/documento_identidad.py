@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 
 class DocumentoIdentidad(db.Model):
     __table_args__ = {"schema": "evaluationroom", 'extend_existing': True}

@@ -1,4 +1,4 @@
-from configs.flask_config import db
+from configs.resources import db
 from objects.psychologicaltest import PsychologicalTest, PsychologicalTestInfoSchema
 
 psychologicaltest_info_schema = PsychologicalTestInfoSchema(many=True)

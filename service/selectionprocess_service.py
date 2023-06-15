@@ -1,6 +1,6 @@
 from flask import jsonify
 from common.util import str2bool
-from configs.flask_config import db
+from configs.resources import db
 from objects.selectionprocess import SelectionProcess, SelectionProcessSchema
 from objects.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, SelectionProcessInfoResumenSchema, CandidatePsychologicalTestInfoSchema, CandidateWithoutSelectionProcessSchema, CandidatePsychologicalTestWithoutSelectionProcessInfoSchema
 

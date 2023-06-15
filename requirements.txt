@@ -1,19 +1,4 @@
-# python -m venv .\venv
-# .\venv\Scripts\activate
-# pip install -r requirements.txt
-# Declarar variable con la ubicación del archivo
-# set FLASK_APP=app.py
-# set SQLALCHEMY_DATABASE_URI=
-# flask run
-
 urllib3
-psycopg2-binary
-Flask==2.2.2
-flask-cors
-Flask-SQLAlchemy
-Flask-RESTful==0.3.10
-SQLAlchemy==2.0.16
-flask-marshmallow==0.15.0
-marshmallow==3.19.0
-marshmallow-sqlalchemy==0.29.0
-gunicorn
+SQLAlchemy
+Flask
+Flask-RESTful

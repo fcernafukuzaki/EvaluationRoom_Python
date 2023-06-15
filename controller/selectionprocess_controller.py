@@ -1,9 +1,11 @@
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
+from service.authorizer_service import AuthorizerService
 from service.selectionprocess_service import SelectionProcessService
 from service.login_user_service import LoginUserService
 
+authorizer_service = AuthorizerService()
 selectionprocess_service = SelectionProcessService()
 login_user_service = LoginUserService()
 
@@ -11,7 +13,7 @@ class SelectionProcessController(Resource):
     
     def get(self, idclient=None, idjobposition=None, process_status=None):
         token = request.headers['Authorization']
-        validate = login_user_service.validate_user(token)
+        validate = authorizer_service.validate_hash(token)
         if validate:
             return selectionprocess_service.get_selectionprocesses(idclient, idjobposition, process_status)
         return {'message': 'User not registered'}, 403

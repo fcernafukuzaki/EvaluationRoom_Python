@@ -1,6 +1,6 @@
 from flask import jsonify
 from common.util import field_in_dict
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate import Candidate, CandidateDataSchema
 from objects.candidate_telephone import CandidateTelephone
 from objects.candidate_form.candidato_direccion import CandidatoDireccion

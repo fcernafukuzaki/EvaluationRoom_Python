@@ -1,6 +1,6 @@
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
 from service.soporte_tecnico.mensaje_procesoseleccion_candidato_service import MensajeProcesoseleccionCandidatoService
 from service.soporte_tecnico.soportetecnico_notificacion_service import SoporteTecnicoNotificacionService
 from service.apigateway_notificacion_service import APIGatewayNotificacionService
