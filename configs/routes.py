@@ -21,7 +21,7 @@ from controller.login_user.login_user_controller import LoginUserController
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 # from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 # from controller.recruiter.reclutadoremailvalidar_controller import *
-# from controller.administrator.usuarios_controller import *
+from controller.administrator.usuarios_controller import UsuariosController
 # from controller.administrator.perfiles_controller import *
 
 def api_add_resource(api):
@@ -116,10 +116,11 @@ def api_add_resource(api):
     # api.add_resource(ReclutadorEmailValidarController,
     #     "/reclutador_email_validar")
 
-    # # Administrador accesos gestionar
-    # api.add_resource(UsuariosController, 
-    #     "/usuarios/",
-    #     "/usuarios/<int:uid>")
+    # Administrador gestionar accesos
+    api.add_resource(UsuariosController, 
+        "/usuarios/",
+        # "/usuarios/<int:uid>"
+        )
 
     # api.add_resource(PerfilesController, 
     #     "/perfiles/",

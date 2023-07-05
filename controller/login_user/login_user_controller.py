@@ -13,12 +13,12 @@ class LoginUserController(Resource):
         try:
             input_json = request.json
             input_header = request.headers
-            hash = input_header.get('Authorization')
+            token = input_header.get('Authorization')
             correoelectronico = input_json.get('correoelectronico')
-            flag, message, code, user_object = authorizer_service.validate_recruiter_active(hash, correoelectronico)
+            flag, message, code, user_object = authorizer_service.validate_recruiter_active(token, correoelectronico)
             user_message = message
             idusuario = user_object['idusuario'] if flag else 0
-            result, _, message_aux = login_user_service.add_login_user(idusuario, hash, correoelectronico)
+            result, _, message_aux = login_user_service.add_login_user(idusuario, token, correoelectronico)
             user_message = f"{user_message} {message_aux}"
 
             response_body = {'usuario':{"idusuario":idusuario,"correoelectronico":correoelectronico,"perfiles":user_object['perfiles']}} if flag else None

@@ -28,7 +28,7 @@ class LoginUserService():
             """
             new_login_user = db.execute(text(sql_query))
             db.commit()
-            print(f"User loged ({email}) inserted")
+            print(f"User logged ({email}) inserted")
             
             message = 'Se registró login en base de datos.'
             return new_login_user, 200, message

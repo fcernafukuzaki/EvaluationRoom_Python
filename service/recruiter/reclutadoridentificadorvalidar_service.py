@@ -44,8 +44,8 @@ class ReclutadorIdentificadorValidarService():
             }
             data['perfiles'].append(perfil)
 
-        json_data = json.dumps(data)
-        print(json_data)
+        # json_data = json.dumps(data)
+        # print(json_data)
         
         if int(usuario.rowcount) > 0:
             print('Se encontró reclutador con el correo electronico {}'.format(email))
