@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 from .candidate import Candidate
 # from .candidate_psychologicaltest import CandidatePsychologicalTest
 # from .candidate_telephone import CandidateTelephone
