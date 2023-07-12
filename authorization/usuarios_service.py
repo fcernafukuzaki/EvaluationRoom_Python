@@ -37,9 +37,9 @@ class UsuariosService():
 
             for row in usuarios:
                 data_usuario = dict()
-                data_usuario['idusuario'] = row.idusuario
+                data_usuario['idUsuario'] = row.idusuario
                 data_usuario['activo'] = row.activo
-                data_usuario['correoelectronico'] = row.correoelectronico
+                data_usuario['correoElectronico'] = row.correoelectronico
                 data_usuario['nombre'] = row.nombre
                 data.append(data_usuario)
             
@@ -80,21 +80,21 @@ class UsuariosService():
 
             # Formatear el resultado en formato JSON
             data = {
-                'idusuario': None,
+                'idUsuario': None,
                 'activo': None,
                 'nombre': None,
-                'correoelectronico': None,
+                'correoElectronico': None,
                 'perfiles': []
             }
 
             for row in usuario:
-                data['idusuario'] = row.idusuario
+                data['idUsuario'] = row.idusuario
                 data['activo'] = row.activo
                 data['nombre'] = row.nombre
-                data['correoelectronico'] = row.correoelectronico
+                data['correoElectronico'] = row.correoelectronico
                 perfil = {
-                    'idusuario': row.idusuario,
-                    'idperfil': row.idperfil,
+                    'idUsuario': row.idusuario,
+                    'idPerfil': row.idperfil,
                     'nombre': row.perfil_nombre
                 }
                 data['perfiles'].append(perfil)
@@ -111,36 +111,77 @@ class UsuariosService():
             logger.info("Response from usuario.", uid=uid, message=message)
             return result, code, message
     
-    # def add_usuario(self, nombre, email, activo, perfiles):
-    #     result = None
-    #     try:
-    #         new_usuario = Usuario(id_usuario=None, nombre=nombre, email=email, activo=activo)
-    #         db.session.add(new_usuario)
-    #         db.session.commit()
-    #         db.session.refresh(new_usuario)
-    #         result = new_usuario.idusuario
-    #         code, message = 200, 'Se registró usuario en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al registrar usuario en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
+
+    def add_usuario(self, nombre, email, activo):
+        """
+        Descripción:
+            Agregar un nuevo usuario.
+        Input:
+            - nombre:str Nombre del usuario.
+            - email:str Correo electrónico del usuario.
+            - activo:bool [True, False] Activo o no activo.
+        Output:
+            - id: Identificador del usuario.
+        """
+        result = None
+        try:
+            sql_query = f"""
+            INSERT INTO evaluationroom.usuario
+            (nombre, correoelectronico, activo)
+            VALUES
+            ('{nombre}', '{email}', '{activo}')
+            RETURNING idusuario
+            """
+            
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            new_usuario = db.execute(text(sql_query))
+            db.commit()
+            new_id_usuario = new_usuario.fetchone()[0]
+
+            logger.debug("Usuario inserted.", new_id_usuario=new_id_usuario)
+            result, code, message = new_id_usuario, 200, 'Se registró usuario en base de datos.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al registrar usuario en base de datos {e}'
+        finally:
+            logger.debug("Usuario inserted.", message=message)
+            return result, code, message
     
-    # def update_usuario(self, uid, nombre, email, activo, perfiles):
-    #     result = None
-    #     try:
-    #         update_usuario = Usuario.query.get((uid))
-    #         update_usuario.nombre = nombre
-    #         update_usuario.correoelectronico = email
-    #         update_usuario.activo = activo
-    #         db.session.commit()
-    #         result, code, message = uid, 200, 'Se actualizó usuario en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al actualizar usuario en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
+
+    def update_usuario(self, uid, nombre, email, activo):
+        """
+        Descripción:
+            Actualizar datos de un usuario.
+        Input:
+            - uid:int Identificador del usuario.
+            - nombre:str Nombre del usuario.
+            - email:str Correo electrónico del usuario.
+            - activo:bool [True, False] Activo o no activo.
+        Output:
+            - id: Identificador del usuario.
+        """
+        result = None
+        try:
+            sql_query = f"""
+            UPDATE evaluationroom.usuario
+            SET nombre='{nombre}', 
+            correoelectronico='{email}', 
+            activo='{activo}'
+            WHERE idusuario={uid}
+            """
+
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            usuario = db.execute(text(sql_query))
+            db.commit()
+
+            logger.debug("Usuario updated.", id_usuario=uid)
+            result, code, message = uid, 200, 'Se actualizó usuario en base de datos.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al actualizar usuario en base de datos {e}'
+        finally:
+            logger.debug("Usuario updated.", message=message)
+            return result, code, message
     
+
     # def delete_perfiles(self, uid, idperfiles):
     #     result = None
     #     try:

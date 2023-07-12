@@ -37,7 +37,7 @@ class PerfilesService():
 
             for row in perfiles:
                 data_perfil = dict()
-                data_perfil['idperfil'] = row.idperfil
+                data_perfil['idPerfil'] = row.idperfil
                 data_perfil['nombre'] = row.nombre
                 data.append(data_perfil)
 
@@ -81,7 +81,7 @@ class PerfilesService():
             }
 
             for row in perfil:
-                data['idperfil'] = row.idperfil
+                data['idPerfil'] = row.idperfil
                 data['nombre'] = row.nombre
             
             logger.debug("Response from perfil.", uid=uid)
@@ -96,30 +96,66 @@ class PerfilesService():
             logger.info("Response from perfil.", uid=uid, message=message)
             return result, code, message
     
-    # def add_perfil(self, nombre):
-    #     result = None
-    #     try:
-    #         new_perfil = Perfil(nombre=nombre)
-    #         db.session.add(new_perfil)
-    #         db.session.commit()
-    #         db.session.refresh(new_perfil)
-    #         result = new_perfil.idperfil
-    #         code, message = 200, 'Se registró perfil en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al registrar perfil en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
+
+    def add_perfil(self, nombre):
+        """
+        Descripción:
+            Agregar un nuevo perfil.
+        Input:
+            - nombre:str Nombre del perfil.
+        Output:
+            - id: Identificador del perfil.
+        """
+        result = None
+        try:
+            sql_query = f"""
+            INSERT INTO evaluationroom.perfil
+            (nombre)
+            VALUES
+            ('{nombre}')
+            RETURNING idperfil
+            """
+            
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            new_perfil = db.execute(text(sql_query))
+            db.commit()
+            new_id_perfil = new_perfil.fetchone()[0]
+
+            logger.debug("Perfil inserted.", new_id_perfil=new_id_perfil)
+            result, code, message = new_id_perfil, 200, 'Se registró perfil en base de datos.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al registrar perfil en base de datos {e}'
+        finally:
+            logger.debug("Perfil inserted.", message=message)
+            return result, code, message
     
-    # def update_perfil(self, uid, nombre):
-    #     result = None
-    #     try:
-    #         update_perfil = Perfil.query.get((uid))
-    #         update_perfil.nombre = nombre
-    #         db.session.commit()
-    #         result, code, message = uid, 200, 'Se actualizó perfil en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al actualizar perfil en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
+
+    def update_perfil(self, uid, nombre):
+        """
+        Descripción:
+            Actualizar datos de un perfil.
+        Input:
+            - uid:int Identificador del perfil.
+            - nombre:str Nombre del perfil.
+        Output:
+            - id: Identificador del perfil.
+        """
+        result = None
+        try:
+            sql_query = f"""
+            UPDATE evaluationroom.perfil
+            SET nombre='{nombre}'
+            WHERE idperfil={uid}
+            """
+            
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            update_perfil = db.execute(text(sql_query))
+            db.commit()
+
+            logger.debug("Perfil updated.", id_perfil=uid)
+            result, code, message = uid, 200, 'Se actualizó perfil en base de datos.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al actualizar perfil en base de datos {e}'
+        finally:
+            logger.debug("Perfil updated.", message=message)
+            return result, code, message
