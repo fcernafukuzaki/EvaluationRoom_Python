@@ -1,6 +1,6 @@
 from configs.resources import db
 # from objects.login_user import LoginUser
-from service.recruiter.reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
+from .reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
 # from objects.usuario import Usuario, UsuarioSchema
 
 reclutadoridentificadorvalidar_service = ReclutadorIdentificadorValidarService()

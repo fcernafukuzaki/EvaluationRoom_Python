@@ -55,20 +55,61 @@ class UsuariosService():
             logger.info(message)
             return result, code, message
     
-    # def get_usuario(self, uid):
-    #     result = None
-    #     try:
-    #         usuario = db.session.query(Usuario).filter(Usuario.idusuario==uid).all()
+
+    def get_usuario(self, uid):
+        """
+        Descripción:
+            Retornar datos de un usuario.
+        Input:
+            - uid:int Identificador del usuario.
+        Output:
+            - data
+        """
+        result = None
+        try:
+            sql_query = f"""
+            SELECT u.idusuario, u.activo, u.nombre, u.correoelectronico, up.idperfil, p.nombre AS "perfil_nombre"
+            FROM evaluationroom.usuario u
+            INNER JOIN evaluationroom.usuarioperfil up ON u.idusuario=up.idusuario
+            INNER JOIN evaluationroom.perfil p ON p.idperfil=up.idperfil
+            WHERE u.idusuario={uid}
+            """
+
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            usuario = db.execute(text(sql_query))
+
+            # Formatear el resultado en formato JSON
+            data = {
+                'idusuario': None,
+                'activo': None,
+                'nombre': None,
+                'correoelectronico': None,
+                'perfiles': []
+            }
+
+            for row in usuario:
+                data['idusuario'] = row.idusuario
+                data['activo'] = row.activo
+                data['nombre'] = row.nombre
+                data['correoelectronico'] = row.correoelectronico
+                perfil = {
+                    'idusuario': row.idusuario,
+                    'idperfil': row.idperfil,
+                    'nombre': row.perfil_nombre
+                }
+                data['perfiles'].append(perfil)
+
+            logger.debug("Response from usuario.", uid=uid)
             
-    #         if usuario:
-    #             result, code, message = usuario_info_schema.dump(usuario[0]), 200, 'Se encontró usuario.'
-    #         else:
-    #             code, message = 404, 'No existe usuario.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al obtener datos de usuario {uid} en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
+            if int(usuario.rowcount) > 0:
+                result, code, message = data, 200, 'Se encontró usuario.'
+            else:
+                code, message = 404, 'No existe usuario.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al obtener datos de usuario {uid} en base de datos {e}'
+        finally:
+            logger.info("Response from usuario.", uid=uid, message=message)
+            return result, code, message
     
     # def add_usuario(self, nombre, email, activo, perfiles):
     #     result = None

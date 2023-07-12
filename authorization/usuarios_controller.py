@@ -2,8 +2,8 @@ from flask import request
 from flask_restful import Resource
 # from datetime import datetime
 # from common.util import field_in_dict, get_response_body, str2bool
-from service.authorizer_service import AuthorizerService
-from service.administrator.usuarios_service import UsuariosService
+from .authorizer_service import AuthorizerService
+from .usuarios_service import UsuariosService
 from common.util import get_response_body
 from configs.logging import logger
 
@@ -30,9 +30,9 @@ class UsuariosController(Resource):
                 if not uid:
                     result, code, message = usuarios_service.get_usuarios()
                     response_body = {'usuarios':result} if result else None
-                # else:
-                #     result, code, message = usuarios_service.get_usuario(uid)
-                #     response_body = {'usuario':result} if result else None
+                else:
+                    result, code, message = usuarios_service.get_usuario(uid)
+                    response_body = {'usuario':result} if result else None
                 user_message = message
             else:
                 code, message = 403, 'Operación inválida.'

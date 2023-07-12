@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 # from configs.resources import app
 # from service.selectionprocess_service import SelectionProcessService
-from service.authorizer_service import AuthorizerService
+from admin.authorizer_service import AuthorizerService
 
 # selectionprocess_service = SelectionProcessService()
 authorizer_service = AuthorizerService()

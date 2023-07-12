@@ -74,7 +74,7 @@ class ReclutadorIdentificadorValidarService():
         AND iduser={idusuario}
         """
         login_user = db.execute(text(sql_query))
-        print(int(login_user.rowcount))
+        # print(int(login_user.rowcount))
             
         if int(login_user.rowcount) > 0:
             return True

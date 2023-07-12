@@ -1,4 +1,4 @@
-from controller.login_user.login_user_controller import LoginUserController
+from authorization.login_user_controller import LoginUserController
 
 # from controller.candidate_info_controller import CandidateInfoSimpleController
 # from controller.selectionprocess_controller import *
@@ -21,8 +21,8 @@ from controller.login_user.login_user_controller import LoginUserController
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 # from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 # from controller.recruiter.reclutadoremailvalidar_controller import *
-from controller.administrator.usuarios_controller import UsuariosController
-# from controller.administrator.perfiles_controller import *
+from authorization.usuarios_controller import UsuariosController
+from authorization.perfiles_controller import PerfilesController
 
 def api_add_resource(api):
     # Agregar la clase como un recurso a la API
@@ -119,9 +119,10 @@ def api_add_resource(api):
     # Administrador gestionar accesos
     api.add_resource(UsuariosController, 
         "/usuarios/",
-        # "/usuarios/<int:uid>"
+        "/usuarios/<int:uid>"
         )
 
-    # api.add_resource(PerfilesController, 
-    #     "/perfiles/",
-    #     "/perfiles/<int:uid>")
+    api.add_resource(PerfilesController, 
+        "/perfiles/",
+        "/perfiles/<int:uid>"
+        )

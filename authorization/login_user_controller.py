@@ -1,8 +1,8 @@
 from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
-from service.authorizer_service import AuthorizerService
-from service.login_user_service import LoginUserService
+from .authorizer_service import AuthorizerService
+from .login_user_service import LoginUserService
 
 authorizer_service = AuthorizerService()
 login_user_service = LoginUserService()

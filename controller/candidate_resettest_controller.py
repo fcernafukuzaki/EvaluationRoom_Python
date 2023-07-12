@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from configs.resources import app
 from service.candidate_resettest_service import CandidateResetTestService
-from service.authorizer_service import AuthorizerService
+from admin.authorizer_service import AuthorizerService
 
 candidate_resettest_service = CandidateResetTestService()
 authorizer_service = AuthorizerService()
