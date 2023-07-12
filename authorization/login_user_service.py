@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from configs.resources import db, text
-
+from configs.logging import logger
 
 class LoginUserService():
     """
@@ -28,7 +28,7 @@ class LoginUserService():
             """
             new_login_user = db.execute(text(sql_query))
             db.commit()
-            print(f"User logged ({email}) inserted")
+            logger.debug("User logged inserted.", email=email)
             
             message = 'Se registró login en base de datos.'
             return new_login_user, 200, message

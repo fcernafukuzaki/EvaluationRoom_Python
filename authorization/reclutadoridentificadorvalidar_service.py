@@ -1,5 +1,6 @@
 import json
 from configs.resources import db, text
+from configs.logging import logger
 
 
 class ReclutadorIdentificadorValidarService():
@@ -48,9 +49,9 @@ class ReclutadorIdentificadorValidarService():
         # print(json_data)
         
         if int(usuario.rowcount) > 0:
-            print('Se encontró reclutador con el correo electronico {}'.format(email))
+            logger.info('Se encontró reclutador con el correo electronico.', email=email)
             return True, 'Existe reclutador', data
-        print('No existe reclutador con el correo electronico {}'.format(email))
+        logger.info('No existe reclutador con el correo electronico.', email=email)
         return False, 'No existe reclutador.', None
     
 

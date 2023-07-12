@@ -2,16 +2,16 @@ from flask import request
 from flask_restful import Resource
 # from datetime import datetime
 # from common.util import field_in_dict, get_response_body, str2bool
-from .authorizer_service import AuthorizerService
 from .usuarios_service import UsuariosService
 from common.util import get_response_body
 from configs.logging import logger
+from common.validate_handler import authorize_user
 
-authorizer_service = AuthorizerService()
 usuarios_service = UsuariosService()
 
 class UsuariosController(Resource):
 
+    @authorize_user
     def get(self, uid=None):
         """ Obtener datos de los usuarios o de un usuario.
         Header:
@@ -20,23 +20,13 @@ class UsuariosController(Resource):
         """
         response_body = None
         try:
-            input_header = request.headers
-            token = input_header.get('Authorization')
-            correoelectronico = input_header.get('correoElectronico')
-            
-            flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, correoelectronico)
-            logger.debug("Response from validate recruiter.", respuesta=respuesta, codigo=codigo)
-            if flag:
-                if not uid:
-                    result, code, message = usuarios_service.get_usuarios()
-                    response_body = {'usuarios':result} if result else None
-                else:
-                    result, code, message = usuarios_service.get_usuario(uid)
-                    response_body = {'usuario':result} if result else None
-                user_message = message
+            if not uid:
+                result, code, message = usuarios_service.get_usuarios()
+                response_body = {'usuarios':result} if result else None
             else:
-                code, message = 403, 'Operación inválida.'
-                user_message = message
+                result, code, message = usuarios_service.get_usuario(uid)
+                response_body = {'usuario':result} if result else None
+            user_message = message
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar usuarios {e}'
             user_message = message

@@ -1,14 +1,14 @@
 from flask import jsonify, request
 from flask_restful import Resource
-from common.util import field_in_dict, get_response_body, str2bool
-from .authorizer_service import AuthorizerService
+from common.util import get_response_body
+from common.validate_handler import authorize_user
 from .perfiles_service import PerfilesService
 
-authorizer_service = AuthorizerService()
 perfiles_service = PerfilesService()
 
 class PerfilesController(Resource):
 
+    @authorize_user
     def get(self, uid=None):
         """ Obtener datos de los perfiles.
         Header:
@@ -17,22 +17,13 @@ class PerfilesController(Resource):
         """
         response_body = None
         try:
-            input_header = request.headers
-            token = input_header.get('Authorization')
-            correoelectronico = input_header.get('correoElectronico')
-
-            flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, correoelectronico)
-            if flag:
-                if not uid:
-                    result, code, message = perfiles_service.get_perfiles()
-                    response_body = {'perfiles':result} if result else None
-                else:
-                    result, code, message = perfiles_service.get_perfil(uid)
-                    response_body = {'perfil':result} if result else None
-                user_message = message
+            if not uid:
+                result, code, message = perfiles_service.get_perfiles()
+                response_body = {'perfiles':result} if result else None
             else:
-                code, message = 403, 'Operación inválida.'
-                user_message = message
+                result, code, message = perfiles_service.get_perfil(uid)
+                response_body = {'perfil':result} if result else None
+            user_message = message
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar perfiles {e}'
             user_message = message
