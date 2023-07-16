@@ -1,19 +1,18 @@
-from flask import jsonify, request
+from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
 from .perfiles_service import PerfilesService
 
+
 perfiles_service = PerfilesService()
+
 
 class PerfilesController(Resource):
 
     @authorize_user
     def get(self, uid=None):
         """ Obtener datos de los perfiles.
-        Header:
-            - Authorization: Valor retornado por API de Login.
-            - correoElectronico: Correo electrónico del usuario que intenta acceder.
         """
         response_body = None
         try:
@@ -35,6 +34,8 @@ class PerfilesController(Resource):
     
     @authorize_user
     def post(self):
+        """ Agregar un nuevo perfil.
+        """
         response_body = None
         try:
             input_json = request.json
@@ -54,10 +55,11 @@ class PerfilesController(Resource):
     
     @authorize_user
     def put(self, uid):
+        """ Actualizar un perfil.
+        """
         response_body = None
         try:
             input_json = request.json
-            # idperfil = input_json.get('idPerfil')
             nombre = input_json.get('nombre')
 
             result, code, message = perfiles_service.update_perfil(uid, nombre)

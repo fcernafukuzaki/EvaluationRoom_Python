@@ -1,11 +1,6 @@
 from configs.resources import db, text
-# from configs.resources import db
-# from objects.usuario import Usuario, UsuarioAccesosGestionSchema, UsuarioInfoSchema
-# from objects.usuario_perfil import UsuarioPerfil
 from configs.logging import logger
 
-# usuario_info_schema = UsuarioInfoSchema()
-# usuarios_schema = UsuarioAccesosGestionSchema(many=True)
 
 class UsuariosService():
     """
@@ -147,7 +142,7 @@ class UsuariosService():
             return result, code, message
     
 
-    def update_usuario(self, uid, nombre, email, activo):
+    def update_usuario(self, uid, nombre, email, activo, perfiles=None):
         """
         Descripción:
             Actualizar datos de un usuario.
@@ -173,6 +168,33 @@ class UsuariosService():
             usuario = db.execute(text(sql_query))
             db.commit()
 
+            # Eliminar perfiles
+
+            sql_query = f"""
+            DELETE FROM evaluationroom.usuarioperfil
+            WHERE idusuario={uid}
+            """
+
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            usuarioperfil = db.execute(text(sql_query))
+            db.commit()
+            logger.debug("Se eliminó perfil en base de datos.", id_usuario=uid)
+
+            if perfiles:
+                for perfil in perfiles:
+                    id_perfil = perfil["idPerfil"]
+                    sql_query = f"""
+                    INSERT INTO evaluationroom.usuarioperfil
+                    (idperfil, idusuario)
+                    VALUES
+                    ({id_perfil}, {uid})
+                    """
+
+                    # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+                    usuarioperfil = db.execute(text(sql_query))
+                    db.commit()
+                    logger.debug("Se registró perfil al usuario en base de datos.", id_usuario=uid, id_perfil=id_perfil)
+
             logger.debug("Usuario updated.", id_usuario=uid)
             result, code, message = uid, 200, 'Se actualizó usuario en base de datos.'
         except Exception as e:
@@ -180,34 +202,3 @@ class UsuariosService():
         finally:
             logger.debug("Usuario updated.", message=message)
             return result, code, message
-    
-
-    # def delete_perfiles(self, uid, idperfiles):
-    #     result = None
-    #     try:
-    #         for perfil in idperfiles:
-    #             usuario_perfil = UsuarioPerfil.query.get((uid, perfil))
-    #             if usuario_perfil:
-    #                 db.session.delete(usuario_perfil)
-    #                 db.session.commit()
-    #         result, code, message = uid, 200, 'Se eliminó perfil en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al eliminar perfil en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message
-    
-    # def add_perfiles(self, uid, perfiles):
-    #     result = None
-    #     try:
-    #         for perfil in perfiles:
-    #             usuario_perfil = UsuarioPerfil(uid, perfil['idPerfil'])
-    #             db.session.add(usuario_perfil)
-    #             db.session.commit()
-            
-    #         result, code, message = uid, 200, f'Se registró perfiles al usuario {uid} en base de datos.'
-    #     except Exception as e:
-    #         code, message = 503, f'Hubo un error al registrar perfiles al usuario {uid} en base de datos {e}'
-    #     finally:
-    #         print(message)
-    #         return result, code, message

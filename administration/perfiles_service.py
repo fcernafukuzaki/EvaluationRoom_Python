@@ -1,11 +1,6 @@
 from configs.resources import db, text
 from configs.logging import logger
 
-# from configs.resources import db
-# from objects.perfil import Perfil, PerfilSchema
-
-# perfil_schema = PerfilSchema()
-# perfiles_schema = PerfilSchema(many=True)
 
 class PerfilesService():
     """

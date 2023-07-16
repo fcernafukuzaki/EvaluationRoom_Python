@@ -6,10 +6,15 @@ from authorization.authorizer_service import AuthorizerService
 authorizer_service = AuthorizerService()
 
 def authorize_user(func):
+    
     def wrapper(*args, **kwargs):
+        """
+        Header:
+            - Authorization: Valor retornado por API de Login.
+            - correoElectronico: Correo electrónico del usuario que intenta acceder.
+        """
         input_header = request.headers
-        token = input_header.get('Authorization')
-        correoelectronico = input_header.get('correoElectronico')
+        token, correoelectronico = input_header.get('Authorization'), input_header.get('correoElectronico')
 
         flag, respuesta, codigo, _ = authorizer_service.validate_recruiter_identify(token, correoelectronico)
         logger.debug("Response from validate recruiter.", respuesta=respuesta, codigo=codigo)
