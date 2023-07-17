@@ -19,7 +19,7 @@ class PsychologicalTestsController(Resource):
             result, code, message = psychologicaltests_service.get_psychologicaltests()
             response_body = {'psychologicaltests':result} if result else None
         except Exception as e:
-            code, message = 503, f'Hubo un error al consultar usuarios {e}'
+            code, message = 503, f'Hubo un error al consultar las pruebas psicológicas {e}'
         finally:
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
