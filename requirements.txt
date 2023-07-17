@@ -4,5 +4,6 @@ psycopg2
 SQLAlchemy
 Flask
 Flask-RESTful
+flask-cors
 structlog
 gunicorn
