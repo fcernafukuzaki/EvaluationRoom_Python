@@ -16,20 +16,18 @@ from authorization.login_user_controller import LoginUserController
 # from controller.candidate_form.tipo_direccion_controller import *
 # from controller.candidate_form.psychologicaltest_controller import *
 # from controller.api.api_test_interpretacion import *
-# from controller.menu.psychologicaltests_controller import *
 # from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import *
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 # from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 # from controller.recruiter.reclutadoremailvalidar_controller import *
-from authorization.usuarios_controller import UsuariosController
-from authorization.perfiles_controller import PerfilesController
+from administration.usuarios_controller import UsuariosController
+from administration.perfiles_controller import PerfilesController
+from administration.psychologicaltests_controller import PsychologicalTestsController
+
 
 def api_add_resource(api):
     # Agregar la clase como un recurso a la API
     api.add_resource(LoginUserController, "/login/authenticate")
-
-    # api.add_resource(LoginUserController, 
-    #     "/login/authenticate")
 
     # api.add_resource(CandidateController, 
     #     "/v1/candidate",
@@ -92,10 +90,6 @@ def api_add_resource(api):
     # api.add_resource(PsychologicalTestController, 
     #     "/v1/candidateform/testpsicologicos")
 
-    # # Menu reclutador
-    # api.add_resource(PsychologicalTestsController,
-    #     "/v1/candidateform/testpsicologicos/info/email=<string:email>")
-
     # # Obtener interpretación de las pruebas psicológicas
     # api.add_resource(PsychologicalTestInterpretacionController, 
     #     "/testpsicologico/interpretacion/candidato/<int:idcandidato>",
@@ -126,3 +120,8 @@ def api_add_resource(api):
         "/perfiles/",
         "/perfiles/<int:uid>"
         )
+    
+    # Menu reclutador
+    api.add_resource(PsychologicalTestsController,
+        "/v1/candidateform/testpsicologicos/info/email=<string:email>")
+

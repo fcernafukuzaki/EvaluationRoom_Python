@@ -11,12 +11,7 @@ psychologicaltests_service = PsychologicalTestsService()
 class PsychologicalTestsController(Resource):
 
     @authorize_user
-    def get(self, email):
-        # token = request.headers['Authorization']
-
-        # flag, respuesta, codigo, id_user = authorizer_service.validate_recruiter_identify(token, email)
-        # if flag:
-
+    def get(self):
         """ Obtener datos de las pruebas psicológicas.
         """
         response_body = None
@@ -25,12 +20,7 @@ class PsychologicalTestsController(Resource):
             response_body = {'psychologicaltests':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar usuarios {e}'
-            user_message = message
         finally:
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=message), 404
-        # message = 'Operación inválida.'
-        # user_message = 'Operación inválida.'
-        # return get_response_body(code=403, message=message, user_message=user_message), 403
-    
