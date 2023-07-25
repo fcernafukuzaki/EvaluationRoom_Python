@@ -21,7 +21,7 @@ class LoginUserController(Resource):
             result, _, message_aux = login_user_service.add_login_user(idusuario, token, correoelectronico)
             user_message = f"{user_message} {message_aux}"
 
-            response_body = {'usuario':{"idusuario":idusuario,"correoelectronico":correoelectronico,"perfiles":user_object['perfiles']}} if flag else None
+            response_body = {'usuario':user_object} if flag else None
             return get_response_body(code=code, message=message, user_message=user_message, body=response_body), code
         except Exception as e:
             message = f'Hubo un error durante la consulta del usuario {e}'

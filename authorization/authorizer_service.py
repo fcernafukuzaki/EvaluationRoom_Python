@@ -1,16 +1,13 @@
 from configs.resources import db
-# from objects.login_user import LoginUser
-from .reclutadoridentificadorvalidar_service import ReclutadorIdentificadorValidarService
-# from objects.usuario import Usuario, UsuarioSchema
+from .usuario_validar_service import UsuarioValidarService
 
-reclutadoridentificadorvalidar_service = ReclutadorIdentificadorValidarService()
-# usuario_schema = UsuarioSchema()
+usuariovalidar_service = UsuarioValidarService()
 
 class AuthorizerService():
 
     def validate_recruiter_identify(self, token, email):
         if email and token:
-            email_valido, mensaje, usuario = reclutadoridentificadorvalidar_service.get_data(email)
+            email_valido, mensaje, usuario = usuariovalidar_service.get_data(email)
             if email_valido:
                 valido = self.validate_token_recruiter(token, usuario.get("idusuario"))
                 if valido:
@@ -22,7 +19,7 @@ class AuthorizerService():
 
     def validate_recruiter_active(self, token, email):
         if email and token:
-            email_valido, mensaje, usuario = reclutadoridentificadorvalidar_service.get_data(email)
+            email_valido, mensaje, usuario = usuariovalidar_service.get_data(email)
             if email_valido:
                 return True, 'Usuario valido.', 200, usuario
             return False, mensaje, 404, None
@@ -31,7 +28,7 @@ class AuthorizerService():
 
     def validate_token_recruiter(self, hash, idusuario):
         if hash:
-            return reclutadoridentificadorvalidar_service.is_authorized(hash, idusuario)
+            return usuariovalidar_service.is_authorized(hash, idusuario)
         return False
 
     
