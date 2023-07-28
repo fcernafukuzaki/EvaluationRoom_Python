@@ -6,7 +6,6 @@ from authorization.login_user_controller import LoginUserController
 # from controller.selection_process.client_controller import *
 # from controller.selection_process.jobposition_controller import *
 # from controller.jobposition_candidate_controller import *
-# from controller.candidate_without_selectionprocess_controller import CandidateWithoutSelectionProcessController
 # from controller.candidate_resettest_controller import *
 # from controller.candidate_form.candidate_controller import *
 # from controller.candidate_form.ubigeo_controller import *
@@ -23,6 +22,7 @@ from authorization.login_user_controller import LoginUserController
 from administration.usuarios_controller import UsuariosController
 from administration.perfiles_controller import PerfilesController
 from administration.psychologicaltests_controller import PsychologicalTestsController
+from dashboard.candidate_without_selectionprocess_controller import CandidateWithoutSelectionProcessController
 
 
 def api_add_resource(api):
@@ -47,9 +47,6 @@ def api_add_resource(api):
     #     "/v1/selectionprocesscandidate",
     #     "/v1/selectionprocesscandidate/<int:idclient>",
     #     "/v1/selectionprocesscandidate/<int:idclient>/<int:idjobposition>")
-
-    # api.add_resource(CandidateWithoutSelectionProcessController, 
-    #     "/v1/candidatewithoutselectionprocess")
 
     # api.add_resource(ClientController, 
     #     "/v1/clients/",
@@ -124,4 +121,7 @@ def api_add_resource(api):
     # Menu reclutador
     api.add_resource(PsychologicalTestsController,
         "/v1/candidateform/testpsicologicos/info/email=<string:email>")
-
+    
+    # Dashboard
+    api.add_resource(CandidateWithoutSelectionProcessController, 
+        "/v1/candidatewithoutselectionprocess/email=<string:email>")
