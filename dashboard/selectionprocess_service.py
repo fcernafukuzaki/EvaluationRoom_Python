@@ -48,13 +48,6 @@ class SelectionProcessService():
         """
         Obtener la lista de candidatos que no están asignados a un proceso de selección.
         """
-        # all_selectionprocess = SelectionProcessInfo.candidates_without_selectionprocess_info()
-        # all_candidates_psychologicaltes = SelectionProcessInfo.candidates_psychologicaltest_without_selectionprocess_info()
-        
-        # result = candidates_without_selection_process_info_resumen_schema.dump(all_selectionprocess),candidates_psychologicaltest_without_selection_process_info_schema.dump(all_candidates_psychologicaltes)
-        # if result:
-        #     return jsonify(result)
-        # return {'message': 'Not found'}, 404
         result = None
         try:
             sql_query = f"""
@@ -72,8 +65,6 @@ class SelectionProcessService():
                     WHERE ctest.idcandidato=c.idcandidato
                     AND ctest.fechaexamen IS NOT NULL
                 ) AS "tiene_resultado",
-                'https://evaluationroom-interpretacion.herokuapp.com/testpsicologico/interpretacion/candidato/' || c.idcandidato AS "generar_informe",
-                'https://evaluationroom.herokuapp.com/testpsicologico/download/informe/uid=' || c.idcandidato || '&email=' || u.correoelectronico AS "descargar_informe",
                 u.idusuario, u.nombre AS "usuario_nombre", u.correoelectronico AS "usuario_correoelectronico", 
                 u.idempresa, up.idperfil, pe.nombre AS "perfil_nombre", 
                 e.nombre AS "empresa_nombre", e.activo AS "empresa_activo", 
@@ -127,7 +118,7 @@ class SelectionProcessService():
             unique_procesosseleccion["fecha_inicio_proceso"] = unique_procesosseleccion["fecha_inicio_proceso"].dt.strftime('%Y-%m-%d')
             unique_procesosseleccion["fecha_fin_proceso"] = unique_procesosseleccion["fecha_fin_proceso"].dt.strftime('%Y-%m-%d')
 
-            campos = ["idempresa", "idcliente", "idpuestolaboral", "idcandidato", "nombre", "apellidopaterno", "apellidomaterno", "nombre_completo", "fechanacimiento", "fecha_registro", "correoelectronico", "selfregistration", "telefono_movil", "telefono_fijo", "cant_examenes_asignados", "tiene_resultado", "generar_informe", "descargar_informe"]
+            campos = ["idempresa", "idcliente", "idpuestolaboral", "idcandidato", "nombre", "apellidopaterno", "apellidomaterno", "nombre_completo", "fechanacimiento", "fecha_registro", "correoelectronico", "selfregistration", "telefono_movil", "telefono_fijo", "cant_examenes_asignados", "tiene_resultado"]
             unique_candidatos = df_results[campos].copy()
             unique_candidatos["fechanacimiento"] = unique_candidatos["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
             unique_candidatos["fecha_registro"] = unique_candidatos["fecha_registro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
@@ -195,8 +186,6 @@ class SelectionProcessService():
                             data_candidato["telefono_fijo"] = row_candidato.get("telefono_fijo")
                             data_candidato["cant_examenes_asignados"] = row_candidato.get("cant_examenes_asignados")
                             data_candidato["tiene_resultado"] = row_candidato.get("tiene_resultado")
-                            data_candidato["generar_informe"] = row_candidato.get("generar_informe")
-                            data_candidato["descargar_informe"] = row_candidato.get("descargar_informe")
                             data_candidatos.append(data_candidato)
                         data_procesoseleccion["candidatos"] = data_candidatos
                         data_procesosseleccion.append(data_procesoseleccion)
