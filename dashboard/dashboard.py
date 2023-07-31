@@ -8,7 +8,7 @@ from .selectionprocess_service import SelectionProcessService
 selectionprocess_service = SelectionProcessService()
 
 
-class CandidateWithoutSelectionProcessController(Resource):
+class Dashboard(Resource):
     
     @authorize_user
     def post(self, email=None):
