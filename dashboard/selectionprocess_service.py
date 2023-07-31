@@ -36,10 +36,9 @@ class SelectionProcessService():
     #         return jsonify(result)
     #     return {'message': 'Not found'}, 404
 
-    def convert_fecha_to_str(self, fecha):
-        if fecha is not None:
-            print(fecha)
-            return fecha.dt.strftime('%Y-%m-%d')
+    def format_date(self, value):
+        if pd.notna(value):
+            return value.strftime('%Y-%m-%d')
         else:
             return None
 
@@ -104,19 +103,21 @@ class SelectionProcessService():
             # Resultado en formato de lista
             data = []
 
-            df = df_results[["idusuario", "usuario_nombre", "usuario_correoelectronico", "idempresa", "empresa_nombre", "empresa_activo", "idperfil", "perfil_nombre"]].copy()
-            unique_usuario = df[["idusuario", "usuario_nombre", "usuario_correoelectronico", "idempresa", "empresa_nombre", "empresa_activo", "idperfil", "perfil_nombre"]].drop_duplicates()
+            campos = ["idusuario", "usuario_nombre", "usuario_correoelectronico", "idempresa", "empresa_nombre", "empresa_activo", "idperfil", "perfil_nombre"]
+            df = df_results[campos].copy()
+            unique_usuario = df[campos].drop_duplicates()
             # Convierte el DataFrame a un diccionario
             unique_usuario = unique_usuario.to_dict(orient="records")
 
-            df_empresas = df_results[["idempresa", "idcliente", "cliente_nombre"]].copy()
-            unique_empresas = df_empresas[["idempresa", "idcliente", "cliente_nombre"]].drop_duplicates()
+            campos = ["idempresa", "idcliente", "cliente_nombre"]
+            df_empresas = df_results[campos].copy()
+            unique_empresas = df_empresas[campos].drop_duplicates()
             
             campos = ["idempresa", "idcliente", "idpuestolaboral", "puestolaboral_nombre", "fecha_inicio_proceso", "fecha_fin_proceso", "usuario_registro", "procesoseleccion_activo", "cantidad_candidatos"]
             df_procesosseleccion = df_results[campos].copy()
             unique_procesosseleccion = df_procesosseleccion[campos].drop_duplicates()
-            unique_procesosseleccion["fecha_inicio_proceso"] = unique_procesosseleccion["fecha_inicio_proceso"].dt.strftime('%Y-%m-%d')
-            unique_procesosseleccion["fecha_fin_proceso"] = unique_procesosseleccion["fecha_fin_proceso"].dt.strftime('%Y-%m-%d')
+            unique_procesosseleccion["fecha_inicio_proceso"] = unique_procesosseleccion["fecha_inicio_proceso"].apply(self.format_date)
+            unique_procesosseleccion["fecha_fin_proceso"] = unique_procesosseleccion["fecha_fin_proceso"].apply(self.format_date)
 
             campos = ["idempresa", "idcliente", "idpuestolaboral", "idcandidato", "nombre", "apellidopaterno", "apellidomaterno", "nombre_completo", "fechanacimiento", "fecha_registro", "correoelectronico", "selfregistration", "telefono_movil", "telefono_fijo", "cant_examenes_asignados", "tiene_resultado"]
             unique_candidatos = df_results[campos].copy()
