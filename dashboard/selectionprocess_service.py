@@ -70,7 +70,21 @@ class SelectionProcessService():
                 cli.idcliente, cli.nombre AS "cliente_nombre",
                 pl.idpuestolaboral, pl.nombre AS "puestolaboral_nombre",
                 sp.fecha_inicio_proceso, sp.fecha_fin_proceso, sp.usuario_registro, sp.activo AS "procesoseleccion_activo",
-                (SELECT COUNT(spc.idcandidato) FROM evaluationroom.procesoseleccioncandidato spc WHERE spc.idempresa=sp.idempresa AND spc.idcliente=sp.idcliente AND spc.idpuestolaboral=sp.idpuestolaboral) AS "cantidad_candidatos"
+                (SELECT COUNT(spc.idcandidato) FROM evaluationroom.procesoseleccioncandidato spc WHERE spc.idempresa=sp.idempresa AND spc.idcliente=sp.idcliente AND spc.idpuestolaboral=sp.idpuestolaboral) AS "cantidad_candidatos",
+                c_test.idtestpsicologico,
+				testp.nombre AS "nombre_test",
+				c_test.fechaexamen,
+				testp.cantidadpreguntas AS "cantidad_preguntas_test",
+                (SELECT COUNT(ctestdet.idcandidato) 
+                    FROM evaluationroom.candidatotestdetalle ctestdet
+                    WHERE ctestdet.idcandidato=c.idcandidato AND ctestdet.idtestpsicologico=c_test.idtestpsicologico
+				) AS "cantidad_preguntas_respondidas",
+                (SELECT CASE WHEN COUNT(ctest.idcandidato) = 1 THEN TRUE ELSE FALSE END CASE
+                    FROM evaluationroom.candidatotest ctest
+                    WHERE ctest.idcandidato=c.idcandidato
+                    AND ctest.idtestpsicologico=c_test.idtestpsicologico
+                    AND ctest.resultado IS NOT NULL
+                ) AS "tiene_resultado_test"
             FROM evaluationroom.usuario u
             INNER JOIN evaluationroom.usuarioperfil up ON u.idusuario=up.idusuario
             INNER JOIN evaluationroom.perfil pe ON up.idperfil=pe.idperfil
@@ -80,6 +94,8 @@ class SelectionProcessService():
             INNER JOIN evaluationroom.procesoseleccion sp ON sp.idempresa=pl.idempresa AND sp.idcliente=pl.idcliente AND sp.idpuestolaboral=pl.idpuestolaboral
             INNER JOIN evaluationroom.procesoseleccioncandidato spc ON spc.idempresa=sp.idempresa AND spc.idcliente=sp.idcliente AND spc.idpuestolaboral=sp.idpuestolaboral
             INNER JOIN evaluationroom.candidato c ON c.idcandidato=spc.idcandidato
+            INNER JOIN evaluationroom.candidatotest c_test ON c_test.idcandidato=c.idcandidato
+            INNER JOIN evaluationroom.testpsicologico testp ON testp.idtestpsicologico=c_test.idtestpsicologico
             WHERE u.activo=true
             AND up.idperfil IN (2, 3)
             AND u.correoelectronico='{correoelectronico}'
@@ -87,8 +103,9 @@ class SelectionProcessService():
                 u.idusuario, u.nombre, u.correoelectronico, u.idempresa, up.idperfil, pe.nombre, 
                 e.nombre, e.activo, cli.idcliente, cli.nombre,
                 pl.idpuestolaboral, pl.nombre,
-                sp.idempresa, sp.idcliente, sp.idpuestolaboral, sp.fecha_inicio_proceso, sp.fecha_fin_proceso, sp.usuario_registro, sp.activo
-            ORDER BY e.nombre, pe.nombre, u.correoelectronico, cli.nombre, pl.nombre, c.idcandidato DESC
+                sp.idempresa, sp.idcliente, sp.idpuestolaboral, sp.fecha_inicio_proceso, sp.fecha_fin_proceso, sp.usuario_registro, sp.activo,
+                c_test.idtestpsicologico, testp.nombre, c_test.fechaexamen, testp.cantidadpreguntas
+            ORDER BY e.nombre, pe.nombre, u.correoelectronico, cli.nombre, pl.nombre, c.idcandidato DESC, c_test.idtestpsicologico ASC
             """
 
             # Ejecutar la consulta SQL y obtener los resultados en un dataframe
@@ -121,8 +138,13 @@ class SelectionProcessService():
 
             campos = ["idempresa", "idcliente", "idpuestolaboral", "idcandidato", "nombre", "apellidopaterno", "apellidomaterno", "nombre_completo", "fechanacimiento", "fecha_registro", "correoelectronico", "selfregistration", "telefono_movil", "telefono_fijo", "cant_examenes_asignados", "tiene_resultado"]
             unique_candidatos = df_results[campos].copy()
+            unique_candidatos = unique_candidatos[campos].drop_duplicates()
             unique_candidatos["fechanacimiento"] = unique_candidatos["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
             unique_candidatos["fecha_registro"] = unique_candidatos["fecha_registro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+
+            campos = ["idcandidato", "idtestpsicologico", "nombre_test", "fechaexamen", "cantidad_preguntas_test", "cantidad_preguntas_respondidas", "tiene_resultado_test"]
+            unique_testpsicologicos = df_results[campos].copy()
+            unique_testpsicologicos["fechaexamen"] = unique_testpsicologicos["fechaexamen"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
 
             for row in unique_usuario:
                 data_proceso = dict()
@@ -165,7 +187,6 @@ class SelectionProcessService():
                         data_procesoseleccion["activo"] = row_procesoseleccion.get("procesoseleccion_activo")
                         data_procesoseleccion["cantidad_candidatos"] = row_procesoseleccion.get("cantidad_candidatos")
 
-                        unique_candidatos
                         filtro = ((unique_candidatos['idempresa'] == row_procesoseleccion.get("idempresa")) & 
                                   (unique_candidatos['idcliente'] == row_procesoseleccion.get("idcliente")) & 
                                   (unique_candidatos['idpuestolaboral'] == row_procesoseleccion.get("idpuestolaboral")))
@@ -187,6 +208,22 @@ class SelectionProcessService():
                             data_candidato["telefono_fijo"] = row_candidato.get("telefono_fijo")
                             data_candidato["cant_examenes_asignados"] = row_candidato.get("cant_examenes_asignados")
                             data_candidato["tiene_resultado"] = row_candidato.get("tiene_resultado")
+
+                            filtro = ((unique_testpsicologicos['idcandidato'] == row_candidato.get("idcandidato")))
+                            testpsicologicos = unique_testpsicologicos[filtro]
+                            testpsicologicos = testpsicologicos.to_dict(orient="records")
+                            data_testpsicologicos = []
+                            for row_testpsicologico in testpsicologicos:
+                                data_testpsicologico = dict()
+                                data_testpsicologico["idtestpsicologico"] = row_testpsicologico.get("idtestpsicologico")
+                                data_testpsicologico["nombre"] = row_testpsicologico.get("nombre_test")
+                                data_testpsicologico["fechaexamen"] = row_testpsicologico.get("fechaexamen")
+                                data_testpsicologico["cantidad_preguntas_test"] = row_testpsicologico.get("cantidad_preguntas_test")
+                                data_testpsicologico["cantidad_preguntas_respondidas"] = row_testpsicologico.get("cantidad_preguntas_respondidas")
+                                data_testpsicologico["tiene_resultado"] = row_testpsicologico.get("tiene_resultado_test")
+                                data_testpsicologicos.append(data_testpsicologico)
+
+                            data_candidato["testpsicologicos"] = data_testpsicologicos
                             data_candidatos.append(data_candidato)
                         data_procesoseleccion["candidatos"] = data_candidatos
                         data_procesosseleccion.append(data_procesoseleccion)

@@ -19,7 +19,7 @@ class UsuariosService():
         result = None
         try:
             sql_query = f"""
-            SELECT u.idusuario, u.activo, u.nombre, u.correoelectronico
+            SELECT u.idusuario, u.activo, u.nombre, u.correoelectronico, u.idempresa
             FROM evaluationroom.usuario u
             ORDER BY u.idusuario
             """
@@ -36,6 +36,7 @@ class UsuariosService():
                 data_usuario['activo'] = row.activo
                 data_usuario['correoElectronico'] = row.correoelectronico
                 data_usuario['nombre'] = row.nombre
+                data_usuario['idempresa'] = row.idempresa
                 data.append(data_usuario)
             
             logger.debug("Response from usuarios.")
@@ -63,7 +64,7 @@ class UsuariosService():
         result = None
         try:
             sql_query = f"""
-            SELECT u.idusuario, u.activo, u.nombre, u.correoelectronico, up.idperfil, p.nombre AS "perfil_nombre"
+            SELECT u.idusuario, u.activo, u.nombre, u.correoelectronico, u.idempresa, up.idperfil, p.nombre AS "perfil_nombre"
             FROM evaluationroom.usuario u
             INNER JOIN evaluationroom.usuarioperfil up ON u.idusuario=up.idusuario
             INNER JOIN evaluationroom.perfil p ON p.idperfil=up.idperfil
@@ -79,6 +80,7 @@ class UsuariosService():
                 'activo': None,
                 'nombre': None,
                 'correoElectronico': None,
+                'idempresa': None,
                 'perfiles': []
             }
 
@@ -87,6 +89,7 @@ class UsuariosService():
                 data['activo'] = row.activo
                 data['nombre'] = row.nombre
                 data['correoElectronico'] = row.correoelectronico
+                data['idempresa'] = row.idempresa
                 perfil = {
                     'idUsuario': row.idusuario,
                     'idPerfil': row.idperfil,
@@ -107,7 +110,7 @@ class UsuariosService():
             return result, code, message
     
 
-    def add_usuario(self, nombre, email, activo):
+    def add_usuario(self, nombre, email, activo, idempresa):
         """
         Descripción:
             Agregar un nuevo usuario.
@@ -115,6 +118,7 @@ class UsuariosService():
             - nombre:str Nombre del usuario.
             - email:str Correo electrónico del usuario.
             - activo:bool [True, False] Activo o no activo.
+            - idempresa: int. Identificador de la empresa.
         Output:
             - id: Identificador del usuario.
         """
@@ -122,9 +126,9 @@ class UsuariosService():
         try:
             sql_query = f"""
             INSERT INTO evaluationroom.usuario
-            (nombre, correoelectronico, activo)
+            (nombre, correoelectronico, activo, idempresa)
             VALUES
-            ('{nombre}', '{email}', '{activo}')
+            ('{nombre}', '{email}', '{activo}', {idempresa})
             RETURNING idusuario
             """
             
@@ -142,7 +146,7 @@ class UsuariosService():
             return result, code, message
     
 
-    def update_usuario(self, uid, nombre, email, activo, perfiles=None):
+    def update_usuario(self, uid, nombre, email, activo, idempresa, perfiles=None):
         """
         Descripción:
             Actualizar datos de un usuario.
@@ -151,6 +155,7 @@ class UsuariosService():
             - nombre:str Nombre del usuario.
             - email:str Correo electrónico del usuario.
             - activo:bool [True, False] Activo o no activo.
+            - idempresa: int. Identificador de la empresa.
         Output:
             - id: Identificador del usuario.
         """
@@ -160,7 +165,8 @@ class UsuariosService():
             UPDATE evaluationroom.usuario
             SET nombre='{nombre}', 
             correoelectronico='{email}', 
-            activo='{activo}'
+            activo='{activo}',
+            idempresa={idempresa}
             WHERE idusuario={uid}
             """
 

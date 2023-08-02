@@ -40,9 +40,9 @@ class UsuariosController(Resource):
         response_body = None
         try:
             input_json = request.json
-            nombre, correoelectronico, activo = input_json.get('nombre'), input_json.get('correoElectronico'), input_json.get('activo')
-
-            result, code, message = usuarios_service.add_usuario(nombre, correoelectronico, activo)
+            nombre, correoelectronico, activo, idempresa = input_json.get('nombre'), input_json.get('correoElectronico'), input_json.get('activo'), input_json.get('idempresa')
+            
+            result, code, message = usuarios_service.add_usuario(nombre, correoelectronico, activo, idempresa)
             response_body = {'usuario':result} if result else None
             user_message = message
         except Exception as e:
@@ -65,9 +65,10 @@ class UsuariosController(Resource):
             nombre = input_json.get('nombre')
             correoelectronico = input_json.get('correoElectronico')
             activo = input_json.get('activo')
+            idempresa = input_json.get('idempresa')
             perfiles = input_json.get('perfiles')
 
-            result, code, message = usuarios_service.update_usuario(uid, nombre, correoelectronico, activo, perfiles)
+            result, code, message = usuarios_service.update_usuario(uid, nombre, correoelectronico, activo, idempresa, perfiles)
             user_message = message
             
             response_body = {'usuario':{'uid':result, 'datetime':datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")}} if result else None
