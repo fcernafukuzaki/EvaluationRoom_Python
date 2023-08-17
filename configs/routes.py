@@ -23,6 +23,7 @@ from controller.candidate_form.documento_identidad_controller import DocumentoId
 from controller.candidate_form.estado_civil_controller import EstadoCivilController
 from controller.candidate_form.tipo_direccion_controller import TipoDireccionController
 from controller.candidate_form.psychologicaltest_controller import PsychologicalTestController
+from controller.candidate_form.candidate_controller import CandidateController
 
 
 def api_add_resource(api):
@@ -87,6 +88,9 @@ def api_add_resource(api):
     api.add_resource(PsychologicalTestController, 
         "/api/v1/candidates/fields/testpsicologicos")
     
+    api.add_resource(CandidateController, 
+        "/api/v1/candidates/fields/self_registered=<string:self_registered>",
+        "/api/v1/candidates/<int:uid>/fields")
 
     # # Obtener interpretación de las pruebas psicológicas
     # api.add_resource(PsychologicalTestInterpretacionController, 

@@ -94,8 +94,8 @@ class SelectionProcessService():
             INNER JOIN evaluationroom.procesoseleccion sp ON sp.idempresa=pl.idempresa AND sp.idcliente=pl.idcliente AND sp.idpuestolaboral=pl.idpuestolaboral
             INNER JOIN evaluationroom.procesoseleccioncandidato spc ON spc.idempresa=sp.idempresa AND spc.idcliente=sp.idcliente AND spc.idpuestolaboral=sp.idpuestolaboral
             INNER JOIN evaluationroom.candidato c ON c.idcandidato=spc.idcandidato
-            INNER JOIN evaluationroom.candidatotest c_test ON c_test.idcandidato=c.idcandidato
-            INNER JOIN evaluationroom.testpsicologico testp ON testp.idtestpsicologico=c_test.idtestpsicologico
+            LEFT JOIN evaluationroom.candidatotest c_test ON c_test.idcandidato=c.idcandidato
+            LEFT JOIN evaluationroom.testpsicologico testp ON testp.idtestpsicologico=c_test.idtestpsicologico
             WHERE u.activo=true
             AND up.idperfil IN (2, 3)
             AND u.correoelectronico='{correoelectronico}'
@@ -212,18 +212,20 @@ class SelectionProcessService():
                             filtro = ((unique_testpsicologicos['idcandidato'] == row_candidato.get("idcandidato")))
                             testpsicologicos = unique_testpsicologicos[filtro]
                             testpsicologicos = testpsicologicos.to_dict(orient="records")
-                            data_testpsicologicos = []
-                            for row_testpsicologico in testpsicologicos:
-                                data_testpsicologico = dict()
-                                data_testpsicologico["idtestpsicologico"] = row_testpsicologico.get("idtestpsicologico")
-                                data_testpsicologico["nombre"] = row_testpsicologico.get("nombre_test")
-                                data_testpsicologico["fechaexamen"] = row_testpsicologico.get("fechaexamen")
-                                data_testpsicologico["cantidad_preguntas_test"] = row_testpsicologico.get("cantidad_preguntas_test")
-                                data_testpsicologico["cantidad_preguntas_respondidas"] = row_testpsicologico.get("cantidad_preguntas_respondidas")
-                                data_testpsicologico["tiene_resultado"] = row_testpsicologico.get("tiene_resultado_test")
-                                data_testpsicologicos.append(data_testpsicologico)
 
-                            data_candidato["testpsicologicos"] = data_testpsicologicos
+                            data_candidato['testpsicologicos'] = [
+                                {
+                                    'idtestpsicologico': row_testpsicologico.get("idtestpsicologico"),
+                                    'nombre': row_testpsicologico.get("nombre_test"),
+                                    'fechaexamen': row_testpsicologico.get("fechaexamen"),
+                                    'cantidad_preguntas_test': row_testpsicologico.get("cantidad_preguntas_test"),
+                                    'cantidad_preguntas_respondidas': row_testpsicologico.get("cantidad_preguntas_respondidas"),
+                                    'tiene_resultado': row_testpsicologico.get("tiene_resultado_test")
+                                }
+                                for row_testpsicologico in testpsicologicos
+                                if row_testpsicologico.get('nombre_test') is not None
+                            ]
+                            
                             data_candidatos.append(data_candidato)
                         data_procesoseleccion["candidatos"] = data_candidatos
                         data_procesosseleccion.append(data_procesoseleccion)

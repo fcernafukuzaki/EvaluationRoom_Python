@@ -1,3 +1,4 @@
+import re
 import urllib3
 
 
@@ -13,7 +14,7 @@ def field_in_dict(dictionary, field):
 
 
 def get_response_body(code=200, message="OK", user_message="", body=None):
-    if code == 200:
+    if re.match(r'^2\d{2}$', str(code)):
         return {
             "code": code,
             "message": message,
