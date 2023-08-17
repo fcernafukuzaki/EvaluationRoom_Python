@@ -8,12 +8,6 @@ from authorization.login_user_controller import LoginUserController
 # from controller.jobposition_candidate_controller import *
 # from controller.candidate_resettest_controller import *
 # from controller.candidate_form.candidate_controller import *
-# from controller.candidate_form.ubigeo_controller import *
-# from controller.candidate_form.sexo_controller import *
-# from controller.candidate_form.documento_identidad_controller import *
-# from controller.candidate_form.estado_civil_controller import *
-# from controller.candidate_form.tipo_direccion_controller import *
-# from controller.candidate_form.psychologicaltest_controller import *
 # from controller.api.api_test_interpretacion import *
 # from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import *
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
@@ -23,6 +17,12 @@ from administration.usuarios_controller import UsuariosController
 from administration.perfiles_controller import PerfilesController
 from administration.psychologicaltests_controller import PsychologicalTestsController
 from dashboard.dashboard import Dashboard
+from controller.candidate_form.ubigeo_controller import UbigeoController
+from controller.candidate_form.sexo_controller import SexoController
+from controller.candidate_form.documento_identidad_controller import DocumentoIdentidadController
+from controller.candidate_form.estado_civil_controller import EstadoCivilController
+from controller.candidate_form.tipo_direccion_controller import TipoDireccionController
+from controller.candidate_form.psychologicaltest_controller import PsychologicalTestController
 
 
 def api_add_resource(api):
@@ -30,10 +30,10 @@ def api_add_resource(api):
     api.add_resource(LoginUserController, "/login/authenticate")
 
     # api.add_resource(CandidateController, 
-    #     "/v1/candidate",
-    #     "/v1/candidate/self_registered=<string:self_registered>",
-    #     "/v1/candidate/uid=<int:uid>",
-    #     "/v1/candidate/email=<string:email>")
+    #     "/api/v1/candidates",
+    #     "/api/v1/candidates/self_registered=<string:self_registered>",
+    #     "/api/v1/candidates/uid=<int:uid>",
+    #     "/api/v1/candidates/email=<string:email>")
 
     # api.add_resource(CandidateInfoSimpleController, 
     #     "/v1/candidate_info")
@@ -65,27 +65,28 @@ def api_add_resource(api):
     # api.add_resource(CandidateResetTestController, 
     #     "/v1/candidate/resettest")
 
-    # # Completar valores para formulario de registro de candidato
-    # api.add_resource(UbigeoController, 
-    #     "/v1/candidateform/ubigeo",
-    #     "/v1/candidateform/ubigeo/<int:idcountry>",
-    #     "/v1/candidateform/ubigeo/<int:idcountry>/<int:iddepartamento>",
-    #     "/v1/candidateform/ubigeo/<int:idcountry>/<int:iddepartamento>/<int:idprovincia>")
+    # Completar valores para formulario de registro de candidato
+    api.add_resource(UbigeoController, 
+        "/api/v1/candidates/fields/ubigeo",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>&provincia=<int:idprovincia>")
 
-    # api.add_resource(SexoController, 
-    #     "/v1/candidateform/sexo")
+    api.add_resource(SexoController, 
+        "/api/v1/candidates/fields/sexos")
 
-    # api.add_resource(DocumentoIdentidadController, 
-    #     "/v1/candidateform/documentoidentidad")
+    api.add_resource(DocumentoIdentidadController, 
+        "/api/v1/candidates/fields/documentosidentidad")
 
-    # api.add_resource(EstadoCivilController, 
-    #     "/v1/candidateform/estadocivil")
+    api.add_resource(EstadoCivilController, 
+        "/api/v1/candidates/fields/estadosciviles")
 
-    # api.add_resource(TipoDireccionController, 
-    #     "/v1/candidateform/tipodireccion")
+    api.add_resource(TipoDireccionController, 
+        "/api/v1/candidates/fields/tiposdirecciones")
 
-    # api.add_resource(PsychologicalTestController, 
-    #     "/v1/candidateform/testpsicologicos")
+    api.add_resource(PsychologicalTestController, 
+        "/api/v1/candidates/fields/testpsicologicos")
+    
 
     # # Obtener interpretación de las pruebas psicológicas
     # api.add_resource(PsychologicalTestInterpretacionController, 
@@ -109,19 +110,19 @@ def api_add_resource(api):
 
     # Administrador gestionar accesos
     api.add_resource(UsuariosController, 
-        "/usuarios/",
-        "/usuarios/<int:uid>"
+        "/api/v1/usuarios/",
+        "/api/v1/usuarios/<int:uid>"
         )
 
     api.add_resource(PerfilesController, 
-        "/perfiles/",
-        "/perfiles/<int:uid>"
+        "/api/v1/perfiles/",
+        "/api/v1/perfiles/<int:uid>"
         )
     
     # Menu reclutador
     api.add_resource(PsychologicalTestsController,
-        "/v1/candidateform/testpsicologicos/info/email=<string:email>")
+        "/api/v1/candidateform/testpsicologicos/info")
     
     # Dashboard
     api.add_resource(Dashboard, 
-        "/v1/dashboard/email=<string:email>")
+        "/api/v1/dashboard/email=<string:email>")

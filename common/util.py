@@ -15,7 +15,7 @@ def field_in_dict(dictionary, field):
 def get_response_body(code=200, message="OK", user_message="", body=None):
     if code == 200:
         return {
-            "code": 200,
+            "code": code,
             "message": message,
             "user_message": user_message,
             "body": body,
