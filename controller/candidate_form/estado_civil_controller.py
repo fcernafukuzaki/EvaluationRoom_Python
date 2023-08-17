@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from common.validate_handler import authorize_user
 from .estado_civil_service import EstadoCivilService
 
 
@@ -9,7 +8,6 @@ estado_civil_service = EstadoCivilService()
 
 class EstadoCivilController(Resource):
 
-    @authorize_user
     def get(self):
         """ Obtener estados civil.
         """

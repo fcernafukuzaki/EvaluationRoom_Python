@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from common.validate_handler import authorize_user
 from .ubigeo_service import UbigeoService
 
 
@@ -9,7 +8,6 @@ ubigeo_service = UbigeoService()
 
 class UbigeoController(Resource):
 
-    @authorize_user
     def get(self, idcountry=None, iddepartamento=None, idprovincia=None):
         """ Obtener datos de ubigeo.
         """

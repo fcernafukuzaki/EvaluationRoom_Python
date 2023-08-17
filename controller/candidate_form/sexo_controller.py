@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from common.validate_handler import authorize_user
 from .sexo_service import SexoService
 
 
@@ -9,7 +8,6 @@ sexo_service = SexoService()
 
 class SexoController(Resource):
 
-    @authorize_user
     def get(self):
         """ Obtener géneros.
         """

@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from common.validate_handler import authorize_user
 from .psychologicaltest_service import PsychologicalTestService
 
 
@@ -9,7 +8,6 @@ psychologicaltest_service = PsychologicalTestService()
 
 class PsychologicalTestController(Resource):
 
-    @authorize_user
     def get(self):
         """ Obtener tests psicológicos.
         """

@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from common.validate_handler import authorize_user
 from .documento_identidad_service import DocumentoIdentidadService
 
 
@@ -9,7 +8,6 @@ documento_identidad_service = DocumentoIdentidadService()
 
 class DocumentoIdentidadController(Resource):
 
-    @authorize_user
     def get(self):
         """ Obtener documentos de identidad.
         """
