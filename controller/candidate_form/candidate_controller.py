@@ -20,8 +20,8 @@ class CandidateController(Resource):
             response_body = {'candidato':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar los datos del candidato {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=user_message), 404
@@ -69,8 +69,8 @@ class CandidateController(Resource):
             response_body = {'candidato':{"idCandidato":idcandidato,"correoElectronico":correoelectronico}} if idcandidato else None
         except Exception as e:
             code, message = 503, f'Hubo un error al guardar los datos del candidato {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=201, message='OK', user_message=message, body=response_body), 201
             return get_response_body(code=code, message=message, user_message=user_message), 404
@@ -92,13 +92,30 @@ class CandidateController(Resource):
             response_body = {'candidato':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al actualizar los datos del candidato {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=user_message), 404
 
     
+    @authorize_user
+    def delete(self, uid):
+        """ Eliminar datos de un candidato.
+        """
+        response_body = None
+        try:
+            result, code, message = candidate_service.delete(uid)
+            response_body = {'candidato':result} if result else None
+        except Exception as e:
+            code, message = 503, f'Hubo un error al eliminar los datos del candidato {e}'
+        finally:
+            user_message = message
+            if response_body:
+                return get_response_body(code=204, message='OK', user_message=message, body=response_body), 204
+            return get_response_body(code=code, message=message, user_message=user_message), 404
+
+
     def __json_candidate(self, input_json):
         nombre, apellidopaterno, apellidomaterno = input_json.get('nombre'), input_json.get('apellidoPaterno'), input_json.get('apellidoMaterno')
         correoelectronico = str(input_json.get('correoElectronico', '')).lower()

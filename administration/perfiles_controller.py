@@ -22,11 +22,10 @@ class PerfilesController(Resource):
             else:
                 result, code, message = perfiles_service.get_perfil(uid)
                 response_body = {'perfil':result} if result else None
-            user_message = message
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar perfiles {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=user_message), code
@@ -43,11 +42,10 @@ class PerfilesController(Resource):
 
             result, code, message = perfiles_service.add_perfil(nombre)
             response_body = {'perfil':result} if result else None
-            user_message = message
         except Exception as e:
             code, message = 503, f'Hubo un error al guardar perfil {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=user_message), code
@@ -64,11 +62,10 @@ class PerfilesController(Resource):
 
             result, code, message = perfiles_service.update_perfil(uid, nombre)
             response_body = {'perfil':result} if result else None
-            user_message = message
         except Exception as e:
             code, message = 503, f'Hubo un error al actualizar perfil {e}'
-            user_message = message
         finally:
+            user_message = message
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=user_message), code

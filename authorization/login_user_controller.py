@@ -22,7 +22,9 @@ class LoginUserController(Resource):
             user_message = f"{user_message} {message_aux}"
 
             response_body = {'usuario':user_object} if flag else None
-            return get_response_body(code=code, message=message, user_message=user_message, body=response_body), code
         except Exception as e:
-            message = f'Hubo un error durante la consulta del usuario {e}'
-            return get_response_body(code=503, message=message, user_message=message), 503
+            code, message = 503, f'Hubo un error durante la consulta del usuario {e}'
+        finally:
+            if response_body:
+                return get_response_body(code=code, message=message, user_message=user_message, body=response_body), code
+            return get_response_body(code=code, message=message, user_message=message), code

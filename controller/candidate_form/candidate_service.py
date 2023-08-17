@@ -34,105 +34,105 @@ class CandidateService():
             # Ejecutar la consulta SQL y obtener los resultados en un dataframe
             response_database = db.execute(text(sql_query))
             
-            # Obtén los resultados del cursor como una lista de diccionarios
-            results = response_database.fetchall()
-
-            # Convierte los resultados a un DataFrame de pandas
-            df_results = pd.DataFrame(results)
-            
-            # Resultado en formato de lista
-            obj_data = {
-                'idcandidato': None,
-                'nombre': None,
-                'apellidopaterno': None,
-                'apellidomaterno': None,
-                'fechanacimiento': None,
-                'correoelectronico': None,
-                'selfregistration': None,
-                'fecharegistro': None,
-                'iddocumentoidentidad': None,
-                'numerodocumentoidentidad': None,
-                'idestadocivil': None,
-                'cantidadhijos': None,
-                'idsexo': None
-            }
-
-            campos = ["idcandidato", "nombre", "apellidopaterno", "apellidomaterno", 
-            "fechanacimiento", "correoelectronico", "selfregistration", "fecharegistro",
-            "iddocumentoidentidad", "numerodocumentoidentidad", "idestadocivil", 
-            "cantidadhijos", "idsexo"]
-            df = df_results[campos].copy()
-            unique_candidate = df[campos].drop_duplicates()
-            unique_candidate["fechanacimiento"] = unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
-            unique_candidate["fecharegistro"] = unique_candidate["fecharegistro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
-            unique_candidate = unique_candidate.to_dict(orient="records")
-
-            campos = ["idcandidato", "idtelefono", "numero"]
-            df = df_results[campos].copy()
-            unique_telefonos = df[campos].drop_duplicates()
-            unique_telefonos = unique_telefonos.to_dict(orient="records")
-
-            campos = ["idcandidato", "idtipodireccion", "idpais", "iddepartamento", "idprovincia", "iddistrito", "direccion"]
-            df = df_results[campos].copy()
-            unique_direcciones = df[campos].drop_duplicates()
-            unique_direcciones = unique_direcciones.to_dict(orient="records")
-
-            campos = ["idcandidato", "idtestpsicologico"]
-            df = df_results[campos].copy()
-            unique_tests = df[campos].drop_duplicates()
-            unique_tests = unique_tests.to_dict(orient="records")
-
-            for row in unique_candidate:
-                obj_data['idcandidato'] = row.get("idcandidato")
-                obj_data['nombre'] = row.get("nombre")
-                obj_data['apellidopaterno'] = row.get("apellidopaterno")
-                obj_data['apellidomaterno'] = row.get("apellidomaterno")
-                obj_data['fechanacimiento'] = row.get("fechanacimiento")
-                obj_data['correoelectronico'] = row.get("correoelectronico")
-                obj_data['selfregistration'] = row.get("selfregistration")
-                obj_data['fecharegistro'] = row.get("fecharegistro")
-                obj_data['iddocumentoidentidad'] = row.get("iddocumentoidentidad")
-                obj_data['numerodocumentoidentidad'] = row.get("numerodocumentoidentidad")
-                obj_data['idestadocivil'] = row.get("idestadocivil")
-                obj_data['cantidadhijos'] = row.get("cantidadhijos")
-                obj_data['idsexo'] = row.get("idsexo")
-
-                obj_data['telephones'] = [
-                    {
-                        'idtelefono': row_telefono.get("idtelefono"),
-                        'numero': row_telefono.get("numero")
-                    }
-                    for row_telefono in unique_telefonos
-                    if row_telefono.get('idtelefono') is not None
-                ]
-                
-                obj_data['addresses'] = [
-                    {
-                        'idtipodireccion': row_direccion.get("idtipodireccion"),
-                        'idpais': row_direccion.get("idpais"),
-                        'iddepartamento': row_direccion.get("iddepartamento"),
-                        'idprovincia': row_direccion.get("idprovincia"),
-                        'iddistrito': row_direccion.get("iddistrito"),
-                        'direccion': row_direccion.get("direccion")
-                    }
-                    for row_direccion in unique_direcciones
-                    if row_direccion.get('idtipodireccion') is not None
-                ]
-                
-                obj_data['psychologicaltests'] = [
-                    {
-                        'idtestpsicologico': row_testpsicologico.get("idtestpsicologico")
-                    }
-                    for row_testpsicologico in unique_tests
-                    if row_testpsicologico.get('idtestpsicologico') is not None
-                ]
-            
-            logger.debug("Response from candidato.", uid=uid)
-
             if int(response_database.rowcount) > 0:
+                # Obtén los resultados del cursor como una lista de diccionarios
+                results = response_database.fetchall()
+
+                # Convierte los resultados a un DataFrame de pandas
+                df_results = pd.DataFrame(results)
+                
+                # Resultado en formato de lista
+                obj_data = {
+                    'idcandidato': None,
+                    'nombre': None,
+                    'apellidopaterno': None,
+                    'apellidomaterno': None,
+                    'fechanacimiento': None,
+                    'correoelectronico': None,
+                    'selfregistration': None,
+                    'fecharegistro': None,
+                    'iddocumentoidentidad': None,
+                    'numerodocumentoidentidad': None,
+                    'idestadocivil': None,
+                    'cantidadhijos': None,
+                    'idsexo': None
+                }
+
+                campos = ["idcandidato", "nombre", "apellidopaterno", "apellidomaterno", 
+                "fechanacimiento", "correoelectronico", "selfregistration", "fecharegistro",
+                "iddocumentoidentidad", "numerodocumentoidentidad", "idestadocivil", 
+                "cantidadhijos", "idsexo"]
+                df = df_results[campos].copy()
+                unique_candidate = df[campos].drop_duplicates()
+                unique_candidate["fechanacimiento"] = unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
+                unique_candidate["fecharegistro"] = unique_candidate["fecharegistro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+                unique_candidate = unique_candidate.to_dict(orient="records")
+
+                campos = ["idcandidato", "idtelefono", "numero"]
+                df = df_results[campos].copy()
+                unique_telefonos = df[campos].drop_duplicates()
+                unique_telefonos = unique_telefonos.to_dict(orient="records")
+
+                campos = ["idcandidato", "idtipodireccion", "idpais", "iddepartamento", "idprovincia", "iddistrito", "direccion"]
+                df = df_results[campos].copy()
+                unique_direcciones = df[campos].drop_duplicates()
+                unique_direcciones = unique_direcciones.to_dict(orient="records")
+
+                campos = ["idcandidato", "idtestpsicologico"]
+                df = df_results[campos].copy()
+                unique_tests = df[campos].drop_duplicates()
+                unique_tests = unique_tests.to_dict(orient="records")
+
+                for row in unique_candidate:
+                    obj_data['idcandidato'] = row.get("idcandidato")
+                    obj_data['nombre'] = row.get("nombre")
+                    obj_data['apellidopaterno'] = row.get("apellidopaterno")
+                    obj_data['apellidomaterno'] = row.get("apellidomaterno")
+                    obj_data['fechanacimiento'] = row.get("fechanacimiento")
+                    obj_data['correoelectronico'] = row.get("correoelectronico")
+                    obj_data['selfregistration'] = row.get("selfregistration")
+                    obj_data['fecharegistro'] = row.get("fecharegistro")
+                    obj_data['iddocumentoidentidad'] = row.get("iddocumentoidentidad")
+                    obj_data['numerodocumentoidentidad'] = row.get("numerodocumentoidentidad")
+                    obj_data['idestadocivil'] = row.get("idestadocivil")
+                    obj_data['cantidadhijos'] = row.get("cantidadhijos")
+                    obj_data['idsexo'] = row.get("idsexo")
+
+                    obj_data['telephones'] = [
+                        {
+                            'idtelefono': row_telefono.get("idtelefono"),
+                            'numero': row_telefono.get("numero")
+                        }
+                        for row_telefono in unique_telefonos
+                        if row_telefono.get('idtelefono') is not None
+                    ]
+                    
+                    obj_data['addresses'] = [
+                        {
+                            'idtipodireccion': row_direccion.get("idtipodireccion"),
+                            'idpais': row_direccion.get("idpais"),
+                            'iddepartamento': row_direccion.get("iddepartamento"),
+                            'idprovincia': row_direccion.get("idprovincia"),
+                            'iddistrito': row_direccion.get("iddistrito"),
+                            'direccion': row_direccion.get("direccion")
+                        }
+                        for row_direccion in unique_direcciones
+                        if row_direccion.get('idtipodireccion') is not None
+                    ]
+                    
+                    obj_data['psychologicaltests'] = [
+                        {
+                            'idtestpsicologico': row_testpsicologico.get("idtestpsicologico")
+                        }
+                        for row_testpsicologico in unique_tests
+                        if row_testpsicologico.get('idtestpsicologico') is not None
+                    ]
+                
+                logger.debug("Response from candidato.", uid=uid)
+
                 result, code, message = obj_data, 200, 'Se encontró candidato.'
             else:
-                code, message = 404, 'No existen candidato.'
+                code, message = 404, 'No existe candidato.'
         except Exception as e:
             code, message = 503, f'Hubo un error al obtener datos de los candidato en base de datos {e}'
         finally:
@@ -212,7 +212,7 @@ class CandidateService():
                 
                 self.__create_tests(uid, tests)
             
-            result, code, message = uid, 200, 'Se registró candidato.'
+            result, code, message = uid, 201, 'Se registró candidato.'
         except Exception as e:
             code, message = 503, f'Hubo un error al registrar datos del candidato en base de datos {e}'
         finally:
@@ -276,6 +276,22 @@ class CandidateService():
             result, flag, message = idcandidate, False, f'Hubo un error al actualizar datos del candidato en base de datos {e}'
         finally:
             logger.info("Candidato updated.", idcandidate=idcandidate, message=message)
+            return result, flag, message
+
+
+    def __delete_data(self, idcandidate:int):
+        try:
+            sql_query = f"DELETE FROM evaluationroom.candidato WHERE idcandidato={idcandidate}"
+            
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            response_database = db.execute(text(sql_query))
+            db.commit()
+            
+            result, flag, message = idcandidate, True, 'Se eliminó data del candidato.'
+        except Exception as e:
+            result, flag, message = idcandidate, False, f'Hubo un error al eliminar los datos del candidato en base de datos {e}'
+        finally:
+            logger.info("Datos del candidato deleted.", idcandidate=idcandidate, message=message)
             return result, flag, message
 
 
@@ -417,7 +433,19 @@ class CandidateService():
             Actualizar datos de un candidato.
         Input:
             - uid:int Identificador del candidato.
-            - candidate:objeto Objeto con los datos del candidato.
+            - nombre:string Nombre del candidato.
+            - apellidopaterno:string Apellido paterno del candidato.
+            - apellidomaterno:string Apellido materno del candidato.
+            - correoelectronico:string Correo electrónico del candidato.
+            - iddocumentoidentidad:int Identificador del documento de identidad.
+            - numerodocumentoidentidad:string Número de documento de identidad.
+            - idestadocivil:int Identificador de estado civil.
+            - idsexo:int Identificador del sexo del candidato.
+            - cantidadhijos:int Cantidad de hijos que tiene el candidato.
+            - fechanacimiento:date Fecha de nacimiento en formato YYYY-MM-DD. 
+            - telefonos: Lista de teléfonos del candidato (celular y/o teléfono fijo).
+            - direcciones: Lista de direcciones del candidato (domicilio y/o lugar de nacimiento).
+            - tests: Lista de test psicológicos asignados al candidato.
         Output:
             - data: Objeto de datos del candidato.
         """
@@ -442,4 +470,28 @@ class CandidateService():
             code, message = 503, f'Hubo un error al actualizar datos de los candidato en base de datos {e}'
         finally:
             logger.info("Candidato updated.", uid=uid, message=message)
+            return result, code, message
+
+
+    def delete(self, uid:int):
+        """ 
+        Descripción:
+            Actualizar datos de un candidato.
+        Input:
+            - uid:int Identificador del candidato.
+        Output:
+            - None
+        """
+        result = None
+        try:
+            _, flag_telephones, message = self.__delete_telephones(uid)
+            _, flag_addresses, message = self.__delete_addresses(uid)
+            _, flag_tests, message = self.__delete_tests(uid)
+            _, flag, message = self.__delete_data(uid)
+                
+            result, code, message = uid, 204, 'Se eliminó candidato.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al eliminar datos de los candidato en base de datos {e}'
+        finally:
+            logger.info("Candidato deleted.", uid=uid, message=message)
             return result, code, message
