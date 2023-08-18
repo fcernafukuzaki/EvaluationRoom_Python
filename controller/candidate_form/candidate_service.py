@@ -182,11 +182,6 @@ class CandidateService():
                 response_database = db.execute(text(sql_query))
                 
                 if int(response_database.rowcount) > 0:
-                    # for row in response_database:
-                    #     uid = row.idcandidato
-                    #     break
-                    # print(response_database.fetchone())
-                    # print(response_database.fetchone().idcandidato)
                     uid = response_database.fetchone().idcandidato
                     result, code, message = self.get_by_uid(uid)
                 else:
