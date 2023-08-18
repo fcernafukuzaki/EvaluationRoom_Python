@@ -64,7 +64,7 @@ class CandidateService():
                 "cantidadhijos", "idsexo"]
                 df = df_results[campos].copy()
                 unique_candidate = df[campos].drop_duplicates()
-                unique_candidate["fechanacimiento"] = unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
+                unique_candidate["fechanacimiento"] = None if unique_candidate["fechanacimiento"][0] is None else unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
                 unique_candidate["fecharegistro"] = unique_candidate["fecharegistro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
                 unique_candidate = unique_candidate.to_dict(orient="records")
 
@@ -225,13 +225,15 @@ class CandidateService():
                             idestadocivil:int, idsexo:int, cantidadhijos:int, fechanacimiento:str, 
                             selfregistration:str):
         try:
+            fechanacimiento = 'NULL' if fechanacimiento is None else f"'{fechanacimiento}'"
+            
             sql_query = f"""
             INSERT INTO evaluationroom.candidato
             (nombre, apellidopaterno, apellidomaterno, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil,
             cantidadhijos, fechanacimiento, correoelectronico, idsexo, selfregistration)
             VALUES 
             ('{nombre}', '{apellidopaterno}', '{apellidomaterno}', {iddocumentoidentidad}, '{numerodocumentoidentidad}', {idestadocivil},
-            {cantidadhijos}, '{fechanacimiento}', '{correoelectronico}', {idsexo}, '{selfregistration}')
+            {cantidadhijos}, {fechanacimiento}, '{correoelectronico}', {idsexo}, '{selfregistration}')
             RETURNING idcandidato
             """
             
@@ -242,6 +244,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se registró datos del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = 0, False, f'Hubo un error al registrar datos del candidato en base de datos {e}'
         finally:
             logger.info("Datos del candidato inserted.", idcandidate=idcandidate, message=message)
@@ -273,6 +276,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se actualizó candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al actualizar datos del candidato en base de datos {e}'
         finally:
             logger.info("Candidato updated.", idcandidate=idcandidate, message=message)
@@ -289,6 +293,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se eliminó data del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al eliminar los datos del candidato en base de datos {e}'
         finally:
             logger.info("Datos del candidato deleted.", idcandidate=idcandidate, message=message)
@@ -305,6 +310,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se eliminó teléfonos del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al eliminar los teléfonos del candidato en base de datos {e}'
         finally:
             logger.info("Teléfonos del candidato deleted.", idcandidate=idcandidate, message=message)
@@ -331,6 +337,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se registró teléfonos del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al registrar teléfonos del candidato en base de datos {e}'
         finally:
             logger.info("Teléfonos del candidato inserted.", idcandidate=idcandidate, message=message)
@@ -347,6 +354,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se eliminó direcciones del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al eliminar las direcciones del candidato en base de datos {e}'
         finally:
             logger.info("Direcciones del candidato deleted.", idcandidate=idcandidate, message=message)
@@ -377,6 +385,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se registró direcciones del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al registrar direcciones del candidato en base de datos {e}'
         finally:
             logger.info("Direcciones del candidato inserted.", idcandidate=idcandidate, message=message)
@@ -393,6 +402,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se eliminó tests del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al eliminar los tests del candidato en base de datos {e}'
         finally:
             logger.info("Tests del candidato deleted.", idcandidate=idcandidate, message=message)
@@ -418,6 +428,7 @@ class CandidateService():
             
             result, flag, message = idcandidate, True, 'Se registró tests del candidato.'
         except Exception as e:
+            db.rollback()
             result, flag, message = idcandidate, False, f'Hubo un error al registrar tests del candidato en base de datos {e}'
         finally:
             logger.info("Tests del candidato inserted.", idcandidate=idcandidate, message=message)
