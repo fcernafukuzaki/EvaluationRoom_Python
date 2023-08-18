@@ -157,21 +157,45 @@ class CandidateService():
     #         return None, 503, message
 
 
-    # def get_candidate_by_document(self, numerodocumentoidentidad):
-    #     try:
-    #         if numerodocumentoidentidad:
-    #             candidato = Candidate.query.filter(Candidate.numerodocumentoidentidad==numerodocumentoidentidad).first()
-    #             print(candidato)
-    #             if candidato:
-    #                 result = candidate_data_schema.dump(candidato)
-                    
-    #                 message = 'Existe candidato en base de datos.'
-    #                 return result, 200, message
-    #             message = f'No existe candidato en base de datos.'
-    #             return None, 404, message
-    #     except Exception as e:
-    #         message = f'Hubo un error al obtener datos del candidato {numerodocumentoidentidad} en base de datos {e}'
-    #         return None, 503, message
+    def get_by_document(self, numerodocumentoidentidad):
+        """ 
+        Descripción:
+            Obtener datos del candidato por número de documento de identidad.
+        Input:
+            - numerodocumentoidentidad:string Número de documento de identidad.
+        Output:
+            - data: Objeto de datos del candidato.
+        """
+        result = None
+        try:
+            uid = None
+            if numerodocumentoidentidad:
+
+                sql_query = f"""
+                SELECT c.idcandidato
+                FROM evaluationroom.candidato c
+                WHERE c.numerodocumentoidentidad='{numerodocumentoidentidad}'
+                ORDER BY c.idcandidato
+                """
+                
+                # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+                response_database = db.execute(text(sql_query))
+                
+                if int(response_database.rowcount) > 0:
+                    # for row in response_database:
+                    #     uid = row.idcandidato
+                    #     break
+                    # print(response_database.fetchone())
+                    # print(response_database.fetchone().idcandidato)
+                    uid = response_database.fetchone().idcandidato
+                    result, code, message = self.get_by_uid(uid)
+                else:
+                    code, message = 404, f'No existe candidato con el número de documento de identidad {numerodocumentoidentidad}.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al obtener datos del candidato {numerodocumentoidentidad} en base de datos {e}'
+        finally:
+            logger.info("Candidato by document.", uid=uid, message=message)
+            return result, code, message
 
 
     def create(self, nombre:str, apellidopaterno:str, apellidomaterno:str, 

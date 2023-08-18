@@ -90,7 +90,8 @@ def api_add_resource(api):
     
     api.add_resource(CandidateController, 
         "/api/v1/candidates/fields/self_registered=<string:self_registered>",
-        "/api/v1/candidates/<int:uid>/fields")
+        "/api/v1/candidates/<int:uid>/fields",
+        "/api/v1/candidates/fields/numerodocumentoidentidad=<string:numerodocumentoidentidad>")
 
     # # Obtener interpretación de las pruebas psicológicas
     # api.add_resource(PsychologicalTestInterpretacionController, 

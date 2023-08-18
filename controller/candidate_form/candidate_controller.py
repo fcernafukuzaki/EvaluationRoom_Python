@@ -11,12 +11,15 @@ candidate_service = CandidateService()
 class CandidateController(Resource):
     
     @authorize_user
-    def get(self, uid=None):
-        """ Obtener datos del candidato.
+    def get(self, uid=None, numerodocumentoidentidad=None):
+        """ Obtener datos del candidato a partir del identificador del candidato o del número de documento de identidad.
         """
         response_body = None
         try:
-            result, code, message = candidate_service.get_by_uid(uid)
+            if uid:
+                result, code, message = candidate_service.get_by_uid(uid)
+            if numerodocumentoidentidad:
+                result, code, message = candidate_service.get_by_document(numerodocumentoidentidad)
             response_body = {'candidato':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar los datos del candidato {e}'
