@@ -14,13 +14,12 @@ apigateway_notificacion_service = APIGatewayNotificacionService()
 
 class CandidatoSoporteTecnicoNotificacionController(Resource):
 
-    @authorize_candidate
-    def get(self):
+    def get(self, type):
         """ Obtener los tipos de errores.
         """
         response_body = None
         try:
-            result, code, message = mensaje_procesoseleccion_candidato_service.obtener_mensajes_error()
+            result, code, message = mensaje_procesoseleccion_candidato_service.obtener_mensajes_error(type)
             response_body = {'mensajes':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar mensajes de error {e}'

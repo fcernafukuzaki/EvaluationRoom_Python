@@ -37,9 +37,9 @@ def authorize_candidate(func):
             - correoElectronico: Correo electrónico del candidato que intenta acceder.
         """
         input_header = request.headers
-        token, correoelectronico = input_header.get('Authorization'), input_header.get('correoElectronico')
+        correoelectronico = input_header.get('Authorization')
 
-        flag, respuesta, codigo, _ = authorizer_service.validate_candidate(token, correoelectronico)
+        flag, respuesta, codigo, _ = authorizer_service.validate_candidate(correoelectronico)
         logger.debug("Response from validate candidate.", respuesta=respuesta, codigo=codigo)
 
         if flag:

@@ -110,6 +110,7 @@ def api_add_resource(api):
     api.add_resource(
         CandidatoSoporteTecnicoNotificacionController,
         "/api/v1/candidates/notificarsoportetecnico",
+        "/api/v1/candidates/notificarsoportetecnico/type=<string:type>",
     )
 
     # api.add_resource(CandidatoEmailValidarController,
