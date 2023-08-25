@@ -36,3 +36,9 @@ class AuthorizerService():
         if token:
             return True
         return False
+    
+
+    def validate_candidate(self, token, email):
+        if email and token:
+            return True, 'Operación valida.', 200, None
+        return False, 'Operación no valida.', 403, None

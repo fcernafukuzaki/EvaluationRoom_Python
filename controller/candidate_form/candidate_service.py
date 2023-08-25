@@ -140,21 +140,40 @@ class CandidateService():
             return result, code, message
 
     
-    # def get_candidate_by_email(self, correoelectronico):
-    #     try:
-    #         if correoelectronico:
-    #             candidato = Candidate.query.filter(Candidate.correoelectronico==correoelectronico).first()
-    #             print(candidato)
-    #             if candidato:
-    #                 result = candidate_data_schema.dump(candidato)
-                    
-    #                 message = 'Existe candidato en base de datos.'
-    #                 return result, 200, message
-    #             message = f'No existe candidato en base de datos.'
-    #             return None, 404, message
-    #     except Exception as e:
-    #         message = f'Hubo un error al obtener datos del candidato {correoelectronico} en base de datos {e}'
-    #         return None, 503, message
+    def get_by_email(self, correoelectronico):
+        """ 
+        Descripción:
+            Obtener datos del candidato por correo electrónico.
+        Input:
+            - correoelectronico:string Correo electrónico del candidato.
+        Output:
+            - data: Objeto de datos del candidato.
+        """
+        result = None
+        try:
+            uid = None
+            if correoelectronico:
+
+                sql_query = f"""
+                SELECT c.idcandidato
+                FROM evaluationroom.candidato c
+                WHERE c.correoelectronico='{correoelectronico}'
+                ORDER BY c.idcandidato
+                """
+                
+                # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+                response_database = db.execute(text(sql_query))
+                
+                if int(response_database.rowcount) > 0:
+                    uid = response_database.fetchone().idcandidato
+                    result, code, message = self.get_by_uid(uid)
+                else:
+                    code, message = 404, f'No existe candidato con el correo electrónico {correoelectronico}.'
+        except Exception as e:
+            code, message = 503, f'Hubo un error al obtener datos del candidato {correoelectronico} en base de datos {e}'
+        finally:
+            logger.info("Candidato by email.", uid=uid, message=message)
+            return result, code, message
 
 
     def get_by_document(self, numerodocumentoidentidad):
@@ -525,3 +544,45 @@ class CandidateService():
         finally:
             logger.info("Candidato deleted.", uid=uid, message=message)
             return result, code, message
+
+
+    def json_candidate(self, input_json):
+        nombre, apellidopaterno, apellidomaterno = input_json.get('nombre'), input_json.get('apellidoPaterno'), input_json.get('apellidoMaterno')
+        correoelectronico = str(input_json.get('correoElectronico', '')).lower()
+        iddocumentoidentidad = input_json.get('documentoIdentidad')['idDocumentoIdentidad'] if input_json.get('documentoIdentidad') is not None else 1
+        numerodocumentoidentidad = input_json.get('numeroDocumentoIdentidad')
+        idestadocivil = input_json.get('estadoCivil')['idEstadoCivil'] if input_json.get('estadoCivil') is not None else 1
+        idsexo = input_json.get('sexo')['idSexo'] if input_json.get('sexo') is not None else 1
+        cantidadhijos = input_json.get('cantidadHijos', 0)
+        fechanacimiento = input_json.get('fechaNacimiento')
+        
+        telefonos = [
+            {
+                'idtelefono': row.get("idTelefono"),
+                'numero': row.get("numero")
+            }
+            for row in input_json.get('telefonos')
+            if row.get('idTelefono') is not None
+        ]
+
+        direcciones = [
+            {
+                'idtipodireccion': row.get("idTipoDireccion"),
+                'idpais': row.get("pais")["idPais"] if row.get("pais") is not None else None,
+                'iddepartamento': row.get("departamento")["idDepartamento"] if row.get("departamento") is not None else None,
+                'idprovincia': row.get("provincia")["idProvincia"] if row.get("provincia") is not None else None,
+                'iddistrito': row.get("distrito")["idDistrito"] if row.get("distrito") is not None else None,
+                'direccion': row.get("direccion")
+            }
+            for row in input_json.get('direcciones')
+            if row.get('idTipoDireccion') is not None
+        ]
+
+        tests = [
+            {
+                'idtestpsicologico': row.get("idTestPsicologico")
+            }
+            for row in input_json.get('testPsicologicos')
+            if row.get('idTestPsicologico') is not None
+        ]
+        return nombre, apellidopaterno, apellidomaterno, correoelectronico, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil, idsexo, cantidadhijos, fechanacimiento, telefonos, direcciones, tests
