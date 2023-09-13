@@ -1,4 +1,3 @@
-from configs.resources import db, text
 from configs.logging import logger
 from repository.mensaje_procesoseleccion_candidato_repository import EvaluationMessageCandidateRepository
 
