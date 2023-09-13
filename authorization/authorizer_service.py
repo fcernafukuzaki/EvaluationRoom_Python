@@ -38,7 +38,23 @@ class AuthorizerService():
         return False
     
 
-    def validate_candidate(self, email):
-        if email:
+    def validate_candidate(self, data):
+        if data:
             return True, 'Operación valida.', 200, None
         return False, 'Operación no valida.', 403, None
+    
+
+    def obtener_header(self, request_headers):
+        origin = None
+        if 'Origin' in request_headers:
+            origin = request_headers['Origin']
+        
+        host = None
+        if 'Host' in request_headers:
+            host = request_headers['Host']
+        
+        user_agent = None
+        if 'User-Agent' in request_headers:
+            user_agent = request_headers['User-Agent']
+        
+        return origin, host, user_agent

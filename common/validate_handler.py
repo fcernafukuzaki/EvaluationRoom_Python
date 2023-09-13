@@ -33,13 +33,12 @@ def authorize_candidate(func):
     def wrapper(*args, **kwargs):
         """
         Header:
-            - Authorization: Valor retornado por API de Login.
-            - correoElectronico: Correo electrónico del candidato que intenta acceder.
+            - Authorization: Dato del candidato que intenta acceder (Número de documento o correo electrónico).
         """
         input_header = request.headers
-        correoelectronico = input_header.get('Authorization')
+        data = input_header.get('Authorization')
 
-        flag, respuesta, codigo, _ = authorizer_service.validate_candidate(correoelectronico)
+        flag, respuesta, codigo, _ = authorizer_service.validate_candidate(data)
         logger.debug("Response from validate candidate.", respuesta=respuesta, codigo=codigo)
 
         if flag:

@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from .candidate_service import CandidateService
+from configs.logging import logger
 
 
 candidate_service = CandidateService()
@@ -13,35 +14,19 @@ class CandidateFormController(Resource):
         response_body = None
         try:
             if numerodocumentoidentidad:
-                result, code, message = candidate_service.get_by_document(
-                    numerodocumentoidentidad
-                )
+                result, code, message = candidate_service.get_by_document(numerodocumentoidentidad)
             if email:
                 correoelectronico = str(email).lower()
-                result, code, message = candidate_service.get_by_email(
-                    correoelectronico
-                )
+                result, code, message = candidate_service.get_by_email(correoelectronico)
             response_body = {"candidato": result} if result else None
         except Exception as e:
-            code, message = (
-                503,
-                f"Hubo un error al consultar los datos del candidato {e}",
-            )
+            logger.error("Error.", error=e)
+            code, message = 503, f"Hubo un error al consultar los datos del candidato {e}"
         finally:
             user_message = message
             if response_body:
-                return (
-                    get_response_body(
-                        code=200, message="OK", user_message=message, body=response_body
-                    ),
-                    200,
-                )
-            return (
-                get_response_body(
-                    code=code, message=message, user_message=user_message
-                ),
-                404,
-            )
+                return get_response_body(code=200, message="OK", user_message=message, body=response_body), 200
+            return get_response_body(code=code, message=message, user_message=user_message), 404
 
     def post(self, self_registered="true"):
         """Guardar datos de un candidato."""
@@ -92,28 +77,20 @@ class CandidateFormController(Resource):
                     "candidato": {
                         "idCandidato": idcandidato,
                         "correoElectronico": correoelectronico,
+                        "numeroDocumentoIdentidad": numerodocumentoidentidad,
                     }
                 }
                 if idcandidato
                 else None
             )
         except Exception as e:
+            logger.error("Error.", error=e)
             code, message = 503, f"Hubo un error al guardar los datos del candidato {e}"
         finally:
             user_message = message
             if response_body:
-                return (
-                    get_response_body(
-                        code=201, message="OK", user_message=message, body=response_body
-                    ),
-                    201,
-                )
-            return (
-                get_response_body(
-                    code=code, message=message, user_message=user_message
-                ),
-                404,
-            )
+                return get_response_body(code=201, message="OK", user_message=message, body=response_body), 201
+            return get_response_body(code=code, message=message, user_message=user_message), 404
 
     def put(self, uid):
         """Actualizar datos de un candidato."""
@@ -155,22 +132,10 @@ class CandidateFormController(Resource):
             )
             response_body = {"candidato": result} if result else None
         except Exception as e:
-            code, message = (
-                503,
-                f"Hubo un error al actualizar los datos del candidato {e}",
-            )
+            logger.error("Error.", error=e)
+            code, message = 503, f"Hubo un error al actualizar los datos del candidato {e}"
         finally:
             user_message = message
             if response_body:
-                return (
-                    get_response_body(
-                        code=200, message="OK", user_message=message, body=response_body
-                    ),
-                    200,
-                )
-            return (
-                get_response_body(
-                    code=code, message=message, user_message=user_message
-                ),
-                404,
-            )
+                return get_response_body(code=200, message="OK", user_message=message, body=response_body), 200
+            return get_response_body(code=code, message=message, user_message=user_message), 404

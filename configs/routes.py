@@ -28,8 +28,70 @@ from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller
 
 
 def api_add_resource(api):
-    # Agregar la clase como un recurso a la API
+    # Autenticación de usuario
     api.add_resource(LoginUserController, "/login/authenticate")
+
+    # Completar valores para formulario de registro de candidato
+    api.add_resource(
+        UbigeoController,
+        "/api/v1/candidates/fields/ubigeo",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>",
+        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>&provincia=<int:idprovincia>",
+    )
+
+    api.add_resource(SexoController, "/api/v1/candidates/fields/sexos")
+
+    api.add_resource(
+        DocumentoIdentidadController, "/api/v1/candidates/fields/documentosidentidad"
+    )
+
+    api.add_resource(EstadoCivilController, "/api/v1/candidates/fields/estadosciviles")
+
+    api.add_resource(
+        TipoDireccionController, "/api/v1/candidates/fields/tiposdirecciones"
+    )
+
+    api.add_resource(
+        PsychologicalTestController, "/api/v1/candidates/fields/testpsicologicos"
+    )
+
+    api.add_resource(
+        CandidateFormController,
+        "/api/v1/candidates/fields/self_registered=<string:self_registered>",
+        "/api/v1/candidates/<int:uid>/fields",
+        "/api/v1/candidates/fields/numerodocumentoidentidad=<string:numerodocumentoidentidad>",
+        "/api/v1/candidates/fields/email=<string:email>",
+    )
+
+    api.add_resource(CandidateController, "/api/v1/candidates/<int:uid>")
+
+    # Notificación de errores a soporte técnico
+    api.add_resource(
+        CandidatoSoporteTecnicoNotificacionController,
+        "/api/v1/candidates/notificarsoportetecnico",
+        "/api/v1/candidates/notificarsoportetecnico/type=<string:type>",
+    )
+
+
+
+
+    # Administrador gestionar accesos
+    api.add_resource(
+        UsuariosController, "/api/v1/usuarios/", "/api/v1/usuarios/<int:uid>"
+    )
+
+    api.add_resource(
+        PerfilesController, "/api/v1/perfiles/", "/api/v1/perfiles/<int:uid>"
+    )
+
+    # Menu reclutador
+    api.add_resource(
+        PsychologicalTestsController, "/api/v1/candidateform/testpsicologicos/info"
+    )
+
+    # Dashboard
+    api.add_resource(Dashboard, "/api/v1/dashboard/email=<string:email>")
 
     # api.add_resource(CandidateController,
     #     "/api/v1/candidates",
@@ -67,51 +129,14 @@ def api_add_resource(api):
     # api.add_resource(CandidateResetTestController,
     #     "/v1/candidate/resettest")
 
-    # Completar valores para formulario de registro de candidato
-    api.add_resource(
-        UbigeoController,
-        "/api/v1/candidates/fields/ubigeo",
-        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>",
-        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>",
-        "/api/v1/candidates/fields/ubigeo/pais=<int:idcountry>&departamento=<int:iddepartamento>&provincia=<int:idprovincia>",
-    )
-
-    api.add_resource(SexoController, "/api/v1/candidates/fields/sexos")
-
-    api.add_resource(
-        DocumentoIdentidadController, "/api/v1/candidates/fields/documentosidentidad"
-    )
-
-    api.add_resource(EstadoCivilController, "/api/v1/candidates/fields/estadosciviles")
-
-    api.add_resource(
-        TipoDireccionController, "/api/v1/candidates/fields/tiposdirecciones"
-    )
-
-    api.add_resource(
-        PsychologicalTestController, "/api/v1/candidates/fields/testpsicologicos"
-    )
-
-    api.add_resource(
-        CandidateFormController,
-        "/api/v1/candidates/fields/self_registered=<string:self_registered>",
-        "/api/v1/candidates/<int:uid>/fields",
-        "/api/v1/candidates/fields/numerodocumentoidentidad=<string:numerodocumentoidentidad>",
-        "/api/v1/candidates/fields/email=<string:email>",
-    )
-
-    api.add_resource(CandidateController, "/api/v1/candidates/<int:uid>")
+    
 
     # # Obtener interpretación de las pruebas psicológicas
     # api.add_resource(PsychologicalTestInterpretacionController,
     #     "/testpsicologico/interpretacion/candidato/<int:idcandidato>",
     #     "/testpsicologico/download/informe/uid=<int:uid>&email=<string:email>&token=<string:token>")
 
-    api.add_resource(
-        CandidatoSoporteTecnicoNotificacionController,
-        "/api/v1/candidates/notificarsoportetecnico",
-        "/api/v1/candidates/notificarsoportetecnico/type=<string:type>",
-    )
+    
 
     # api.add_resource(CandidatoEmailValidarController,
     #     "/candidato_email_validar")
@@ -124,20 +149,3 @@ def api_add_resource(api):
 
     # api.add_resource(ReclutadorEmailValidarController,
     #     "/reclutador_email_validar")
-
-    # Administrador gestionar accesos
-    api.add_resource(
-        UsuariosController, "/api/v1/usuarios/", "/api/v1/usuarios/<int:uid>"
-    )
-
-    api.add_resource(
-        PerfilesController, "/api/v1/perfiles/", "/api/v1/perfiles/<int:uid>"
-    )
-
-    # Menu reclutador
-    api.add_resource(
-        PsychologicalTestsController, "/api/v1/candidateform/testpsicologicos/info"
-    )
-
-    # Dashboard
-    api.add_resource(Dashboard, "/api/v1/dashboard/email=<string:email>")
