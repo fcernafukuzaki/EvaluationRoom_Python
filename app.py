@@ -6,7 +6,7 @@ from configs.routes import api_add_resource
 app = Flask(__name__)
 api = Api(app)
 
-CORS(app, resorces={r'/d/*': {"origins": '*'}})
+CORS(app, resorces={r'/*': {"origins": '*'}})
 
 # Importar la línea api.add_resource desde routes.py
 api_add_resource(api)
