@@ -96,3 +96,45 @@ class EvaluationMessageCandidateRepository():
         finally:
             logger.info(message)
             return flag, message, result
+
+
+    def get_mensaje_felicitaciones(self, uid:int):
+        """ 
+        Descripción:
+            Obtener el mensaje de felicitaciones.
+        Input:
+            - uid:int Identificador del mensaje.
+        Output:
+            - flag:bool (True, False)
+            - message:str Mensaje de la operación.
+            - result: Objeto de mensajes de error.
+        """
+        result = None
+        try:
+            sql_query = f"SELECT id_mensaje, tipo_mensaje, mensaje \
+                FROM evaluationroom.mensaje_procesoseleccion_candidato \
+                WHERE id_mensaje = '{uid}' \
+                ORDER BY id_mensaje\
+            "
+
+            # Ejecutar la consulta SQL
+            response_database = db.execute(text(sql_query))
+
+            if int(response_database.rowcount) > 0:
+                for row in response_database:
+                    data = {
+                        "id_mensaje": row.id_mensaje, 
+                        "tipo_mensaje": row.tipo_mensaje,
+                        "mensaje": row.mensaje,
+                    }
+
+                result, flag, message = data, True, "Se encontró mensaje de felicitaciones."
+            else:
+                flag, message = False, "No existen mensaje de felicitaciones."
+        except Exception as e:
+            logger.error("Error.", error=e)
+            db.rollback()
+            flag, message = False, f"Hubo un error al obtener datos de mensaje de felicitaciones en base de datos {e}",
+        finally:
+            logger.info(message)
+            return flag, message, result

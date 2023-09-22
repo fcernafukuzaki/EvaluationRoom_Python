@@ -1,3 +1,4 @@
+from common.util import seconds_to_format
 from configs.logging import logger
 from repository.mensaje_procesoseleccion_candidato_repository import EvaluationMessageCandidateRepository
 
@@ -20,16 +21,32 @@ class MensajeProcesoseleccionCandidatoService:
             return result, code, message
 
 
-    def mensaje_bienvenida(self, nombre, uid=1):
+    def mensaje_bienvenida(self, nombre, duracion_total, uid=7):
         """Obtener el mensaje de bienvenida."""
         result = None
         try:
             code, message, objeto = evaluationmessagecandidate_repository.get_mensaje_bienvenida(uid)
+            duracion_format = seconds_to_format(duracion_total)
             
             # Colocar el nombre del candidato en el mensaje de bienvenida.
-            result = objeto.get("mensaje").format(nombre)
+            result = objeto.get("mensaje").format(nombre, duracion_format)
         except Exception as e:
             code, message = False, f"Hubo un error al obtener datos de mensaje de bienvenida en base de datos {e}",
         finally:
             logger.info('El candidato {} va a iniciar el examen (mensaje de bienvenida)'.format(nombre), code=code)
+            return result, code, message
+
+
+    def mensaje_felicitaciones(self, nombre, uid=2):
+        """Obtener el mensaje de felicitaciones."""
+        result = None
+        try:
+            code, message, objeto = evaluationmessagecandidate_repository.get_mensaje_felicitaciones(uid)
+            
+            # Colocar el nombre del candidato en el mensaje de felicitaciones.
+            result = objeto.get("mensaje").format(nombre)
+        except Exception as e:
+            code, message = False, f"Hubo un error al obtener datos de mensaje de felicitaciones en base de datos {e}",
+        finally:
+            logger.info('El candidato {} no tiene preguntas pendientes (mensaje de felicitaciones)'.format(nombre), code=code)
             return result, code, message

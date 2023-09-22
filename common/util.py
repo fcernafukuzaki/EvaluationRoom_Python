@@ -28,3 +28,10 @@ def invoke_api(url, body, headers={"Content-Type": "application/json"}, method="
     http = urllib3.PoolManager()
     response = http.request(method, url, body=body, headers=headers, retries=retries)
     return response
+
+
+def seconds_to_format(segundos):
+    horas = segundos // 3600
+    minutos = (segundos % 3600) // 60
+    
+    return f"{horas} hora(s) y {minutos} minutos"

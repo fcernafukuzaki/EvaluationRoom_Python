@@ -26,7 +26,7 @@ class PsychologicalTestsRepository():
         try:
             sql_query = f"""
             SELECT configuracion.idtestpsicologico, configuracion.orden,
-                tests.fechaexamen, tests.idparte, tests.idcandidato
+                tests.fechaexamen, tests.idparte, tests.idcandidato, tests.duracionestimada
             FROM (
                 SELECT (jsonb_array_elements(ec.test_orden->'test_orden')->>'idtestpsicologico')::integer AS idtestpsicologico,
                     (jsonb_array_elements(ec.test_orden->'test_orden')->>'orden')::integer AS orden
@@ -35,7 +35,7 @@ class PsychologicalTestsRepository():
                 ORDER BY (jsonb_array_elements(ec.test_orden->'test_orden')->>'orden')::integer
             ) AS configuracion
             JOIN (
-                SELECT ctest.fechaexamen, inst.idparte, ctest.idcandidato, ctest.idtestpsicologico
+                SELECT ctest.fechaexamen, inst.idparte, ctest.idcandidato, ctest.idtestpsicologico, inst.duracionestimada
                 FROM evaluationroom.candidatotest ctest
                 INNER JOIN evaluationroom.testpsicologicoparte inst ON ctest.idtestpsicologico=inst.idtestpsicologico
                 WHERE ctest.idcandidato={uid}
@@ -52,9 +52,10 @@ class PsychologicalTestsRepository():
                 result = response_database.fetchall()
                 df_results = pd.DataFrame(result)
 
-                campos = ["orden", "fechaexamen", "idparte", "idcandidato", "idtestpsicologico"]
+                campos = ["orden", "fechaexamen", "idparte", "idcandidato", "idtestpsicologico", "duracionestimada"]
                 df_results = df_results[campos].drop_duplicates()
-                df_results["fechaexamen"] = df_results["fechaexamen"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+                if not df_results["fechaexamen"].isnull().all():
+                    df_results["fechaexamen"] = df_results["fechaexamen"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
                 results = df_results.to_dict(orient="records")
 
                 message = "Operación exitosa"
@@ -99,17 +100,39 @@ class PsychologicalTestsRepository():
                 ORDER BY (jsonb_array_elements(ec.test_orden->'test_orden')->>'orden')::integer
             ) AS configuracion
             JOIN (
-                SELECT c.idcandidato, 
+                SELECT ctest.idcandidato, 
                     ctest.fechaexamen,
                     t.idtestpsicologico, t.nombre, t.cantidadpreguntas AS "cantidadpreguntas_total", 
                     inst.idparte, inst.instrucciones, inst.alternativamaxseleccion, inst.duracion, inst.cantidadpreguntas, inst.tipoprueba, 
                     preg.idpregunta, preg.enunciado, preg.alternativa
-                FROM evaluationroom.candidato c
-                LEFT JOIN evaluationroom.candidatotest ctest ON c.idcandidato=ctest.idcandidato
-                LEFT JOIN evaluationroom.testpsicologico t ON ctest.idtestpsicologico=t.idtestpsicologico
-                INNER JOIN evaluationroom.testpsicologicoparte inst ON t.idtestpsicologico=inst.idtestpsicologico
-                INNER JOIN evaluationroom.testpsicologicopregunta preg  ON inst.idtestpsicologico=preg.idtestpsicologico AND inst.idparte=preg.idparte
-                WHERE c.idcandidato={uid}
+                FROM evaluationroom.testpsicologicopregunta preg
+                LEFT JOIN evaluationroom.testpsicologico t ON preg.idtestpsicologico=t.idtestpsicologico
+                LEFT JOIN evaluationroom.candidatotest ctest ON preg.idtestpsicologico=ctest.idtestpsicologico
+                LEFT JOIN evaluationroom.testpsicologicoparte inst ON preg.idtestpsicologico=inst.idtestpsicologico
+                AND preg.idparte=inst.idparte
+                WHERE ctest.idcandidato={uid}
+                AND CONCAT(preg.idtestpsicologico, '.', preg.idparte, '.', preg.idpregunta) NOT IN (
+                        SELECT CONCAT(idtestpsicologico, '.', idparte, '.', idpregunta) 
+                        FROM evaluationroom.candidatotestdetalle 
+                        WHERE idcandidato = ctest.idcandidato
+                        UNION 
+                        SELECT CONCAT(ctd.idtestpsicologico, '.', ctd.idparte, '.', ctd.idpregunta) 
+                        FROM evaluationroom.testpsicologicopregunta ctd
+                        INNER JOIN evaluationroom.testpsicologicoparte tp 
+                            ON ctd.idtestpsicologico = tp.idtestpsicologico AND ctd.idparte = tp.idparte
+                        WHERE CONCAT(ctd.idtestpsicologico, '.', ctd.idparte) IN (
+                            SELECT CONCAT(ct.idtestpsicologico, '.', ct.idparte)
+                            FROM evaluationroom.candidatotestdetalle ct
+                            WHERE ct.idcandidato = ctest.idcandidato
+                            )
+                        AND tp.duracion > 0
+                        AND tp.tipoprueba <> 'Preg.Abierta'
+                        AND CONCAT(ctd.idtestpsicologico, '.', ctd.idparte, '.', ctd.idpregunta) NOT IN (
+                            SELECT CONCAT(idtestpsicologico, '.', idparte, '.', idpregunta) 
+                            FROM evaluationroom.candidatotestdetalle 
+                            WHERE idcandidato = ctest.idcandidato
+                    )
+                )
             ) AS tests
             ON configuracion.idtestpsicologico=tests.idtestpsicologico
             ORDER BY configuracion.orden ASC, tests.idparte, tests.idpregunta

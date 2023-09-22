@@ -25,7 +25,9 @@ from controller.candidate_form.psychologicaltest_controller import Psychological
 from controller.candidate_form.candidate_controller import CandidateController
 from controller.candidate_form.candidate_form_controller import CandidateFormController
 from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller import CandidatoSoporteTecnicoNotificacionController
-
+from evaluations.evaluation_controller import EvaluationController
+from evaluations.log_controller import LogController
+from evaluations.respuesta_controller import RespuestaController
 
 def api_add_resource(api):
     # Autenticación de usuario
@@ -73,8 +75,13 @@ def api_add_resource(api):
         "/api/v1/candidates/notificarsoportetecnico/type=<string:type>",
     )
 
+    # Evaluación de candidato
+    api.add_resource(EvaluationController, "/api/v1/evaluations")
 
+    # Log de evaluación de candidato
+    api.add_resource(LogController, "/api/v1/evaluations/actions")
 
+    api.add_resource(RespuestaController, "/api/v1/evaluations/answers")
 
     # Administrador gestionar accesos
     api.add_resource(
