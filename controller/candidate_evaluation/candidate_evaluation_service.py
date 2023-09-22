@@ -45,7 +45,7 @@ class CandidateEvaluationService():
                     code, message = 404, 'No existe candidato.'
         except Exception as e:
             accion = f'Error al registrar respuesta del candidato {idcandidato}'
-            detalle = f'Candidato: {idcandidato}. Datos de la pregunta: {idtestpsicologico}.{idparte}.}'
+            detalle = f'Candidato: {idcandidato}. Datos de la pregunta: {idtestpsicologico}.{idparte}.'
             _ = self.insert_log(idcandidato, accion, detalle, origin, host, user_agent)
             
             code, message = 503, f'Hubo un error al obtener datos de los candidato en base de datos {e}'
