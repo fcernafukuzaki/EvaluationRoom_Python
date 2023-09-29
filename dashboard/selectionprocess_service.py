@@ -52,7 +52,7 @@ class SelectionProcessService():
             sql_query = f"""
             SELECT c.idcandidato, c.nombre, c.apellidopaterno, c.apellidomaterno,
                 c.nombre || ' ' || c.apellidopaterno || ' ' || c.apellidomaterno AS "nombre_completo",
-                c.fechanacimiento, c.fecharegistro AS "fecha_registro", c.correoelectronico,
+                c.fechanacimiento, c.fecharegistro AT TIME ZONE 'America/Lima' AS "fecha_registro", c.correoelectronico,
                 c.selfregistration,
                 (SELECT tel.numero FROM evaluationroom.candidatotelefono tel WHERE tel.idtelefono=1 AND tel.idcandidato=c.idcandidato) AS "telefono_movil",
                 (SELECT tel.numero FROM evaluationroom.candidatotelefono tel WHERE tel.idtelefono=2 AND tel.idcandidato=c.idcandidato) AS "telefono_fijo",
@@ -73,7 +73,7 @@ class SelectionProcessService():
                 (SELECT COUNT(spc.idcandidato) FROM evaluationroom.procesoseleccioncandidato spc WHERE spc.idempresa=sp.idempresa AND spc.idcliente=sp.idcliente AND spc.idpuestolaboral=sp.idpuestolaboral) AS "cantidad_candidatos",
                 c_test.idtestpsicologico,
 				testp.nombre AS "nombre_test",
-				c_test.fechaexamen,
+				c_test.fechaexamen AT TIME ZONE 'America/Lima' AS "fechaexamen",
 				testp.cantidadpreguntas AS "cantidad_preguntas_test",
                 (SELECT COUNT(ctestdet.idcandidato) 
                     FROM evaluationroom.candidatotestdetalle ctestdet
@@ -140,11 +140,11 @@ class SelectionProcessService():
             unique_candidatos = df_results[campos].copy()
             unique_candidatos = unique_candidatos[campos].drop_duplicates()
             unique_candidatos["fechanacimiento"] = unique_candidatos["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
-            unique_candidatos["fecha_registro"] = unique_candidatos["fecha_registro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+            unique_candidatos["fecha_registro"] = unique_candidatos["fecha_registro"].dt.strftime('%Y-%m-%d %H:%M:%S').astype(str).replace("nan", None)
 
             campos = ["idcandidato", "idtestpsicologico", "nombre_test", "fechaexamen", "cantidad_preguntas_test", "cantidad_preguntas_respondidas", "tiene_resultado_test"]
             unique_testpsicologicos = df_results[campos].copy()
-            unique_testpsicologicos["fechaexamen"] = unique_testpsicologicos["fechaexamen"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+            unique_testpsicologicos["fechaexamen"] = unique_testpsicologicos["fechaexamen"].dt.strftime('%Y-%m-%d %H:%M:%S').astype(str).replace("nan", None)
 
             for row in unique_usuario:
                 data_proceso = dict()
@@ -215,6 +215,7 @@ class SelectionProcessService():
 
                             data_candidato['testpsicologicos'] = [
                                 {
+                                    'idcandidato': row_testpsicologico.get("idcandidato"),
                                     'idtestpsicologico': row_testpsicologico.get("idtestpsicologico"),
                                     'nombre': row_testpsicologico.get("nombre_test"),
                                     'fechaexamen': row_testpsicologico.get("fechaexamen"),
