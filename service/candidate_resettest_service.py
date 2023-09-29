@@ -1,82 +1,41 @@
-from flask import jsonify
-from sqlalchemy.sql import table, column, text
-from sqlalchemy import create_engine
-from configs.resources import db, DATABASE_URI
-from objects.candidate_psychologicaltest_history import CandidatePsychologicalTestHistory, CandidatePsychologicalTestHistorySchema
+from configs.logging import logger
+from service.candidate_resettest_service_repository import CandidateResetTestRepository
+
+
+candidateresettest_repository = CandidateResetTestRepository()
+
 
 class CandidateResetTestService():
-
+    """
+    Reset de preguntas de una prueba psicológica.
+    """
     def reset_candidate_test(self, id_user, idcandidate, idpsychologicaltest):
+        """
+        Descripción:
+            Resetear las preguntas de un test psicológico asignado a un candidato/paciente.
+        Input:
+            - id_user: Identificador del usuario.
+            - idcandidate: Identificador del candidato.
+            - idpsychologicaltest: Identificador del test psicológico.
+        Output:
+            - result: Objeto.
+            - code: Código de respuesta. [200:OK, 503:Error]
+            - message: Mensaje de salida.
+        """
+        result = None
+        times = 0
         try:
-            count_times_psychologicaltest = db.session.query(
-                db.func.count(CandidatePsychologicalTestHistory.intento).label('intento')
-            ).filter(CandidatePsychologicalTestHistory.idcandidato == idcandidate, 
-                CandidatePsychologicalTestHistory.idtestpsicologico == idpsychologicaltest
-            )
+            flag, message, times_reseted = candidateresettest_repository.count_tries(idcandidate, idpsychologicaltest)
+            if flag:
+                times = times_reseted + 1
 
-            if count_times_psychologicaltest.count() > 0:
-                time = count_times_psychologicaltest[0].intento + 1
-                data = ({'time': time, 'idcandidate': idcandidate, 'idtestpsicologico': idpsychologicaltest, 'id_user': id_user},)
-                
-                sql_insert = text('''INSERT INTO evaluationroom.candidatotest_historico 
-                    (intento, idtestpsicologico, idcandidato, fechaexamen, resultado, fecharegistro_usuario, idusuario) 
-                    SELECT 
-                    :time AS intento, 
-                    evaluationroom.candidatotest.idtestpsicologico AS evaluationroom_candidatotest_idtestpsicologico, 
-                    evaluationroom.candidatotest.idcandidato AS evaluationroom_candidatotest_idcandidato, 
-                    evaluationroom.candidatotest.fechaexamen AS evaluationroom_candidatotest_fechaexamen, 
-                    evaluationroom.candidatotest.resultado AS evaluationroom_candidatotest_resultado, now() AS fecharegistro_usuario, 
-                    :id_user AS idusuario
-                    FROM evaluationroom.candidatotest
-                    WHERE evaluationroom.candidatotest.idcandidato = :idcandidate
-                    AND evaluationroom.candidatotest.idtestpsicologico = :idtestpsicologico
-                    ORDER BY evaluationroom.candidatotest.idcandidato, 
-                    evaluationroom.candidatotest.idtestpsicologico ''')
-
-                connection = create_engine(DATABASE_URI)
-                
-                sql_insert_detail = text('''INSERT INTO evaluationroom.candidatotestdetalle_historico 
-                    (intento, idtestpsicologico, idpregunta, idparte, idcandidato, respuesta, fecharegistro, origin, host, user_agent, fecharegistro_usuario, idusuario) 
-                    SELECT 
-                    :time AS intento, 
-                    evaluationroom.candidatotestdetalle.idtestpsicologico, 
-                    evaluationroom.candidatotestdetalle.idpregunta, 
-                    evaluationroom.candidatotestdetalle.idparte, 
-                    evaluationroom.candidatotestdetalle.idcandidato, 
-                    evaluationroom.candidatotestdetalle.respuesta, 
-                    evaluationroom.candidatotestdetalle.fecharegistro,
-                    evaluationroom.candidatotestdetalle.origin, 
-                    evaluationroom.candidatotestdetalle.host, 
-                    evaluationroom.candidatotestdetalle.user_agent, 
-                    now() AS fecharegistro_usuario, 
-                    :id_user AS idusuario
-                    FROM evaluationroom.candidatotestdetalle
-                    WHERE evaluationroom.candidatotestdetalle.idcandidato = :idcandidate
-                    AND evaluationroom.candidatotestdetalle.idtestpsicologico = :idtestpsicologico
-                    ORDER BY evaluationroom.candidatotestdetalle.idcandidato, 
-                    evaluationroom.candidatotestdetalle.idtestpsicologico,
-                    evaluationroom.candidatotestdetalle.idparte,
-                    evaluationroom.candidatotestdetalle.idpregunta ''')
-                
-                sql_update = text('''UPDATE evaluationroom.candidatotest 
-                    SET resultado = '""', 
-                    fechaexamen = NULL
-                    WHERE 
-                    evaluationroom.candidatotest.idcandidato = :idcandidate 
-                    AND evaluationroom.candidatotest.idtestpsicologico = :idtestpsicologico ''')
-
-                sql_delete = text('''DELETE FROM evaluationroom.candidatotestdetalle
-                    WHERE 
-                    evaluationroom.candidatotestdetalle.idcandidato = :idcandidate
-                    AND evaluationroom.candidatotestdetalle.idtestpsicologico = :idtestpsicologico ''')
-                
-                for line in data:
-                    connection.execute(sql_insert, **line)
-                    connection.execute(sql_insert_detail, **line)
-                    connection.execute(sql_update, **line)
-                    connection.execute(sql_delete, **line)
-
-            return {'message': 'Inserted'}, 200
-        except:
-            return {'message': 'Error'}, 503
-        
+            flag, message, result = candidateresettest_repository.reset(id_user, idcandidate, idpsychologicaltest, times)
+            
+            logger.debug("Test reseted.", times_reseted=times_reseted)
+            result, code, message = times_reseted, 200, 'Se reseteó la prueba en base de datos.'
+        except Exception as e:
+            logger.error("Error.", error=e)
+            code, message = 503, f'Hubo un error al resetear la prueba en base de datos {e}'
+        finally:
+            logger.debug("Test reseted.", message=message)
+            return result, code, message

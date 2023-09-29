@@ -1,11 +1,10 @@
 from flask import request, send_file
 from flask_restful import Resource
-from common.util import field_in_dict, get_response_body
-import json
+from common.util import get_response_body
 import os
 import io
 from common.util import invoke_api
-from service.authorizer_service import AuthorizerService
+from authorization.authorizer_service import AuthorizerService
 
 authorizer_service = AuthorizerService()
 
@@ -38,7 +37,7 @@ class PsychologicalTestInterpretacionController(Resource):
                     filename = str(response.headers.get('content-disposition')).split("filename=")
                     filename = filename[1][1:-1].strip()
                     mimetype = response.headers.get('content-type')
-                    return send_file(io.BytesIO(response.data),mimetype=mimetype,as_attachment=True,attachment_filename=filename)
+                    return send_file(io.BytesIO(response.data),mimetype=mimetype,as_attachment=True,download_name=filename)
         except Exception as e:
             message = f'Hubo un error durante la consulta del usuario {e}'
             return get_response_body(code=503, message=message, user_message=message), 503

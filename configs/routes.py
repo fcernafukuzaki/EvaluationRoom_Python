@@ -6,9 +6,7 @@ from authorization.login_user_controller import LoginUserController
 # from controller.selection_process.client_controller import *
 # from controller.selection_process.jobposition_controller import *
 # from controller.jobposition_candidate_controller import *
-# from controller.candidate_resettest_controller import *
 # from controller.candidate_form.candidate_controller import *
-# from controller.api.api_test_interpretacion import *
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 # from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 # from controller.recruiter.reclutadoremailvalidar_controller import *
@@ -28,6 +26,8 @@ from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller
 from evaluations.evaluation_controller import EvaluationController
 from evaluations.log_controller import LogController
 from evaluations.respuesta_controller import RespuestaController
+from controller.api.api_test_interpretacion import PsychologicalTestInterpretacionController
+from controller.candidate_resettest_controller import CandidateResetTestController
 
 def api_add_resource(api):
     # Autenticación de usuario
@@ -100,6 +100,14 @@ def api_add_resource(api):
     # Dashboard
     api.add_resource(Dashboard, "/api/v1/dashboard/email=<string:email>")
 
+    # Obtener interpretación de las pruebas psicológicas
+    api.add_resource(PsychologicalTestInterpretacionController,
+        "/api/v1/psychologicalreport/interpretacion/candidato/<int:idcandidato>",
+        "/api/v1/psychologicalreport/download/uid=<int:uid>&email=<string:email>&token=<string:token>")
+    
+    # Resetear preguntas de una prueba psicológica
+    api.add_resource(CandidateResetTestController, "/api/v1/candidates/resettest")
+
     # api.add_resource(CandidateController,
     #     "/api/v1/candidates",
     #     "/api/v1/candidates/self_registered=<string:self_registered>",
@@ -133,8 +141,7 @@ def api_add_resource(api):
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>",
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>/<int:idcandidate>")
 
-    # api.add_resource(CandidateResetTestController,
-    #     "/v1/candidate/resettest")
+    
 
     
 
