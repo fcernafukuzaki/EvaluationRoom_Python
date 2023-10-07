@@ -5,16 +5,19 @@ from configs.resources import db, text
 from configs.logging import logger
 from repository.candidate_repository import CandidateRepository
 from controller.candidate_form.candidate_service import CandidateService
+from psychologicalreport.api.api_test_interpretacion import PsychologicalTestInterpretacionController
 
 
 candidate_service = CandidateService()
 candidaterepository = CandidateRepository()
+interpretacion = PsychologicalTestInterpretacionController()
 
 
 class CandidateEvaluationService():
 
     def registrar_log(self, token, uid, idtestpsicologico, idparte, flag, origin, host, user_agent):
         result = None
+        message = None
         try:
             if token:
                 data = str(token).lower()
@@ -28,9 +31,10 @@ class CandidateEvaluationService():
                         return result_val, code, message
                 
                 idcandidato = result_val.get("idcandidato")
-                result_val, flag, message = self.registrar_log_candidato(idcandidato, idtestpsicologico, idparte, flag, origin, host, user_agent)
+                result_val, flag_log, message = self.registrar_log_candidato(idcandidato, idtestpsicologico, idparte, flag, origin, host, user_agent)
+                logger.debug("Service.", result_val=result_val, flag_log=flag_log, message=message)
                 
-                if flag == False:
+                if flag_log == False:
                     accion_aux = 'Fin de Prueba' if flag == 'F' else 'Inicio de Prueba'
                     accion = f'Error al registrar {accion_aux} del candidato {idcandidato} ({token})'
                     detalle = f'Candidato: {idcandidato} ({token}). Datos de prueba: {idtestpsicologico}.{idparte}'
@@ -39,16 +43,17 @@ class CandidateEvaluationService():
                 
                 obj_data = {"mensaje": result_val} if result_val else None
 
-                if flag:
+                if flag_log:
                     result, code, message = obj_data, 200, 'Se encontró candidato.'
                 else:
                     code, message = 404, 'No existe candidato.'
         except Exception as e:
+            logger.error("Error service.", token=token, error=e)
             accion = f'Error al registrar respuesta del candidato {idcandidato}'
             detalle = f'Candidato: {idcandidato}. Datos de la pregunta: {idtestpsicologico}.{idparte}.'
             _ = self.insert_log(idcandidato, accion, detalle, origin, host, user_agent)
             
-            code, message = 503, f'Hubo un error al obtener datos de los candidato en base de datos {e}'
+            code, message = 503, f'Hubo un error al registrar el log del candidato en base de datos {e}'
         finally:
             logger.info("Response from candidato.", uid=uid, message=message)
             return result, code, message
@@ -93,7 +98,7 @@ class CandidateEvaluationService():
             detalle = f'Candidato: {idcandidato}. Datos de la pregunta: {idtestpsicologico}.{idparte}.{idpregunta}. Respuesta: {json.dumps(respuesta)}'
             _ = self.insert_log(idcandidato, accion, detalle, origin, host, user_agent)
             
-            code, message = 503, f'Hubo un error al obtener datos de los candidato en base de datos {e}'
+            code, message = 503, f'Hubo un error al registrar la respuesta del candidato en base de datos {e}'
         finally:
             logger.info("Response from candidato.", uid=uid, message=message)
             return result, code, message
@@ -137,7 +142,7 @@ class CandidateEvaluationService():
         try:
             if flag == 'F':
                 sql_query = f"""
-                SELECT idcandidato
+                SELECT fechainicio
                 FROM evaluationroom.candidatotest_log
                 WHERE idcandidato={idcandidato}
                 AND idtestpsicologico={idtestpsicologico}
@@ -166,30 +171,32 @@ class CandidateEvaluationService():
 
                     try:
                         ## Interpretar resultados
-                        # psychologicaltestinterpretacion_service.getinterpretacion(idcandidato)
-                        pass
-                    except:
+                        resultado_api = interpretacion.get(idcandidato=idcandidato)
+                        print(resultado_api)
+                    except Exception as e_api:
+                        logger.error('Error API', error_api=e_api)
+                        db.rollback()
                         print('Error al interpretar los resultados del candidato {}.'.format(idcandidato))
 
-                    return True, 'Actualización exitosa.'
+                    result, flag, message = 'Interpretación de resultados exitosa.', True, 'Actualización exitosa.'
+            else:
+                fechainicio = datetime.now(timezone.utc)
 
-
-            fechainicio = datetime.now(timezone.utc)
-
-            sql_query = f"""
-            INSERT INTO evaluationroom.candidatotest_log
-            (idcandidato, idtestpsicologico, idparte, fechainicio, origin, host, user_agent)
-            VALUES 
-            ({idcandidato}, {idtestpsicologico}, {idparte}, '{fechainicio}',
-            '{origin}', '{host}', '{user_agent}')
-            """
-            
-            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
-            response_database = db.execute(text(sql_query))
-            db.commit()
-            
-            result, flag, message = 'Registro exitoso.', True, 'Se registró datos del candidato.'
+                sql_query = f"""
+                INSERT INTO evaluationroom.candidatotest_log
+                (idcandidato, idtestpsicologico, idparte, fechainicio, origin, host, user_agent)
+                VALUES 
+                ({idcandidato}, {idtestpsicologico}, {idparte}, '{fechainicio}',
+                '{origin}', '{host}', '{user_agent}')
+                """
+                
+                # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+                response_database = db.execute(text(sql_query))
+                db.commit()
+                
+                result, flag, message = 'Registro exitoso.', True, 'Se registró datos del candidato.'
         except Exception as e:
+            logger.error('Error API', error=e)
             db.rollback()
             result, flag, message = 0, False, f'Hubo un error al registrar acción del candidato en base de datos {e}'
         finally:
@@ -206,7 +213,7 @@ class CandidateEvaluationService():
             INSERT INTO evaluationroom.candidato_log
             (fecharegistro, idcandidato, accion, detalle, origin, host, user_agent)
             VALUES 
-            ({fecharegistro}, {idcandidato}, {accion}, {detalle},
+            ('{fecharegistro}', {idcandidato}, '{accion}', '{detalle}',
             '{origin}', '{host}', '{user_agent}')
             """
             
@@ -216,6 +223,7 @@ class CandidateEvaluationService():
             
             result, flag, message = 'Registro exitoso.', True, 'Se registró datos del candidato.'
         except Exception as e:
+            logger.error("Error service.", error=e)
             db.rollback()
             result, flag, message = 0, False, f'Hubo un error al registrar acción del candidato en base de datos {e}'
         finally:

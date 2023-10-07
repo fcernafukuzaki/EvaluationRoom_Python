@@ -48,4 +48,3 @@ class EvaluationController(Resource):
             if response_body:
                 return get_response_body(code=200, message='OK', user_message=message, body=response_body), 200
             return get_response_body(code=code, message=message, user_message=message), 404
-

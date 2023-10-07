@@ -169,24 +169,26 @@ class SelectionProcessService():
                 empresas = empresas.to_dict(orient="records")
                 data_empresas = []
                 for row_empresa in empresas:
-                    data_empresa = dict()
-                    data_empresa["idcliente"] = row_empresa.get("idcliente")
-                    data_empresa["nombre"] = row_empresa.get("cliente_nombre")
+                    data_empresa = {
+                        "idcliente": row_empresa.get("idcliente"),
+                        "nombre": row_empresa.get("cliente_nombre")
+                    }
 
                     filtro = ((unique_procesosseleccion['idempresa'] == row_empresa.get("idempresa")) & (unique_procesosseleccion['idcliente'] == row_empresa.get("idcliente")))
                     procesosseleccion = unique_procesosseleccion[filtro]
                     procesosseleccion = procesosseleccion.to_dict(orient="records")
                     data_procesosseleccion = []
                     for row_procesoseleccion in procesosseleccion:
-                        data_procesoseleccion = dict()
-                        data_procesoseleccion["idpuestolaboral"] = row_procesoseleccion.get("idpuestolaboral")
-                        data_procesoseleccion["nombre"] = row_procesoseleccion.get("puestolaboral_nombre")
-                        data_procesoseleccion["fecha_inicio_proceso"] = row_procesoseleccion.get("fecha_inicio_proceso")
-                        data_procesoseleccion["fecha_fin_proceso"] = row_procesoseleccion.get("fecha_fin_proceso")
-                        data_procesoseleccion["usuario_registro"] = row_procesoseleccion.get("usuario_registro")
-                        data_procesoseleccion["activo"] = row_procesoseleccion.get("procesoseleccion_activo")
-                        data_procesoseleccion["cantidad_candidatos"] = row_procesoseleccion.get("cantidad_candidatos")
-
+                        data_procesoseleccion = {
+                            "idpuestolaboral": row_procesoseleccion.get("idpuestolaboral"),
+                            "nombre": row_procesoseleccion.get("puestolaboral_nombre"),
+                            "fecha_inicio_proceso": row_procesoseleccion.get("fecha_inicio_proceso"),
+                            "fecha_fin_proceso": row_procesoseleccion.get("fecha_fin_proceso"),
+                            "usuario_registro": row_procesoseleccion.get("usuario_registro"),
+                            "activo": row_procesoseleccion.get("procesoseleccion_activo"),
+                            "cantidad_candidatos": row_procesoseleccion.get("cantidad_candidatos")
+                        }
+                        
                         filtro = ((unique_candidatos['idempresa'] == row_procesoseleccion.get("idempresa")) & 
                                   (unique_candidatos['idcliente'] == row_procesoseleccion.get("idcliente")) & 
                                   (unique_candidatos['idpuestolaboral'] == row_procesoseleccion.get("idpuestolaboral")))
@@ -194,24 +196,26 @@ class SelectionProcessService():
                         candidatos = candidatos.to_dict(orient="records")
                         data_candidatos = []
                         for row_candidato in candidatos:
-                            data_candidato = dict()
-                            data_candidato["idcandidato"] = row_candidato.get("idcandidato")
-                            data_candidato["nombre"] = row_candidato.get("nombre")
-                            data_candidato["apellidopaterno"] = row_candidato.get("apellidopaterno")
-                            data_candidato["apellidomaterno"] = row_candidato.get("apellidomaterno")
-                            data_candidato["nombre_completo"] = row_candidato.get("nombre_completo")
-                            data_candidato["fechanacimiento"] = row_candidato.get("fechanacimiento")
-                            data_candidato["fecha_registro"] = row_candidato.get("fecha_registro")
-                            data_candidato["correoelectronico"] = row_candidato.get("correoelectronico")
-                            data_candidato["selfregistration"] = row_candidato.get("selfregistration")
-                            data_candidato["telefono_movil"] = row_candidato.get("telefono_movil")
-                            data_candidato["telefono_fijo"] = row_candidato.get("telefono_fijo")
-                            data_candidato["cant_examenes_asignados"] = row_candidato.get("cant_examenes_asignados")
-                            data_candidato["tiene_resultado"] = row_candidato.get("tiene_resultado")
-
-                            filtro = ((unique_testpsicologicos['idcandidato'] == row_candidato.get("idcandidato")))
-                            testpsicologicos = unique_testpsicologicos[filtro]
-                            testpsicologicos = testpsicologicos.to_dict(orient="records")
+                            data_candidato = {
+                                "idcandidato": row_candidato.get("idcandidato"),
+                                "nombre": row_candidato.get("nombre"),
+                                "apellidopaterno": row_candidato.get("apellidopaterno"),
+                                "apellidomaterno": row_candidato.get("apellidomaterno"),
+                                "nombre_completo": row_candidato.get("nombre_completo"),
+                                "fechanacimiento": row_candidato.get("fechanacimiento"),
+                                "fecha_registro": row_candidato.get("fecha_registro"),
+                                "correoelectronico": row_candidato.get("correoelectronico"),
+                                "selfregistration": row_candidato.get("selfregistration"),
+                                "telefono_movil": row_candidato.get("telefono_movil"),
+                                "telefono_fijo": row_candidato.get("telefono_fijo"),
+                                "cant_examenes_asignados": row_candidato.get("cant_examenes_asignados"),
+                                "tiene_resultado": row_candidato.get("tiene_resultado")
+                            }
+                            
+                            # filtro = ((unique_testpsicologicos['idcandidato'] == row_candidato.get("idcandidato")))
+                            # testpsicologicos = unique_testpsicologicos[filtro]
+                            # testpsicologicos = testpsicologicos.to_dict(orient="records")
+                            testpsicologicos = unique_testpsicologicos.query(f"idcandidato == {row_candidato['idcandidato']}").to_dict(orient="records")
 
                             data_candidato['testpsicologicos'] = [
                                 {

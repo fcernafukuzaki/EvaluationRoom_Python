@@ -26,7 +26,7 @@ from controller.soporte_tecnico.candidato_soportetecnico_notificacion_controller
 from evaluations.evaluation_controller import EvaluationController
 from evaluations.log_controller import LogController
 from evaluations.respuesta_controller import RespuestaController
-from controller.api.api_test_interpretacion import PsychologicalTestInterpretacionController
+from psychologicalreport.api.api_test_interpretacion import PsychologicalTestInterpretacionController
 from controller.candidate_resettest_controller import CandidateResetTestController
 
 def api_add_resource(api):
@@ -108,12 +108,6 @@ def api_add_resource(api):
     # Resetear preguntas de una prueba psicológica
     api.add_resource(CandidateResetTestController, "/api/v1/candidates/resettest")
 
-    # api.add_resource(CandidateController,
-    #     "/api/v1/candidates",
-    #     "/api/v1/candidates/self_registered=<string:self_registered>",
-    #     "/api/v1/candidates/uid=<int:uid>",
-    #     "/api/v1/candidates/email=<string:email>")
-
     # api.add_resource(CandidateInfoSimpleController,
     #     "/v1/candidate_info")
 
@@ -140,17 +134,6 @@ def api_add_resource(api):
     #     "/v1/jobpositioncandidate",
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>",
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>/<int:idcandidate>")
-
-    
-
-    
-
-    # # Obtener interpretación de las pruebas psicológicas
-    # api.add_resource(PsychologicalTestInterpretacionController,
-    #     "/testpsicologico/interpretacion/candidato/<int:idcandidato>",
-    #     "/testpsicologico/download/informe/uid=<int:uid>&email=<string:email>&token=<string:token>")
-
-    
 
     # api.add_resource(CandidatoEmailValidarController,
     #     "/candidato_email_validar")

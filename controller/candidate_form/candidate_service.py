@@ -159,14 +159,14 @@ class CandidateService():
                                                                idestadocivil, idsexo, cantidadhijos, fechanacimiento)
             
             if flag:
-                _, flag_telephones, message = candidaterepository.delete_telephones(uid)
-                candidaterepository.insert_telephones(uid, telefonos) if flag_telephones is True else _, flag_telephones, message
+                flag_telephones, message, _ = candidaterepository.delete_telephones(uid)
+                candidaterepository.insert_telephones(uid, telefonos) if flag_telephones else _, flag_telephones, message
                 
-                _, flag_addresses, message = candidaterepository.delete_addresses(uid)
-                candidaterepository.insert_addresses(uid, direcciones) if flag_addresses is True else _, flag_addresses, message
+                flag_addresses, message, _ = candidaterepository.delete_addresses(uid)
+                candidaterepository.insert_addresses(uid, direcciones) if flag_addresses else _, flag_addresses, message
                 
-                _, flag_tests, message = candidaterepository.delete_tests(uid)
-                candidaterepository.insert_tests(uid, tests) if flag_tests is True else _, flag_tests, message
+                flag_tests, message, _ = candidaterepository.delete_tests(uid)
+                candidaterepository.insert_tests(uid, tests) if flag_tests else _, flag_tests, message
             
             result, code, message = uid, 200, 'Se actualizó candidato.'
         except Exception as e:

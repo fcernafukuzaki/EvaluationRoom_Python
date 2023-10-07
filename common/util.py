@@ -31,6 +31,8 @@ def invoke_api(url, body, headers={"Content-Type": "application/json"}, method="
 
 
 def seconds_to_format(segundos):
+    """ Mostrar la cantidad de horas y minutos que tomarán todas las pruebas psicológicas.
+    """
     horas = segundos // 3600
     minutos = (segundos % 3600) // 60
     
