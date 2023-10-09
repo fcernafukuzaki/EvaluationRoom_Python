@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
-from .perfiles_service import PerfilesService
+from administration.service.perfiles_service import PerfilesService
 
 
 perfiles_service = PerfilesService()

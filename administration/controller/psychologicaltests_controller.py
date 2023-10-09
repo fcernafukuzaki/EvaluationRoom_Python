@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
-from .psychologicaltests_service import PsychologicalTestsService
+from administration.service.psychologicaltests_service import PsychologicalTestsService
 
 
 psychologicaltests_service = PsychologicalTestsService()

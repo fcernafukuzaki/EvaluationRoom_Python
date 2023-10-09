@@ -3,7 +3,7 @@ from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
-from .usuarios_service import UsuariosService
+from administration.service.usuarios_service import UsuariosService
 
 
 usuarios_service = UsuariosService()
