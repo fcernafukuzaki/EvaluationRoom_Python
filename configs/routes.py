@@ -10,9 +10,9 @@ from authorization.login_user_controller import LoginUserController
 # from controller.candidate_email_validate.candidatoemailvalidar_controller import *
 # from controller.recruiter.reclutadoridentificadorvalidar_controller import *
 # from controller.recruiter.reclutadoremailvalidar_controller import *
-from administration.usuarios_controller import UsuariosController
-from administration.perfiles_controller import PerfilesController
-from administration.psychologicaltests_controller import PsychologicalTestsController
+from administration.controller.usuarios_controller import UsuariosController
+from administration.controller.perfiles_controller import PerfilesController
+from administration.controller.psychologicaltests_controller import PsychologicalTestsController
 from dashboard.dashboard import Dashboard
 from controller.candidate_form.ubigeo_controller import UbigeoController
 from controller.candidate_form.sexo_controller import SexoController
