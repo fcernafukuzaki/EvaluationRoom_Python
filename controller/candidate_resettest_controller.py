@@ -3,7 +3,7 @@ from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
 from service.candidate_resettest_service import CandidateResetTestService
-from authorization.usuario_validar_service import UsuarioValidarService
+from authorization.service.usuario_validar_service import UsuarioValidarService
 
 
 usuariovalidar_service = UsuarioValidarService()

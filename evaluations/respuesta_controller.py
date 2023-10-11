@@ -1,15 +1,13 @@
 from flask import request
 from flask_restful import Resource
-from common.util import get_response_body
+from common.util import get_response_body, obtener_header
 from common.validate_handler import authorize_candidate
 from controller.candidate_evaluation.candidate_evaluation_service import CandidateEvaluationService
 from .evaluation_service import EvaluationService
-from authorization.authorizer_service import AuthorizerService
 
 
 candidate_evaluation_service = CandidateEvaluationService()
 evaluation_service = EvaluationService()
-authorizer_service = AuthorizerService()
 
 
 class RespuestaController(Resource):
@@ -34,7 +32,7 @@ class RespuestaController(Resource):
                     data_json['respuesta']
                 )
 
-                origin, host, user_agent = authorizer_service.obtener_header(request.headers)
+                origin, host, user_agent = obtener_header(request.headers)
                 
                 result, code, message = candidate_evaluation_service.registrar_respuesta(data, idcandidato, idtestpsicologico, idparte, idpregunta, respuesta, origin, host, user_agent)
                 response_body = {"evaluations": result} if result else None

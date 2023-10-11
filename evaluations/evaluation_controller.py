@@ -1,14 +1,12 @@
 from flask import request
 from flask_restful import Resource
-from common.util import get_response_body
+from common.util import get_response_body, obtener_header
 from common.validate_handler import authorize_candidate
 from configs.logging import logger
 from controller.candidate_form.candidate_service import CandidateService
 from .evaluation_service import EvaluationService
-from authorization.authorizer_service import AuthorizerService
 
 
-authorizer_service = AuthorizerService()
 candidate_service = CandidateService()
 evaluation_service = EvaluationService()
 
@@ -24,7 +22,7 @@ class EvaluationController(Resource):
             input_header = request.headers
             data = input_header.get('Authorization')
             idempresa = input_header.get('empresa')
-            origin, host, user_agent = authorizer_service.obtener_header(request.headers)
+            origin, host, user_agent = obtener_header(request.headers)
             logger.debug("", origin=origin, host=host, user_agent=user_agent)
 
             if data:

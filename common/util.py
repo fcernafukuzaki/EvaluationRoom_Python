@@ -2,15 +2,14 @@ import re
 import urllib3
 
 
-# def str2bool(v):
-#     """Retorna un Boolean a partir de un palabra que se encuentre en la lista"""
-#     return v.lower() in ("yes", "true", "t", "1")
-
-
-# def field_in_dict(dictionary, field):
-#     if field in dictionary:
-#         return True
-#     return False
+def obtener_header(request_headers):
+    ''' Obtener datos del header.
+    '''
+    origin = request_headers.get('Origin')
+    host = request_headers.get('Host')
+    user_agent = request_headers.get('User-Agent')
+    
+    return origin, host, user_agent
 
 
 def get_response_body(code=200, message="OK", user_message="", body=None):
