@@ -1,6 +1,4 @@
-from configs.resources import db
-from configs.logging import logger
-from .service.usuario_validar_service import UsuarioValidarService
+from authorization.service.usuario_validar_service import UsuarioValidarService
 from authorization.service.login_user_service import LoginUserService
 
 usuariovalidar_service = UsuarioValidarService()
