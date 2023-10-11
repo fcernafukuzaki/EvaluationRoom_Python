@@ -3,8 +3,8 @@ from flask_restful import Resource
 from common.util import get_response_body, obtener_header
 from common.validate_handler import authorize_candidate
 from configs.logging import logger
-from controller.candidate_form.candidate_service import CandidateService
-from .evaluation_service import EvaluationService
+from candidate.candidate_form.candidate_service import CandidateService
+from evaluations.evaluation_service import EvaluationService
 
 
 candidate_service = CandidateService()

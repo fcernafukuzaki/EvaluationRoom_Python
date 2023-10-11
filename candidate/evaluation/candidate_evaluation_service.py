@@ -1,10 +1,9 @@
 import json
-import pandas as pd
 from datetime import datetime, timezone
 from configs.resources import db, text
 from configs.logging import logger
-from repository.candidate_repository import CandidateRepository
-from controller.candidate_form.candidate_service import CandidateService
+from candidate.candidate_form.repository.candidate_repository import CandidateRepository
+from candidate.candidate_form.candidate_service import CandidateService
 from psychologicalreport.api.api_test_interpretacion import PsychologicalTestInterpretacionController
 
 

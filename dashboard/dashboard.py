@@ -1,8 +1,7 @@
-from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
 from common.validate_handler import authorize_user
-from .selectionprocess_service import SelectionProcessService
+from dashboard.service.selectionprocess_service import SelectionProcessService
 
 
 selectionprocess_service = SelectionProcessService()
@@ -16,7 +15,7 @@ class Dashboard(Resource):
         """
         response_body = None
         try:
-            result, code, message = selectionprocess_service.get_candidates_without_selectionprocess(email)
+            result, code, message = selectionprocess_service.get_selectionprocess_and_candidates(email)
             response_body = {'selectionprocess':result} if result else None
         except Exception as e:
             code, message = 503, f'Hubo un error al consultar los procesos de selección {e}'

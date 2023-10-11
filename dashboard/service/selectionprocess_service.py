@@ -1,40 +1,12 @@
 import pandas as pd
 from configs.resources import db, text
 from configs.logging import logger
-# from objects.selectionprocess import SelectionProcess, SelectionProcessSchema
-# from objects.selectionprocess_info import SelectionProcessInfo, SelectionProcessInfoSchema, SelectionProcessInfoResumenSchema, CandidatePsychologicalTestInfoSchema, CandidateWithoutSelectionProcessSchema, CandidatePsychologicalTestWithoutSelectionProcessInfoSchema
 
-# selectionprocess_schema = SelectionProcessSchema()
-# selectionprocesses_info_schema = SelectionProcessInfoSchema(many=True)
-# candidates_psychologicaltest_info_schema = CandidatePsychologicalTestInfoSchema(many=True)
-# selection_process_info_resumen_schema = SelectionProcessInfoResumenSchema(many=True)
-# candidates_without_selection_process_info_resumen_schema = CandidateWithoutSelectionProcessSchema(many=True)
-# candidates_psychologicaltest_without_selection_process_info_schema = CandidatePsychologicalTestWithoutSelectionProcessInfoSchema(many=True)
 
 class SelectionProcessService():
     """
     Obtener datos relacionados a los procesos de selección.
     """
-
-    # def get_selectionprocesses(self, idclient, idjobposition, processStatus):        
-    #     if idclient and idjobposition:
-    #         all_selectionprocess = SelectionProcess.query.get((idclient, idjobposition))
-    #     elif idclient and not idjobposition:
-    #         all_selectionprocess = SelectionProcess.query.filter(SelectionProcess.idclient==idclient).all()
-    #     elif not idclient and idjobposition:
-    #         return {'message': 'Client identity is required'}, 500
-    #     else:
-    #         resumen_selectionprocess = SelectionProcessInfo.resumen
-    #         all_selectionprocess = SelectionProcessInfo.selectionprocess_info(processStatus)
-    #         all_candidates_psychologicaltes = SelectionProcessInfo.candidates_psychologicaltest_info(processStatus)
-        
-    #     if all_selectionprocess and idclient and idjobposition:
-    #         result = selectionprocess_schema.jsonify(all_selectionprocess)
-    #         return result
-    #     else:
-    #         result = selection_process_info_resumen_schema.dump(resumen_selectionprocess),selectionprocesses_info_schema.dump(all_selectionprocess),candidates_psychologicaltest_info_schema.dump(all_candidates_psychologicaltes)
-    #         return jsonify(result)
-    #     return {'message': 'Not found'}, 404
 
     def format_date(self, value):
         if pd.notna(value):
@@ -43,10 +15,18 @@ class SelectionProcessService():
             return None
 
     
-    def get_candidates_without_selectionprocess(self, correoelectronico):
-        """
-        Obtener la lista de candidatos que no están asignados a un proceso de selección.
-        """
+    def get_selectionprocess_and_candidates(self, correoelectronico:str):
+        '''
+        Descripción:
+            Obtener la lista de candidatos que no están asignados a un proceso de selección.
+        Input:
+            - correoelectronico:str correo electrónico.
+        
+        Output:
+            - result:object Lista de procesos de selección.
+            - code:int Código de respuesta. [200:OK, 404:Not Found, 503:Error]
+            - message:str Mensaje de salida.
+        '''
         result = None
         try:
             sql_query = f"""
@@ -212,9 +192,6 @@ class SelectionProcessService():
                                 "tiene_resultado": row_candidato.get("tiene_resultado")
                             }
                             
-                            # filtro = ((unique_testpsicologicos['idcandidato'] == row_candidato.get("idcandidato")))
-                            # testpsicologicos = unique_testpsicologicos[filtro]
-                            # testpsicologicos = testpsicologicos.to_dict(orient="records")
                             testpsicologicos = unique_testpsicologicos.query(f"idcandidato == {row_candidato['idcandidato']}").to_dict(orient="records")
 
                             data_candidato['testpsicologicos'] = [

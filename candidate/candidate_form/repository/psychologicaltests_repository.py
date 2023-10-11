@@ -1,6 +1,6 @@
+import pandas as pd
 from configs.resources import db, text
 from configs.logging import logger
-import pandas as pd
 
 
 class PsychologicalTestsRepository():

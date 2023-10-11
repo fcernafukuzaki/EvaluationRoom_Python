@@ -1,5 +1,5 @@
 from configs.logging import logger
-from repository.candidate_repository import CandidateRepository
+from candidate.candidate_form.repository.candidate_repository import CandidateRepository
 
 
 candidaterepository = CandidateRepository()

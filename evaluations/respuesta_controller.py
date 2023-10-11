@@ -2,7 +2,7 @@ from flask import request
 from flask_restful import Resource
 from common.util import get_response_body, obtener_header
 from common.validate_handler import authorize_candidate
-from controller.candidate_evaluation.candidate_evaluation_service import CandidateEvaluationService
+from candidate.evaluation.candidate_evaluation_service import CandidateEvaluationService
 from .evaluation_service import EvaluationService
 
 
