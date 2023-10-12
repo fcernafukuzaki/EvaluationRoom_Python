@@ -73,7 +73,7 @@ def api_add_resource(api):
     )
 
     # Evaluación de candidato
-    api.add_resource(EvaluationController, "/api/v1/evaluations")
+    api.add_resource(EvaluationController, "/api/v1/evaluations/candidates")
 
     # Log de evaluación de candidato
     api.add_resource(LogController, "/api/v1/evaluations/actions")
