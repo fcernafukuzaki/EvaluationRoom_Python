@@ -7,9 +7,6 @@ from authorization.login_user_controller import LoginUserController
 # from controller.selection_process.jobposition_controller import *
 # from controller.jobposition_candidate_controller import *
 # from controller.candidate_form.candidate_controller import *
-# from controller.candidate_email_validate.candidatoemailvalidar_controller import *
-# from controller.recruiter.reclutadoridentificadorvalidar_controller import *
-# from controller.recruiter.reclutadoremailvalidar_controller import *
 from administration.controller.usuarios_controller import UsuariosController
 from administration.controller.perfiles_controller import PerfilesController
 from administration.controller.psychologicaltests_controller import PsychologicalTestsController
@@ -27,7 +24,7 @@ from evaluations.controller.evaluation_controller import EvaluationController
 from evaluations.controller.log_controller import LogController
 from evaluations.controller.respuesta_controller import RespuestaController
 from psychologicalreport.controller.psychologicalreport_controller import PsychologicalTestInterpretacionController
-from controller.candidate_resettest_controller import CandidateResetTestController
+from evaluations.controller.candidate_resettest_controller import CandidateResetTestController
 
 def api_add_resource(api):
     # Autenticación de usuario
@@ -134,15 +131,3 @@ def api_add_resource(api):
     #     "/v1/jobpositioncandidate",
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>",
     #     "/v1/jobpositioncandidate/<int:idclient>/<int:idjobposition>/<int:idcandidate>")
-
-    # api.add_resource(CandidatoEmailValidarController,
-    #     "/candidato_email_validar")
-
-    # """
-    # Eliminar luego de migrar código fuente.
-    # """
-    # api.add_resource(ReclutadorIdentificadorValidarController,
-    #     "/reclutador_identificador_validar")
-
-    # api.add_resource(ReclutadorEmailValidarController,
-    #     "/reclutador_email_validar")
