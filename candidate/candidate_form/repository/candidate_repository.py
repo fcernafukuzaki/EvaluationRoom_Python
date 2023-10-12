@@ -128,7 +128,7 @@ class CandidateRepository():
                         if row_testpsicologico.get('idtestpsicologico') is not None
                     ]
                 
-                logger.debug("Response from candidato.", uid=uid)
+                # logger.debug("Response from candidato.", uid=uid)
 
                 result, flag, message = obj_data, True, 'Se encontró candidato.'
             else:
@@ -176,7 +176,7 @@ class CandidateRepository():
             db.rollback()
             flag, message = False, f'Hubo un error al obtener uid del candidato en base de datos {e}'
         finally:
-            logger.info("Response from candidato.", uid=uid, correoelectronico=correoelectronico, message=message)
+            # logger.info("Response from candidato.", uid=uid, correoelectronico=correoelectronico, message=message)
             return flag, message, result
 
 

@@ -23,7 +23,6 @@ class EvaluationController(Resource):
             data = input_header.get('Authorization')
             idempresa = input_header.get('empresa')
             origin, host, user_agent = obtener_header(request.headers)
-            logger.debug("", origin=origin, host=host, user_agent=user_agent)
 
             if data:
                 data = str(data).lower()

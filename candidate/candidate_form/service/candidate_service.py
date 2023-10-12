@@ -80,7 +80,7 @@ class CandidateService():
         except Exception as e:
             code, message = 503, f'Hubo un error al obtener datos del candidato {numerodocumentoidentidad} en base de datos {e}'
         finally:
-            logger.info("Candidato by document.", uid=uid, message=message)
+            # logger.info("Candidato by document.", uid=uid, message=message)
             return result, code, message
 
 
