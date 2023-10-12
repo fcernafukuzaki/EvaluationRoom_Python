@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from .ubigeo_service import UbigeoService
+from candidate.candidate_form.service.ubigeo_service import UbigeoService
 
 
 ubigeo_service = UbigeoService()

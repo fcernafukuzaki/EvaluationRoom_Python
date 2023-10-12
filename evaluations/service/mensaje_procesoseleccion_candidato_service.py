@@ -1,6 +1,6 @@
 from common.util import seconds_to_format
 from configs.logging import logger
-from candidate.candidate_form.repository.mensaje_procesoseleccion_candidato_repository import EvaluationMessageCandidateRepository
+from evaluations.repository.mensaje_procesoseleccion_candidato_repository import EvaluationMessageCandidateRepository
 
 
 evaluationmessagecandidate_repository = EvaluationMessageCandidateRepository()

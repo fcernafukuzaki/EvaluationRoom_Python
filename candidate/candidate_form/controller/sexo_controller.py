@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from .sexo_service import SexoService
+from candidate.candidate_form.service.sexo_service import SexoService
 
 
 sexo_service = SexoService()

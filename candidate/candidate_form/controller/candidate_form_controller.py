@@ -1,8 +1,8 @@
 from flask import request
 from flask_restful import Resource
 from common.util import get_response_body
-from .candidate_service import CandidateService
 from configs.logging import logger
+from candidate.candidate_form.service.candidate_service import CandidateService
 
 
 candidate_service = CandidateService()

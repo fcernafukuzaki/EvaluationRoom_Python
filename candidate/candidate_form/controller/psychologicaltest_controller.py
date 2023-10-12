@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from .psychologicaltest_service import PsychologicalTestService
+from candidate.candidate_form.service.psychologicaltest_service import PsychologicalTestService
 
 
 psychologicaltest_service = PsychologicalTestService()

@@ -1,7 +1,7 @@
 from configs.logging import logger
 from candidate.candidate_form.repository.candidate_repository import CandidateRepository
 from candidate.candidate_form.repository.psychologicaltests_repository import PsychologicalTestsRepository
-from controller.soporte_tecnico.mensaje_procesoseleccion_candidato_service import MensajeProcesoseleccionCandidatoService
+from evaluations.service.mensaje_procesoseleccion_candidato_service import MensajeProcesoseleccionCandidatoService
 
 
 candidaterepository = CandidateRepository()

@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from .documento_identidad_service import DocumentoIdentidadService
+from candidate.candidate_form.service.documento_identidad_service import DocumentoIdentidadService
 
 
 documento_identidad_service = DocumentoIdentidadService()

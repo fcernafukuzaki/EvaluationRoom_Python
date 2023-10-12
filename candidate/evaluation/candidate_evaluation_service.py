@@ -3,13 +3,13 @@ from datetime import datetime, timezone
 from configs.resources import db, text
 from configs.logging import logger
 from candidate.candidate_form.repository.candidate_repository import CandidateRepository
-from candidate.candidate_form.candidate_service import CandidateService
-from psychologicalreport.api.api_test_interpretacion import PsychologicalTestInterpretacionController
+from candidate.candidate_form.service.candidate_service import CandidateService
+from psychologicalreport.api.api_test_interpretacion_service import PsychologicalTestInterpretacionService
 
 
 candidate_service = CandidateService()
 candidaterepository = CandidateRepository()
-interpretacion = PsychologicalTestInterpretacionController()
+interpretacion = PsychologicalTestInterpretacionService()
 
 
 class CandidateEvaluationService():
@@ -170,7 +170,7 @@ class CandidateEvaluationService():
 
                     try:
                         ## Interpretar resultados
-                        resultado_api = interpretacion.get(idcandidato=idcandidato)
+                        resultado_api = interpretacion.create(idcandidato=idcandidato)
                         print(resultado_api)
                     except Exception as e_api:
                         logger.error('Error API', error_api=e_api)

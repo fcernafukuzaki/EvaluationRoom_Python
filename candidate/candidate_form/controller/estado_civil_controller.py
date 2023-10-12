@@ -1,22 +1,22 @@
 from flask_restful import Resource
 from common.util import get_response_body
-from .tipo_direccion_service import TipoDireccionService
+from candidate.candidate_form.service.estado_civil_service import EstadoCivilService
 
 
-tipo_direccion_service = TipoDireccionService()
+estado_civil_service = EstadoCivilService()
 
 
-class TipoDireccionController(Resource):
+class EstadoCivilController(Resource):
 
     def get(self):
-        """ Obtener tipos de direcciones.
+        """ Obtener estados civil.
         """
         response_body = None
         try:
-            result, code, message = tipo_direccion_service.get_tipos_direccion()
-            response_body = {'tipos_direccion':result} if result else None
+            result, code, message = estado_civil_service.get_estados_civil()
+            response_body = {'estados_civil':result} if result else None
         except Exception as e:
-            code, message = 503, f'Hubo un error al consultar tipos de direcciones {e}'
+            code, message = 503, f'Hubo un error al consultar estados civil {e}'
         finally:
             user_message = message
             if response_body:
