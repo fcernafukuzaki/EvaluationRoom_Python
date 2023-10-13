@@ -14,7 +14,7 @@ evaluation_service = EvaluationService()
 class EvaluationController(Resource):
     
     @authorize_candidate
-    def post(self):
+    def get(self):
         """ Obtener los datos del candidato a partir de su correo electrónico o número de documento de identidad.
         """
         response_body = None
