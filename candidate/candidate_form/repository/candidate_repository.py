@@ -582,7 +582,11 @@ class CandidateRepository():
             c.fechanacimiento, c.correoelectronico, c.selfregistration, 
             (SELECT COUNT(ctest.idcandidato) 
                 FROM evaluationroom.candidatotest ctest
-                WHERE ctest.idcandidato=c.idcandidato) AS "cantidad_pruebas_asignadas"
+                WHERE ctest.idcandidato=c.idcandidato) AS "cantidad_pruebas_asignadas",
+            (SELECT COUNT(ctest.idcandidato) 
+                FROM evaluationroom.candidatotest ctest
+                WHERE ctest.idcandidato=c.idcandidato
+                AND ctest.fechaexamen IS NULL) AS "cantidad_pruebas_pendientes"
             FROM evaluationroom.candidato c
             WHERE c.idcandidato={uid}
             """
@@ -605,11 +609,12 @@ class CandidateRepository():
                     'fechanacimiento': None,
                     'correoelectronico': None,
                     'selfregistration': None,
-                    'cantidad_pruebas_asignadas': None
+                    'cantidad_pruebas_asignadas': None,
+                    'cantidad_pruebas_pendientes': None
                 }
 
                 campos = ["idcandidato", "nombre", "apellidopaterno", "apellidomaterno", "nombre_completo", 
-                          "fechanacimiento", "correoelectronico", "selfregistration", "cantidad_pruebas_asignadas"]
+                          "fechanacimiento", "correoelectronico", "selfregistration", "cantidad_pruebas_asignadas", "cantidad_pruebas_pendientes"]
                 df = df_results[campos].copy()
                 unique_candidate = df[campos].drop_duplicates()
                 unique_candidate["fechanacimiento"] = None if unique_candidate["fechanacimiento"][0] is None else unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
@@ -625,7 +630,8 @@ class CandidateRepository():
                         'fechanacimiento': row.get("fechanacimiento"),
                         'correoelectronico': row.get("correoelectronico"),
                         'selfregistration': row.get("selfregistration"),
-                        'cantidad_pruebas_asignadas': row.get("cantidad_pruebas_asignadas")
+                        'cantidad_pruebas_asignadas': row.get("cantidad_pruebas_asignadas"),
+                        'cantidad_pruebas_pendientes': row.get("cantidad_pruebas_pendientes")
                     }
 
                 logger.debug("Response from candidato.", uid=uid)
