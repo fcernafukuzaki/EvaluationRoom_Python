@@ -117,7 +117,8 @@ class CandidateService():
             if flag:
                 candidaterepository.insert_telephones(uid, telefonos)
                 candidaterepository.insert_addresses(uid, direcciones)
-                candidaterepository.insert_tests(uid, tests)
+                idtests = [test.get("idtestpsicologico") for test in tests]
+                candidaterepository.insert_tests(uid, idtests)
             
             result, code, message = uid, 201, 'Se registró candidato.'
         except Exception as e:
@@ -165,8 +166,27 @@ class CandidateService():
                 flag_addresses, message, _ = candidaterepository.delete_addresses(uid)
                 candidaterepository.insert_addresses(uid, direcciones) if flag_addresses else _, flag_addresses, message
                 
-                flag_tests, message, _ = candidaterepository.delete_tests(uid)
-                candidaterepository.insert_tests(uid, tests) if flag_tests else _, flag_tests, message
+                flag_tests, message, result_tests = candidaterepository.get_tests_id(uid)
+                
+                if result_tests:
+                    testpsicologicos_originales = set(
+                        idtestpsicologico 
+                        for idtestpsicologico in result_tests
+                    )
+
+                    testpsicologicos_nuevos = set(
+                        test.get("idtestpsicologico")
+                        for test in tests
+                    )
+
+                    test_eliminar = testpsicologicos_originales - testpsicologicos_nuevos
+                    logger.debug("Tests del candidato para eliminar.", test_eliminar=test_eliminar)
+
+                    test_registrar = testpsicologicos_nuevos - testpsicologicos_originales
+                    logger.debug("Tests del candidato para registrar.", test_registrar=test_registrar)
+                
+                    flag_tests, message, _ = candidaterepository.delete_tests(uid, test_eliminar)
+                    candidaterepository.insert_tests(uid, test_registrar) if flag_tests else _, flag_tests, message
             
             result, code, message = uid, 200, 'Se actualizó candidato.'
         except Exception as e:

@@ -356,7 +356,7 @@ class CandidateRepository():
     def insert_tests(self, idcandidate:int, tests:list):
         """ 
         Descripción:
-            Registrar teléfonos de un candidato.
+            Registrar test psicológicos a un candidato.
         Input:
             - idcandidate:int Identificador del candidato.
             - tests:list Lista de test psicológicos asignados al candidato.
@@ -366,18 +366,17 @@ class CandidateRepository():
             - result: Identificador del candidato.
         """
         try:
-            for test in tests:
-                idtestpsicologico = test.get("idtestpsicologico")
-
-                sql_query = f"""
-                INSERT INTO evaluationroom.candidatotest
-                (idtestpsicologico, idcandidato)
-                VALUES 
-                ({idtestpsicologico}, {idcandidate})
-                """
+            for idtestpsicologico in tests:
+                sql_query = '''INSERT INTO evaluationroom.candidatotest \
+                (idtestpsicologico, idcandidato) \
+                VALUES \
+                (:idtestpsicologico, :idcandidate) \
+                '''
+                
+                data = {'idcandidate': idcandidate, 'idtestpsicologico': idtestpsicologico}
                 
                 # Ejecutar la consulta SQL y obtener los resultados en un dataframe
-                response_database = db.execute(text(sql_query))
+                response_database = db.execute(text(sql_query), data)
                 db.commit()
                 logger.debug("Tests del candidato inserted.", idcandidate=idcandidate, idtestpsicologico=idtestpsicologico)
             
@@ -388,6 +387,42 @@ class CandidateRepository():
             result, flag, message = idcandidate, False, f'Hubo un error al registrar tests del candidato en base de datos {e}'
         finally:
             logger.info("Tests del candidato inserted.", idcandidate=idcandidate, message=message)
+            return flag, message, result
+
+
+    def get_tests_id(self, idcandidate:int):
+        """ 
+        Descripción:
+            Obtener los identificadores de los test psicológicos de un candidato.
+        Input:
+            - idcandidate:int Identificador del candidato.
+        Output:
+            - flag:bool (True, False)
+            - message:str Mensaje de la operación.
+            - result: Lista de identificador de los tests psicológicos asignados al candidato.
+        """
+        result = None
+        try:
+            sql_query = '''SELECT idtestpsicologico \
+                FROM evaluationroom.candidatotest \
+                WHERE idcandidato = :idcandidato \
+            '''
+            data = {'idcandidato': idcandidate}
+            response_database = db.execute(text(sql_query), data)
+            
+            if int(response_database.rowcount) > 0:
+                result = [
+                    test.idtestpsicologico 
+                    for test in response_database
+                ]
+                flag, message = True, 'Se encontró tests del candidato.'
+            else:
+                flag, message = False, 'No candidato no tiene tests asignados.'
+        except Exception as e:
+            logger.error("Error.", error=e)
+            db.rollback()
+            result, flag, message = idcandidate, False, f'Hubo un error al obtener los tests del candidato en base de datos {e}'
+        finally:
             return flag, message, result
 
 
@@ -508,13 +543,17 @@ class CandidateRepository():
             return flag, message, result
 
 
-    def delete_tests(self, idcandidate:int):
+    def delete_tests(self, idcandidate:int, tests:list):
         try:
-            sql_query = f"DELETE FROM evaluationroom.candidatotest WHERE idcandidato={idcandidate}"
-            
-            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
-            response_database = db.execute(text(sql_query))
-            db.commit()
+            for idtest in tests:
+                sql_query = '''DELETE FROM evaluationroom.candidatotest \
+                    WHERE idcandidato = :idcandidato \
+                    AND idtestpsicologico = :idtestpsicologico
+                '''
+                data = {'idcandidato': idcandidate, 'idtestpsicologico': idtest}
+                response_database = db.execute(text(sql_query), data)
+                db.commit()
+                logger.info("Test del candidato deleted.", idcandidate=idcandidate, ids_test=idtest)
             
             result, flag, message = idcandidate, True, 'Se eliminó tests del candidato.'
         except Exception as e:
