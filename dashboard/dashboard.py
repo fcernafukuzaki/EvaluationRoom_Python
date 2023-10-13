@@ -10,7 +10,7 @@ selectionprocess_service = SelectionProcessService()
 class Dashboard(Resource):
     
     @authorize_user
-    def post(self, email=None):
+    def get(self, email=None):
         """ Obtener los datos de los procesos de selección.
         """
         response_body = None
