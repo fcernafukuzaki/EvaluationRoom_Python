@@ -48,6 +48,9 @@ class CandidateFormController(Resource):
                 telefonos,
                 direcciones,
                 tests,
+                uid_empresa, 
+                uid_cliente, 
+                uid_puestolaboral
             ) = candidate_service.json_candidate(input_json)
 
             # user_message = f'Ya existe un candidato con el mismo correo electrónico. Debe ingresar un email distinto.'
@@ -68,6 +71,9 @@ class CandidateFormController(Resource):
                 telefonos,
                 direcciones,
                 tests,
+                uid_empresa, 
+                uid_cliente, 
+                uid_puestolaboral
             )
 
             idcandidato = result
@@ -112,6 +118,9 @@ class CandidateFormController(Resource):
                 telefonos,
                 direcciones,
                 tests,
+                uid_empresa, 
+                uid_cliente, 
+                uid_puestolaboral
             ) = candidate_service.json_candidate(input_json)
 
             result, code, message = candidate_service.update(
@@ -129,6 +138,9 @@ class CandidateFormController(Resource):
                 telefonos,
                 direcciones,
                 tests,
+                uid_empresa, 
+                uid_cliente, 
+                uid_puestolaboral
             )
             response_body = {"candidato": result} if result else None
         except Exception as e:

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import pandas as pd
 from configs.resources import db, text
 from configs.logging import logger
@@ -565,6 +566,26 @@ class CandidateRepository():
             return flag, message, result
 
 
+    def delete_tests(self, idcandidate:int):
+        try:
+            sql_query = '''DELETE FROM evaluationroom.candidatotest \
+                WHERE idcandidato = :idcandidato
+            '''
+            data = {'idcandidato': idcandidate}
+            response_database = db.execute(text(sql_query), data)
+            db.commit()
+            logger.info("Test del candidato deleted.", idcandidate=idcandidate)
+        
+            result, flag, message = idcandidate, True, 'Se eliminó tests del candidato.'
+        except Exception as e:
+            logger.error("Error.", error=e)
+            db.rollback()
+            result, flag, message = idcandidate, False, f'Hubo un error al eliminar los tests del candidato en base de datos {e}'
+        finally:
+            logger.info("Tests del candidato deleted.", idcandidate=idcandidate, message=message)
+            return flag, message, result
+
+
     def get_evaluation_by_uid(self, uid:int):
         """ 
         Descripción:
@@ -646,4 +667,76 @@ class CandidateRepository():
         finally:
             logger.info("Response from candidato.", uid=uid, message=message)
             return flag, message, result
-    
+
+
+    def delete_selectionprocess(self, uid:int):
+        """ 
+        Descripción:
+            Asignar un proceso de selección a un candidato.
+        Input:
+            - uid:int Identificador del candidato.
+        Output:
+            - flag:bool (True, False)
+            - message:str Mensaje de la operación.
+            - result: Identificador del candidato.
+        """
+        try:
+            sql_query = '''DELETE FROM evaluationroom.procesoseleccioncandidato \
+                WHERE idcandidato = :idcandidato 
+            '''
+            data = {'idcandidato': uid}
+            db.execute(text(sql_query), data)
+            db.commit()
+            logger.info("Proceso de selección del candidato deleted.", idcandidate=uid)
+            
+            result, flag, message = uid, True, 'Se eliminó proceso de selección del candidato.'
+        except Exception as e:
+            logger.error("Error.", error=e)
+            db.rollback()
+            result, flag, message = uid, False, f'Hubo un error al eliminar proceso de selección del candidato en base de datos {e}'
+        finally:
+            logger.info("Proceso de selección del candidato deleted.", idcandidate=uid, message=message)
+            return flag, message, result 
+
+
+    def assign_selectionprocess(self, uid:int, uid_empresa:int, uid_cliente:int, uid_puestolaboral:int):
+        """ 
+        Descripción:
+            Asignar un proceso de selección a un candidato.
+        Input:
+            - uid:int Identificador del candidato.
+            - uid_empresa:int Identificador de la empresa al que pertenece el proceso de selección.
+            - uid_cliente:int Identificador del cliente que solicitó el proceso de selección.
+            - uid_puestolaboral:int Identificador del proceso de selección.
+        Output:
+            - flag:bool (True, False)
+            - message:str Mensaje de la operación.
+            - result: Identificador del candidato.
+        """
+        try:
+            sql_query = f"""
+            INSERT INTO evaluationroom.procesoseleccioncandidato 
+            (idempresa, idcliente, idpuestolaboral, idcandidato, usuario_registro, fecharegistro, selfregistration)
+            VALUES 
+            (:idempresa, :idcliente, :idpuestolaboral, :idcandidato, :usuario_registro, :fecharegistro, :selfregistration)
+            """
+            data = {'idempresa': uid_empresa,
+                    'idcliente': uid_cliente,
+                    'idpuestolaboral': uid_puestolaboral,
+                    'idcandidato': uid,
+                    'usuario_registro': 1,
+                    'fecharegistro': datetime.now(timezone.utc),
+                    'selfregistration': 'false'}
+            # Ejecutar la consulta SQL y obtener los resultados en un dataframe
+            db.execute(text(sql_query), data)
+            db.commit()
+            logger.debug("Proceso de selección del candidato assigned.", idcandidate=uid)
+            
+            result, flag, message = uid, True, 'Se asignó proceso de selección del candidato.'
+        except Exception as e:
+            logger.error("Error.", error=e)
+            db.rollback()
+            result, flag, message = uid, False, f'Hubo un error al asignar proceso de selección del candidato en base de datos {e}'
+        finally:
+            logger.info("Proceso de selección del candidato assigned.", idcandidate=uid, message=message)
+            return flag, message, result 

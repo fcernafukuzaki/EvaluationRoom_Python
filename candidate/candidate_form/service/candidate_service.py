@@ -87,7 +87,8 @@ class CandidateService():
     def create(self, nombre:str, apellidopaterno:str, apellidomaterno:str, 
                 correoelectronico:str, iddocumentoidentidad:int, numerodocumentoidentidad:str, 
                 idestadocivil:int, idsexo:int, cantidadhijos:int, fechanacimiento:str, 
-                selfregistration:str, telefonos:list, direcciones:list, tests:list):
+                selfregistration:str, telefonos:list, direcciones:list, tests:list,
+                uid_empresa:int, uid_cliente:int, uid_puestolaboral:int):
         """ 
         Descripción:
             Registrar datos de un candidato.
@@ -106,6 +107,9 @@ class CandidateService():
             - telefonos: Lista de teléfonos del candidato (celular y/o teléfono fijo).
             - direcciones: Lista de direcciones del candidato (domicilio y/o lugar de nacimiento).
             - tests: Lista de test psicológicos asignados al candidato.
+            - uid_empresa:int Identificador de la empresa al que pertenece el proceso de selección.
+            - uid_cliente:int Identificador del cliente que solicitó el proceso de selección.
+            - uid_puestolaboral:int Identificador del proceso de selección.
         Output:
             - data: Identificador del candidato.
         """
@@ -119,6 +123,7 @@ class CandidateService():
                 candidaterepository.insert_addresses(uid, direcciones)
                 idtests = [test.get("idtestpsicologico") for test in tests]
                 candidaterepository.insert_tests(uid, idtests)
+                candidaterepository.assign_selectionprocess(uid, uid_empresa, uid_cliente, uid_puestolaboral)
             
             result, code, message = uid, 201, 'Se registró candidato.'
         except Exception as e:
@@ -131,7 +136,8 @@ class CandidateService():
     def update(self, uid:int, nombre:str, apellidopaterno:str, apellidomaterno:str, 
                correoelectronico:str, iddocumentoidentidad:int, numerodocumentoidentidad:str, 
                idestadocivil:int, idsexo:int, cantidadhijos:int, fechanacimiento:str, 
-               telefonos:list, direcciones:list, tests:list):
+               telefonos:list, direcciones:list, tests:list,
+               uid_empresa:int, uid_cliente:int, uid_puestolaboral:int):
         """ 
         Descripción:
             Actualizar datos de un candidato.
@@ -150,6 +156,9 @@ class CandidateService():
             - telefonos: Lista de teléfonos del candidato (celular y/o teléfono fijo).
             - direcciones: Lista de direcciones del candidato (domicilio y/o lugar de nacimiento).
             - tests: Lista de test psicológicos asignados al candidato.
+            - uid_empresa:int Identificador de la empresa al que pertenece el proceso de selección.
+            - uid_cliente:int Identificador del cliente que solicitó el proceso de selección.
+            - uid_puestolaboral:int Identificador del proceso de selección.
         Output:
             - data: Objeto de datos del candidato.
         """
@@ -187,6 +196,9 @@ class CandidateService():
                 
                     flag_tests, message, _ = candidaterepository.delete_tests(uid, test_eliminar)
                     candidaterepository.insert_tests(uid, test_registrar) if flag_tests else _, flag_tests, message
+
+                    flag_selectionprocess, message, _ = candidaterepository.delete_selectionprocess(uid)
+                    candidaterepository.assign_selectionprocess(uid, uid_empresa, uid_cliente, uid_puestolaboral) if flag_selectionprocess else _, flag_selectionprocess, message
             
             result, code, message = uid, 200, 'Se actualizó candidato.'
         except Exception as e:
@@ -207,6 +219,7 @@ class CandidateService():
         """
         result = None
         try:
+            candidaterepository.delete_selectionprocess(uid)
             candidaterepository.delete_telephones(uid)
             candidaterepository.delete_addresses(uid)
             candidaterepository.delete_tests(uid)
@@ -229,6 +242,9 @@ class CandidateService():
         idsexo = input_json.get('sexo')['idSexo'] if input_json.get('sexo') is not None else 1
         cantidadhijos = input_json.get('cantidadHijos', 0)
         fechanacimiento = input_json.get('fechaNacimiento')
+        uid_empresa = input_json.get('idEmpresa', 0)
+        uid_cliente = input_json.get('idCliente', 0)
+        uid_puestolaboral = input_json.get('idPuestoLaboral', 0)
         
         telefonos = [
             {
@@ -259,4 +275,4 @@ class CandidateService():
             for row in input_json.get('testPsicologicos')
             if row.get('idTestPsicologico') is not None
         ]
-        return nombre, apellidopaterno, apellidomaterno, correoelectronico, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil, idsexo, cantidadhijos, fechanacimiento, telefonos, direcciones, tests
+        return nombre, apellidopaterno, apellidomaterno, correoelectronico, iddocumentoidentidad, numerodocumentoidentidad, idestadocivil, idsexo, cantidadhijos, fechanacimiento, telefonos, direcciones, tests, uid_empresa, uid_cliente, uid_puestolaboral
