@@ -85,7 +85,7 @@ class SelectionProcessService():
                 pl.idpuestolaboral, pl.nombre,
                 sp.idempresa, sp.idcliente, sp.idpuestolaboral, sp.fecha_inicio_proceso, sp.fecha_fin_proceso, sp.usuario_registro, sp.activo,
                 c_test.idtestpsicologico, testp.nombre, c_test.fechaexamen, testp.cantidadpreguntas
-            ORDER BY e.nombre, pe.nombre, u.correoelectronico, cli.nombre, pl.nombre, c.idcandidato DESC, c_test.idtestpsicologico ASC
+            ORDER BY e.nombre, pe.nombre, u.correoelectronico, cli.idcliente, pl.idpuestolaboral, c.idcandidato DESC, c_test.idtestpsicologico ASC
             """
 
             # Ejecutar la consulta SQL y obtener los resultados en un dataframe
