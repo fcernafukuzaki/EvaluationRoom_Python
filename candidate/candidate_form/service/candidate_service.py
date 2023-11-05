@@ -235,7 +235,7 @@ class CandidateService():
 
     def json_candidate(self, input_json):
         nombre, apellidopaterno, apellidomaterno = input_json.get('nombre'), input_json.get('apellidoPaterno'), input_json.get('apellidoMaterno')
-        correoelectronico = str(input_json.get('correoElectronico', '')).lower()
+        correoelectronico = str(input_json.get('correoElectronico', '')).strip().lower()
         iddocumentoidentidad = input_json.get('documentoIdentidad')['idDocumentoIdentidad'] if input_json.get('documentoIdentidad') is not None else 1
         numerodocumentoidentidad = str(input_json.get('numeroDocumentoIdentidad', '')).strip()
         idestadocivil = input_json.get('estadoCivil')['idEstadoCivil'] if input_json.get('estadoCivil') is not None else 1
