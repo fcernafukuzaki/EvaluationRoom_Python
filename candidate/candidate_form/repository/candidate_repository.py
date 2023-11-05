@@ -544,7 +544,7 @@ class CandidateRepository():
             return flag, message, result
 
 
-    def delete_tests(self, idcandidate:int, tests:list):
+    def delete_tests_by_uid(self, idcandidate:int, tests:list):
         try:
             for idtest in tests:
                 sql_query = '''DELETE FROM evaluationroom.candidatotest \

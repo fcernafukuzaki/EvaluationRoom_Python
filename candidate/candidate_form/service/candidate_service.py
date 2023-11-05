@@ -194,7 +194,7 @@ class CandidateService():
                     test_registrar = testpsicologicos_nuevos - testpsicologicos_originales
                     logger.debug("Tests del candidato para registrar.", test_registrar=test_registrar)
                 
-                    flag_tests, message, _ = candidaterepository.delete_tests(uid, test_eliminar)
+                    flag_tests, message, _ = candidaterepository.delete_tests_by_uid(uid, test_eliminar)
                     candidaterepository.insert_tests(uid, test_registrar) if flag_tests else _, flag_tests, message
 
                     flag_selectionprocess, message, _ = candidaterepository.delete_selectionprocess(uid)
