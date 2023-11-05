@@ -64,7 +64,7 @@ class CandidateRepository():
                 df = df_results[campos].copy()
                 unique_candidate = df[campos].drop_duplicates()
                 unique_candidate["fechanacimiento"] = None if unique_candidate["fechanacimiento"][0] is None else unique_candidate["fechanacimiento"].dt.strftime('%Y-%m-%d').astype(str).replace("nan", None)
-                unique_candidate["fecharegistro"] = unique_candidate["fecharegistro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
+                unique_candidate["fecharegistro"] = None if unique_candidate["fecharegistro"][0] is None else unique_candidate["fecharegistro"].dt.strftime('%Y-%m-%d %H:%M:%S %Z').astype(str).replace("nan", None)
                 unique_candidate = unique_candidate.to_dict(orient="records")
 
                 campos = ["idcandidato", "idtelefono", "numero"]
