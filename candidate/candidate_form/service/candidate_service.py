@@ -237,7 +237,7 @@ class CandidateService():
         nombre, apellidopaterno, apellidomaterno = input_json.get('nombre'), input_json.get('apellidoPaterno'), input_json.get('apellidoMaterno')
         correoelectronico = str(input_json.get('correoElectronico', '')).lower()
         iddocumentoidentidad = input_json.get('documentoIdentidad')['idDocumentoIdentidad'] if input_json.get('documentoIdentidad') is not None else 1
-        numerodocumentoidentidad = input_json.get('numeroDocumentoIdentidad', '')
+        numerodocumentoidentidad = str(input_json.get('numeroDocumentoIdentidad', '')).strip()
         idestadocivil = input_json.get('estadoCivil')['idEstadoCivil'] if input_json.get('estadoCivil') is not None else 1
         idsexo = input_json.get('sexo')['idSexo'] if input_json.get('sexo') is not None else 1
         cantidadhijos = input_json.get('cantidadHijos', 0)
