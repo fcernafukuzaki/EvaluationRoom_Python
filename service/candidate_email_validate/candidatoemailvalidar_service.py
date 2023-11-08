@@ -1,4 +1,4 @@
-from configs.flask_config import db
+from configs.resources import db
 from objects.candidate import Candidate, CandidateEmailValidateSchema
 
 candidato_schema = CandidateEmailValidateSchema()
