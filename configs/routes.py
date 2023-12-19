@@ -99,8 +99,8 @@ def api_add_resource(api):
 
     # Obtener interpretación de las pruebas psicológicas
     api.add_resource(PsychologicalTestInterpretacionController,
-        "/api/v1/psychologicalreport/interpretacion/candidato/<int:idcandidato>",
-        "/api/v1/psychologicalreport/download/uid=<int:uid>&email=<string:email>&token=<string:token>")
+        "/api/v1/psychologicalreport/interpretacion/candidato/<int:idcandidato>&model=<int:model>",
+        "/api/v1/psychologicalreport/download/uid=<int:uid>&email=<string:email>&token=<string:token>&model=<int:model>")
     
     # Resetear preguntas de una prueba psicológica
     api.add_resource(CandidateResetTestController, "/api/v1/candidates/resettest")

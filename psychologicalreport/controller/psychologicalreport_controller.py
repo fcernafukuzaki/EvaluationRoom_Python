@@ -2,9 +2,11 @@ from flask_restful import Resource
 from common.util import get_response_body
 from configs.logging import logger
 from psychologicalreport.api.api_test_interpretacion_service import PsychologicalTestInterpretacionService
+from psychologicalreport.service.psychologicalreport_service import PsychologicalTestReportService
 
 
 psychologicaltestinterpretacion_service = PsychologicalTestInterpretacionService()
+psychologicaltestreport_service = PsychologicalTestReportService()
 
 
 class PsychologicalTestInterpretacionController(Resource):
@@ -30,16 +32,21 @@ class PsychologicalTestInterpretacionController(Resource):
             logger.debug("PsychologicalTestInterpretacionController", idcandidato=idcandidato, uid=uid, email=email, model=model)
             
             if idcandidato:
-                result, code, message = psychologicaltestinterpretacion_service.create(idcandidato)
+                model_dict = {
+                    1: psychologicaltestinterpretacion_service.create(idcandidato),
+                    2: psychologicaltestreport_service.create(idcandidato)
+                }
+
+                # result, code, message = psychologicaltestinterpretacion_service.create(idcandidato)
+                result, code, message = model_dict.get(model, None)
                 response_body = {"mensaje": result} if result else None
                 return get_response_body(code=200, message="OK", user_message="OK", body=response_body), 200
             
-            model_dict = {
-                1: psychologicaltestinterpretacion_service.download(uid, email, token),
-                2: psychologicaltestinterpretacion_service.download(uid, email, token)
-            }
-
             if uid:
+                model_dict = {
+                    1: psychologicaltestinterpretacion_service.download(uid, email, token),
+                    2: psychologicaltestreport_service.download(uid, email, token)
+                }
                 return model_dict.get(model, None)
         except Exception as e:
             code, message = 503, f'Hubo un error al obtener la interpretación {e}'
