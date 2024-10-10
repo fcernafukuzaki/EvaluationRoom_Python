@@ -6,11 +6,11 @@
 # set SQLALCHEMY_DATABASE_URI=
 # flask run
 
-Flask==1.1.2
-Flask-SQLAlchemy==2.4.1
+Flask
+Flask-SQLAlchemy
 flask-restful
 psycopg2
-SQLAlchemy==1.3.18
+SQLAlchemy
 flask-marshmallow
 marshmallow
 marshmallow-sqlalchemy
