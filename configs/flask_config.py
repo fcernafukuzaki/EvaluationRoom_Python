@@ -16,4 +16,6 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 api = Api(app)
 
-CORS(app)
+# CORS(app)
+# Configura CORS para permitir solicitudes solo desde https://evaluationroom.com
+CORS(app, resources={r"/*": {"origins": "https://evaluationroom.com"}})
