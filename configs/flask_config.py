@@ -7,7 +7,6 @@ from os import environ
 from flask_cors import CORS
 
 DATABASE_URI = environ.get("SQLALCHEMY_DATABASE_URI")
-# DATABASE_URI = DATABASE_URI[1 : len(DATABASE_URI) - 1]
 
 # Aplicación de servidor
 app = Flask(__name__)
@@ -16,6 +15,4 @@ db = SQLAlchemy(app)
 ma = Marshmallow(app)
 api = Api(app)
 
-# CORS(app)
-# Configura CORS para permitir solicitudes solo desde https://evaluationroom.com
-CORS(app, resources={r"/*": {"origins": "https://evaluationroom.com"}})
+CORS(app)
