@@ -1,4 +1,4 @@
-from configs.flask_config import db, ma
+from configs.resources import db, ma
 from objects.selection_process.client import Client
 from objects.selection_process.jobposition import JobPosition
 

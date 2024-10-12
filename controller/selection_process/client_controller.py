@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import request
 from flask_restful import Resource
-from configs.flask_config import app
+from configs.resources import app
 from common.util import field_in_dict, get_response_body, str2bool
 from service.authorizer_service import AuthorizerService
 from service.selection_process.client_service import ClientService

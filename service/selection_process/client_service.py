@@ -1,5 +1,5 @@
 from flask import jsonify
-from configs.flask_config import db
+from configs.resources import db
 from objects.selection_process.client import Client, ClientSchema
 from objects.selection_process.client_info import ClientInfo, ClientInfoSchema
 
