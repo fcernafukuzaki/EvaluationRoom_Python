@@ -86,6 +86,7 @@ class PsychologicalTestsRepository():
         flag = True
         try:
             sql_query = f"""
+            /*
             SELECT configuracion.idtestpsicologico, configuracion.orden,
                 tests.idcandidato, 
                 tests.fechaexamen,
@@ -133,6 +134,60 @@ class PsychologicalTestsRepository():
                             WHERE idcandidato = ctest.idcandidato
                     )
                 )
+            ) AS tests
+            ON configuracion.idtestpsicologico=tests.idtestpsicologico
+            ORDER BY configuracion.orden ASC, tests.idparte, tests.idpregunta
+            */
+            SELECT configuracion.idtestpsicologico, configuracion.orden,
+                tests.idcandidato, 
+                tests.fechaexamen,
+                tests.nombre, tests.cantidadpreguntas_total, 
+                tests.idparte, tests.instrucciones, tests.alternativamaxseleccion, tests.duracion, tests.cantidadpreguntas, tests.tipoprueba, 
+                tests.idpregunta, tests.enunciado, tests.alternativa
+            FROM (
+                SELECT (jsonb_array_elements(ec.test_orden->'test_orden')->>'idtestpsicologico')::integer AS idtestpsicologico,
+                    (jsonb_array_elements(ec.test_orden->'test_orden')->>'orden')::integer AS orden
+                FROM evaluationroom.empresa_configuracion ec 
+                WHERE ec.idempresa={idempresa}
+            ) AS configuracion
+            JOIN (
+                SELECT ctest.idcandidato, 
+                    ctest.fechaexamen,
+                    t.idtestpsicologico, t.nombre, t.cantidadpreguntas AS "cantidadpreguntas_total", 
+                    inst.idparte, inst.instrucciones, inst.alternativamaxseleccion, inst.duracion, inst.cantidadpreguntas, inst.tipoprueba, 
+                    preg.idpregunta, preg.enunciado, preg.alternativa
+                FROM evaluationroom.testpsicologicopregunta preg
+                JOIN evaluationroom.testpsicologico t ON preg.idtestpsicologico=t.idtestpsicologico
+                JOIN evaluationroom.candidatotest ctest ON preg.idtestpsicologico=ctest.idtestpsicologico
+                JOIN evaluationroom.testpsicologicoparte inst ON preg.idtestpsicologico=inst.idtestpsicologico AND preg.idparte=inst.idparte
+                
+                -- JOIN PARA DETECTAR PREGUNTAS RESPONDIDAS (Optimización Clave)
+                LEFT JOIN evaluationroom.candidatotestdetalle respuesta_existe
+                    ON respuesta_existe.idcandidato = ctest.idcandidato
+                    AND respuesta_existe.idtestpsicologico = preg.idtestpsicologico
+                    AND respuesta_existe.idparte = preg.idparte
+                    AND respuesta_existe.idpregunta = preg.idpregunta
+
+                WHERE ctest.idcandidato={uid}
+                
+                -- FILTRO 1: DESCARTAR LO QUE YA SE RESPONDIÓ
+                -- Si el LEFT JOIN encontró una respuesta, el ID no será nulo.
+                -- Al pedir IS NULL, nos quedamos SOLO con lo pendiente.
+                AND respuesta_existe.idpregunta IS NULL
+
+                -- FILTRO 2: LÓGICA DE TIEMPOS (Original del sistema)
+                -- Si una parte tiene tiempo límite y ya se inició (hay al menos una respuesta en esa parte),
+                -- no se deben mostrar las preguntas restantes de esa parte.
+                AND NOT EXISTS (
+                    SELECT 1 
+                    FROM evaluationroom.candidatotestdetalle resp_parte
+                    WHERE resp_parte.idcandidato = ctest.idcandidato
+                    AND resp_parte.idtestpsicologico = preg.idtestpsicologico
+                    AND resp_parte.idparte = preg.idparte
+                    AND inst.duracion > 0            -- Solo aplica si la parte tiene tiempo límite
+                    AND inst.tipoprueba <> 'Preg.Abierta'
+                )
+
             ) AS tests
             ON configuracion.idtestpsicologico=tests.idtestpsicologico
             ORDER BY configuracion.orden ASC, tests.idparte, tests.idpregunta
